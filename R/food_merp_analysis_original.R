@@ -12,66 +12,66 @@ library(papaja)
 
 #upload individual bird sheets off the excel sheet------
 
-fozzie <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+fozzie <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                      sheet = "Fozzie")
-fozzie <- fozzie %>%  
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
-  na.omit(df) 
+fozzie <- fozzie %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
+  na.omit(df)
 
 #upload data Uno
 
-uno <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+uno <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                   sheet = "Uno")
-uno <- uno %>% 
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
+uno <- uno %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
   na.omit(df)
 
 #upload data Fern
 
-fern <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+fern <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                    sheet = "Fern")
-fern <- fern %>% 
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
+fern <- fern %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
   na.omit(df)
 
 #upload data Mork
 
-mork <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+mork <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                    sheet = "Mork")
-mork <- mork %>% 
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
+mork <- mork %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
   na.omit(df)
 
 #upload data Prudence
 
-prudence <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+prudence <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                        sheet = "Prudence")
-prudence <- prudence %>% 
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
+prudence <- prudence %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
   na.omit(df)
 
 #upload data Dumbledore
 
-dumbledore <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+dumbledore <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                          sheet = "Dumbledore")
-dumbledore <- dumbledore %>% 
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
+dumbledore <- dumbledore %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
   na.omit(df)
 
 #upload data Mote
 
-mote <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+mote <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                    sheet = "Mote")
-mote <- mote %>% 
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
+mote <- mote %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
   na.omit(df)
 
 #upload data He-man
 
-heman <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"), 
+heman <- read_excel(here("data/phase_1_nonsocial_complete.xlsx"),
                     sheet = "He-man")
-heman <- heman %>% 
-  select(subject_bird, small_num, large_num, large_side, Choice...12) %>% 
+heman <- heman %>%
+  select(subject_bird, small_num, large_num, large_side, Choice...12) %>%
   na.omit(df)
 
 #Data Clean UP----------------------------------------------
@@ -81,7 +81,7 @@ df_food <- bind_rows(fozzie, uno, fern, mork, prudence, dumbledore, mote, heman)
 
 #Creating binary choice, ratio, and pair columns
 
-df_food$pair <- paste(df_food$small_num, df_food$large_num, sep = "/") 
+df_food$pair <- paste(df_food$small_num, df_food$large_num, sep = "/")
 
 df_food$large_choice <- ifelse(df_food$Choice == df_food$large_side, "Y", "N")
 
@@ -104,7 +104,7 @@ df_food$bird_sex <- ifelse(df_food$subject_bird %in% female_birds_food, "female"
 
 #creating the ratio and difference columns
 
-options(digits = 2)   
+options(digits = 2)
 
 df_food$ratio <- df_food$small_num/df_food$large_num
 
@@ -117,48 +117,48 @@ bird_ages <- c(17,12,13,14,12,12,17,13,16,17,16,13,14,13,14,16,16,17,14,16,13,16
 
 #Summarizing Data------------------
 
-summary_food <- df_food %>% 
-  group_by(choice_num) %>% 
+summary_food <- df_food %>%
+  group_by(choice_num) %>%
   summarise(n())
 
-pairsummary_food <- df_food %>% 
-  group_by(pair) %>% 
+pairsummary_food <- df_food %>%
+  group_by(pair) %>%
   summarise(perc = mean(choice_num)*100)
 
-birdsummary_food <- df_food %>% 
-  group_by(subject_bird) %>% 
-  summarise(n = n(), 
+birdsummary_food <- df_food %>%
+  group_by(subject_bird) %>%
+  summarise(n = n(),
             perc = mean(choice_num)*100,
-            sd = sd(choice_num)) %>% 
-  mutate(se=sd/sqrt(8)) %>%  
+            sd = sd(choice_num)) %>%
+  mutate(se=sd/sqrt(8)) %>%
   mutate(ic=se*qt((1-0.05)/2 + .5, n-1))
 
-diffsummary_food<- df_food %>% 
-  group_by(difference) %>% 
+diffsummary_food<- df_food %>%
+  group_by(difference) %>%
   summarise(perc = mean(choice_num)*100)
 
-diff_bird_summary_food <- df_food %>% 
-  group_by(difference, subject_bird) %>% 
+diff_bird_summary_food <- df_food %>%
+  group_by(difference, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-diff_bird_summary_means <- diff_bird_summary_food %>% 
-  group_by(difference) %>% 
+diff_bird_summary_means <- diff_bird_summary_food %>%
+  group_by(difference) %>%
   summarise(perc = mean(perc))
 
-ratiosummary_food <- df_food %>% 
-  group_by(ratio) %>% 
+ratiosummary_food <- df_food %>%
+  group_by(ratio) %>%
   summarise(perc = mean(choice_num)*100)
 
-ratio_bird_summary_food <- df_food %>% 
-  group_by(ratio, subject_bird) %>% 
+ratio_bird_summary_food <- df_food %>%
+  group_by(ratio, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-ratio_bird_summary_means <- ratio_bird_summary_food %>% 
-  group_by(ratio) %>% 
+ratio_bird_summary_means <- ratio_bird_summary_food %>%
+  group_by(ratio) %>%
   summarise(perc = mean(perc))
 
-diff_ratio_summary_food <- df_food %>% 
-  group_by(difference, ratio) %>% 
+diff_ratio_summary_food <- df_food %>%
+  group_by(difference, ratio) %>%
   summarise(perc = mean(choice_num)*100)
 
 
@@ -188,7 +188,7 @@ random_effect_intercept_food <- glm(formula = choice_num ~ 1, data = df_food, fa
 
 random_effect_sub_food <- glmer(formula = choice_num ~ (1 | subject_bird), data = df_food, family = binomial()) #only subject bird as random effect
 
-random_effect_pair_food<- glmer(formula = choice_num ~ (1 | pair), data = df_food, family = binomial()) 
+random_effect_pair_food<- glmer(formula = choice_num ~ (1 | pair), data = df_food, family = binomial())
 
 random_effect_sub_pair_food <- glmer(formula = choice_num ~ (1|subject_bird) + (1|pair), data = df_food, family = binomial) #subject bird and pair as random effect
 
@@ -205,7 +205,7 @@ bic4_random <- nonsocial_random_comparison$BIC[4]
 # Convert BIC values to Bayes factor
 bf_values_random <- bic_to_bf(c(bic1_random, bic2_random, bic3_random, bic4_random ), denominator = bic1_random)
 
-nonsocial_random_comparison_table <- nonsocial_random_comparison %>% 
+nonsocial_random_comparison_table <- nonsocial_random_comparison %>%
   mutate(BF = bf_values_random)
 
 
@@ -235,19 +235,19 @@ bic3_food <- nonsocial_fixed_comparison$BIC[3]
 bic4_food <- nonsocial_fixed_comparison$BIC[4]
 bic5_food <- nonsocial_fixed_comparison$BIC[5]
 
-### Convert BICs to BFs 
+### Convert BICs to BFs
 
 # Convert BIC values to Bayes factor
 bf_values_food <- bic_to_bf(c(bic1_food, bic2_food, bic3_food, bic4_food, bic5_food), denominator = bic1_food)
-  
-nonsocial_fixed_comparison_table <- nonsocial_fixed_comparison %>% 
+
+nonsocial_fixed_comparison_table <- nonsocial_fixed_comparison %>%
   mutate(BF = bf_values_food)
-  
+
 #Calculating within subject confidence intervals----------------
 
 confidence_intv_difference_food <- wsci(data = diff_bird_summary_food,
      id = "subject_bird",
-     dv = "perc", 
+     dv = "perc",
      factors = "difference",
      method = "Morey")
 
@@ -257,7 +257,7 @@ diff_bird_summary_means$upper <- confidence_intv_difference_food$perc + diff_bir
 diff_bird_summary_means$lower <-  diff_bird_summary_means$perc - confidence_intv_difference_food$perc
 
 confidence_intv_ratio_food <- wsci(data=
-                                ratio_bird_summary_food, 
+                                ratio_bird_summary_food,
                               id = "subject_bird",
                               dv = "perc",
                               factors= "ratio",
@@ -284,7 +284,7 @@ bird_graph_food <- ggplot(data = birdsummary_food, aes(x=subject_bird, y= perc))
 bird_graph_food
 
 
-#Ratio Graph with the ratio in proportion form. as in 1 "/" 3 etc. 
+#Ratio Graph with the ratio in proportion form. as in 1 "/" 3 etc.
 
 pair_graph_food <- ggplot(data = pairsummary_food, aes(x=pair, y= perc)) +
   labs(title = "Food Preference by Pair", y="% of trials larger option choosen", x = "Pair")+
@@ -295,7 +295,7 @@ pair_graph_food <- ggplot(data = pairsummary_food, aes(x=pair, y= perc)) +
 
 pair_graph_food
 
-# Ratio graph with the ratio in numeric form so 0.13. Some conditions collapsed together. 
+# Ratio graph with the ratio in numeric form so 0.13. Some conditions collapsed together.
 
 ratio_graph_food <- ggplot(data = ratiosummary_food, aes(x=ratio, y= perc)) +
   labs( y="% of trials larger option choosen", x = "Ratio")+
@@ -327,7 +327,7 @@ ratio_difference_graph_food <- ggplot(data = diff_ratio_summary_food, aes(x=rati
              size = 2)+
   labs(color = "difference")+
   theme_bw(base_size = 24)+
-  theme(axis.text.x = element_text(angle = 60, hjust = 1), 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),
         legend.position = c(0.85, 0.75),
         legend.background = element_rect(fill = "white", color = "black"),
         legend.key.size = unit(.3, 'cm'),
@@ -351,7 +351,7 @@ ratio_bird_graph_food <- ggplot(data = ratio_bird_summary_food, aes(x=ratio, y= 
   geom_errorbar(data = ratio_bird_summary_means, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
   geom_line(aes(group = subject_bird, color = subject_bird), alpha = 0.5)+
   theme_bw(base_size = 22)+
-  theme(legend.position =  "none", 
+  theme(legend.position =  "none",
         axis.text.x = element_text(angle = 60, hjust = 1),
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_blank())+

@@ -71,8 +71,7 @@ df_social <- df_social %>%
 
 summary_social <- df_social %>%
   group_by(choice_num) %>%
-  summarise(n(),
-            percent = )
+  summarise(n())
 
 pairsummary_social <- df_social %>%
   group_by(pair) %>%

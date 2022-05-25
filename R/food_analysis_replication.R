@@ -63,57 +63,53 @@ saffron <- saffron %>%
 
 
 #Data Clean UP----------------------------------------------
-#bind them all together into 1 sheet, we took out Mulder and dart because they didn't complete the project.
+#bind them all together into 1 sheet
 
-df_food <- bind_rows(dart, dill, rooster, saffron)
+df_food_rep <- bind_rows(dart, dill, rooster, saffron)
 
 #Creating binary choice, ratio, and pair columns
 
-df_food$pair <- paste(df_food$small_num, df_food$large_num, sep = "/")
+df_food_rep$pair <- paste(df_food_rep$small_num, df_food_rep$large_num, sep = "/")
 
-df_food$large_choice <- ifelse(df_food$Choice == df_food$large_side, "Y", "N")
+df_food_rep$large_choice <- ifelse(df_food_rep$Choice == df_food_rep$large_side, "Y", "N")
 
-df_food$choice_num <- ifelse(df_food$large_choice == "Y", 1, 0)
+df_food_rep$choice_num <- ifelse(df_food_rep$large_choice == "Y", 1, 0)
 
 #changing data types of columns in our data frame
 
-df_food$large_num <- as.numeric(df_food$large_num)
-df_food$small_num <- as.numeric(df_food$small_num)
+df_food_rep$large_num <- as.numeric(df_food_rep$large_num)
+df_food_rep$small_num <- as.numeric(df_food_rep$small_num)
 
-df_food$subject_bird <- as.factor(df_food$subject_bird)
-df_food$pair <- as.factor(df_food$pair)
+df_food_rep$subject_bird <- as.factor(df_food_rep$subject_bird)
+df_food_rep$pair <- as.factor(df_food_rep$pair)
 
 #create bird sex column
 
-female_birds_food <- c("saffron", "robin")
+female_birds_food_rep <- c("saffron", "robin")
 
-df_food$bird_sex <- ifelse(df_food$subject_bird %in% female_birds_food, "female", "male")
+df_food_rep$bird_sex <- ifelse(df_food_rep$subject_bird %in% female_birds_food_rep, "female", "male")
 
 
 #creating the ratio and difference columns
 
 options(digits = 2)
 
-df_food$ratio <- df_food$small_num/df_food$large_num
+df_food_rep$ratio <- df_food_rep$small_num/df_food_rep$large_num
 
-df_food$difference <-  df_food$large_num - df_food$small_num
+df_food_rep$difference <-  df_food_rep$large_num - df_food_rep$small_num
 
-
-#creating vector of bird ages for the entire colony at time of studies
-
-bird_ages <- c(17,12,13,14,12,12,17,13,16,17,16,13,14,13,14,16,16,17,14,16,13,16,14,12,16,16,14,14,14,14,13)
 
 #Summarizing Data------------------
 
-summary_food <- df_food %>%
+summary_food_rep <- df_food_rep %>%
   group_by(choice_num) %>%
   summarise(n())
 
-pairsummary_food <- df_food %>%
+pairsummary_food_rep <- df_food_rep %>%
   group_by(pair) %>%
   summarise(perc = mean(choice_num)*100)
 
-birdsummary_food <- df_food %>%
+birdsummary_food_rep <- df_food_rep %>%
   group_by(subject_bird) %>%
   summarise(n = n(),
             perc = mean(choice_num)*100,
@@ -121,31 +117,31 @@ birdsummary_food <- df_food %>%
   mutate(se=sd/sqrt(8)) %>%
   mutate(ic=se*qt((1-0.05)/2 + .5, n-1))
 
-diffsummary_food<- df_food %>%
+diffsummary_food_rep <- df_food_rep %>%
   group_by(difference) %>%
   summarise(perc = mean(choice_num)*100)
 
-diff_bird_summary_food <- df_food %>%
+diff_bird_summary_food_rep <- df_food_rep %>%
   group_by(difference, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-diff_bird_summary_means <- diff_bird_summary_food %>%
+diff_bird_summary_means_food_rep <- diff_bird_summary_food %>%
   group_by(difference) %>%
   summarise(perc = mean(perc))
 
-ratiosummary_food <- df_food %>%
+ratiosummary_food_rep <- df_food_rep %>%
   group_by(ratio) %>%
   summarise(perc = mean(choice_num)*100)
 
-ratio_bird_summary_food <- df_food %>%
+ratio_bird_summary_food_rep <- df_food_rep %>%
   group_by(ratio, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-ratio_bird_summary_means <- ratio_bird_summary_food %>%
+ratio_bird_summary_means_food_rep <- ratio_bird_summary_food %>%
   group_by(ratio) %>%
   summarise(perc = mean(perc))
 
-diff_ratio_summary_food <- df_food %>%
+diff_ratio_summary_food_rep <- df_food_rep %>%
   group_by(difference, ratio) %>%
   summarise(perc = mean(choice_num)*100)
 
@@ -155,16 +151,16 @@ diff_ratio_summary_food <- df_food %>%
 #1 sample t-test -------
 #First want to test if birds choose larger over smaller
 
-large_pref_ttest_food <- t.test(birdsummary_food$perc, mu= 50, alternative = "two.sided")
+large_pref_ttest_food_rep <- t.test(birdsummary_food$perc, mu= 50, alternative = "two.sided")
 
-large_pref_ttest_food
+large_pref_ttest_food_rep
 
-large_pref_ttest_bf_food <- ttestBF(birdsummary_food$perc, mu= 50, alternative = "two.sided")
+large_pref_ttest_bf_food_rep <- ttestBF(birdsummary_food$perc, mu= 50, alternative = "two.sided")
 
 
 # Model selection ----------------------------------------------
 
-#Now that I've looked at things individually lets put it all together folks!
+#Now we've looked at things individually lets put it all together folks!
 
 # First find best-fitting random effect model, then test for fixed effect predictors
 # Process is backward by eliminating weakest terms sequentially, starting with full model, until only significant effects remain
@@ -172,94 +168,94 @@ large_pref_ttest_bf_food <- ttestBF(birdsummary_food$perc, mu= 50, alternative =
 
 # Random effects Structure selection------------------
 
-random_effect_intercept_food <- glm(formula = choice_num ~ 1, data = df_food, family = binomial())
+random_effect_intercept_food_rep <- glm(formula = choice_num ~ 1, data = df_food_rep, family = binomial())
 
-random_effect_sub_food <- glmer(formula = choice_num ~ (1 | subject_bird), data = df_food, family = binomial()) #only subject bird as random effect
+random_effect_sub_food_rep <- glmer(formula = choice_num ~ (1 | subject_bird), data = df_food_rep, family = binomial()) #only subject bird as random effect
 
-random_effect_pair_food<- glmer(formula = choice_num ~ (1 | pair), data = df_food, family = binomial())
+random_effect_pair_food_rep <- glmer(formula = choice_num ~ (1 | pair), data = df_food_rep, family = binomial())
 
-random_effect_sub_pair_food <- glmer(formula = choice_num ~ (1|subject_bird) + (1|pair), data = df_food, family = binomial) #subject bird and pair as random effect
+random_effect_sub_pair_food_rep <- glmer(formula = choice_num ~ (1|subject_bird) + (1|pair), data = df_food_rep, family = binomial) #subject bird and pair as random effect
 
-nonsocial_random_comparison <- compare_performance(random_effect_intercept_food, random_effect_sub_food, random_effect_pair_food, random_effect_sub_pair_food )
+nonsocial_random_comparison_rep <- compare_performance(random_effect_intercept_food_rep, random_effect_sub_food_rep, random_effect_pair_food_rep, random_effect_sub_pair_food_rep )
 
-nonsocial_random_bayes_comparison <- bayesfactor_models(random_effect_sub_food, random_effect_pair_food, random_effect_sub_pair_food, denominator = random_effect_intercept_food)
+nonsocial_random_bayes_comparison_rep <- bayesfactor_models(random_effect_sub_food_rep, random_effect_pair_food_rep, random_effect_sub_pair_food_rep, denominator = random_effect_intercept_food_rep)
 
 ### Extract BICs
-bic1_random <- nonsocial_random_comparison$BIC[1]  # empty random model
-bic2_random <- nonsocial_random_comparison$BIC[2]
-bic3_random <- nonsocial_random_comparison$BIC[3]
-bic4_random <- nonsocial_random_comparison$BIC[4]
+bic1_random_rep <- nonsocial_random_comparison_rep$BIC[1]  # empty random model
+bic2_random_rep <- nonsocial_random_comparison_rep$BIC[2]
+bic3_random_rep <- nonsocial_random_comparison_rep$BIC[3]
+bic4_random_rep <- nonsocial_random_comparison_rep$BIC[4]
 
 # Convert BIC values to Bayes factor
-bf_values_random <- bic_to_bf(c(bic1_random, bic2_random, bic3_random, bic4_random ), denominator = bic1_random)
+bf_values_random_rep <- bic_to_bf(c(bic1_random_rep, bic2_random_rep, bic3_random_rep, bic4_random_rep ), denominator = bic1_random_rep)
 
-nonsocial_random_comparison_table <- nonsocial_random_comparison %>%
-  mutate(BF = bf_values_random)
+nonsocial_random_comparison_rep_table <- nonsocial_random_comparison_rep %>%
+  mutate(BF = bf_values_random_rep)
 
 
 # Fixed effects----------------------
 #create fixed-effects models
 
-nonsocial_full <- glm(formula = choice_num ~ difference * ratio, data = df_food, family = binomial)  #full model
+nonsocial_full_rep <- glm(formula = choice_num ~ difference * ratio, data = df_food_rep, family = binomial)  #full model
 
-nonsocial_no_interaction <- glm(formula = choice_num ~ difference + ratio , data = df_food, family = binomial) #changing ratio from a term that adds an interaction to a main effect without the interaction.
+nonsocial_no_interaction_rep <- glm(formula = choice_num ~ difference + ratio , data = df_food_rep, family = binomial) #changing ratio from a term that adds an interaction to a main effect without the interaction.
 
-nonsocial_difference <- glm(formula = choice_num ~ difference, data = df_food, family = binomial) #drop ratio from the model, difference is the main IV
+nonsocial_difference_rep <- glm(formula = choice_num ~ difference, data = df_food_rep, family = binomial) #drop ratio from the model, difference is the main IV
 
-nonsocial_ratio <- glm(formula = choice_num ~ ratio, data = df_food, family = binomial) #drop difference from the model and add ratio back in as the main IV
+nonsocial_ratio_rep <- glm(formula = choice_num ~ ratio, data = df_food_rep, family = binomial) #drop difference from the model and add ratio back in as the main IV
 
 ## Likelihood ratio tests for model comparison
 
-nonsocial_fixed_comparison <- compare_performance(random_effect_intercept_food, nonsocial_ratio, nonsocial_difference, nonsocial_no_interaction, nonsocial_full)
+nonsocial_fixed_comparison_rep <- compare_performance(random_effect_intercept_food_rep, nonsocial_ratio_rep, nonsocial_difference_rep, nonsocial_no_interaction_rep, nonsocial_full_rep)
 
-nonsocial_fixed_bayes_comparison <- bayesfactor_models(nonsocial_ratio, nonsocial_difference, nonsocial_no_interaction, nonsocial_full, denominator = random_effect_intercept_food)
+nonsocial_fixed_bayes_comparison_rep <- bayesfactor_models(nonsocial_ratio_rep, nonsocial_difference_rep, nonsocial_no_interaction_rep, nonsocial_full_rep, denominator = random_effect_intercept_food_rep)
 
 
 ## Bayes factors for fixed effects
 ### Extract BICs
-bic1_food <- nonsocial_fixed_comparison$BIC[1]  # empty random model
-bic2_food <- nonsocial_fixed_comparison$BIC[2]
-bic3_food <- nonsocial_fixed_comparison$BIC[3]
-bic4_food <- nonsocial_fixed_comparison$BIC[4]
-bic5_food <- nonsocial_fixed_comparison$BIC[5]
+bic1_food_rep <- nonsocial_fixed_comparison_rep$BIC[1]  # empty random model
+bic2_food_rep <- nonsocial_fixed_comparison_rep$BIC[2]
+bic3_food_rep <- nonsocial_fixed_comparison_rep$BIC[3]
+bic4_food_rep <- nonsocial_fixed_comparison_rep$BIC[4]
+bic5_food_rep <- nonsocial_fixed_comparison_rep$BIC[5]
 
 ### Convert BICs to BFs
 
 # Convert BIC values to Bayes factor
-bf_values_food <- bic_to_bf(c(bic1_food, bic2_food, bic3_food, bic4_food, bic5_food), denominator = bic1_food)
+bf_values_food_rep <- bic_to_bf(c(bic1_food_rep, bic2_food_rep, bic3_food_rep, bic4_food_rep, bic5_food_rep), denominator = bic1_food_rep)
 
-nonsocial_fixed_comparison_table <- nonsocial_fixed_comparison %>%
-  mutate(BF = bf_values_food)
+nonsocial_fixed_comparison_rep_table <- nonsocial_fixed_comparison_rep %>%
+  mutate(BF = bf_values_food_rep)
 
 #Calculating within subject confidence intervals----------------
 
-confidence_intv_difference_food <- wsci(data = diff_bird_summary_food,
+confidence_intv_difference_food_rep <- wsci(data = diff_bird_summary_food,
                                         id = "subject_bird",
                                         dv = "perc",
                                         factors = "difference",
                                         method = "Morey")
 
 
-diff_bird_summary_means$upper <- confidence_intv_difference_food$perc + diff_bird_summary_means$perc
+diff_bird_summary_means$upper <- confidence_intv_difference_food_rep$perc + diff_bird_summary_means$perc
 
-diff_bird_summary_means$lower <-  diff_bird_summary_means$perc - confidence_intv_difference_food$perc
+diff_bird_summary_means$lower <-  diff_bird_summary_means$perc - confidence_intv_difference_food_rep$perc
 
-confidence_intv_ratio_food <- wsci(data=
+confidence_intv_ratio_food_rep <- wsci(data=
                                      ratio_bird_summary_food,
                                    id = "subject_bird",
                                    dv = "perc",
                                    factors= "ratio",
                                    method = "Morey")
 
-ratio_bird_summary_means$upper <- confidence_intv_ratio_food$perc + ratio_bird_summary_means$perc
+ratio_bird_summary_means$upper <- confidence_intv_ratio_food_rep$perc + ratio_bird_summary_means$perc
 
-ratio_bird_summary_means$lower <-  ratio_bird_summary_means$perc - confidence_intv_ratio_food$perc
+ratio_bird_summary_means$lower <-  ratio_bird_summary_means$perc - confidence_intv_ratio_food_rep$perc
 
 #GRAPHING TIME!!!-----------------------------------
 
 #Bird Mean preference. Hypothesis 1 graph
 
-bird_graph_food <- ggplot(data = birdsummary_food, aes(x=subject_bird, y= perc)) +
+bird_graph_food_rep <- ggplot(data = birdsummary_food_rep, aes(x=subject_bird, y= perc)) +
   labs( y="Percent larger choosen")+
   geom_bar(stat = 'identity')+
   theme_bw(base_size = 22)+
@@ -269,45 +265,45 @@ bird_graph_food <- ggplot(data = birdsummary_food, aes(x=subject_bird, y= perc))
   geom_hline(yintercept = 50, linetype = "dashed")+
   ylim(0,75)
 
-bird_graph_food
+bird_graph_food_rep
 
 
 #Ratio Graph with the ratio in proportion form. as in 1 "/" 3 etc.
 
-pair_graph_food <- ggplot(data = pairsummary_food, aes(x=pair, y= perc)) +
+pair_graph_food_rep <- ggplot(data = pairsummary_food_rep, aes(x=pair, y= perc)) +
   labs(title = "Food Preference by Pair", y="% of trials larger option choosen", x = "Pair")+
   geom_point()+
   theme_bw(base_size = 22)+
   geom_hline(yintercept = 50, linetype = "dashed")+
   ylim(0,100)
 
-pair_graph_food
+pair_graph_food_rep
 
 # Ratio graph with the ratio in numeric form so 0.13. Some conditions collapsed together.
 
-ratio_graph_food <- ggplot(data = ratiosummary_food, aes(x=ratio, y= perc)) +
+ratio_graph_food_rep <- ggplot(data = ratiosummary_food_rep, aes(x=ratio, y= perc)) +
   labs( y="% of trials larger option choosen", x = "Ratio")+
   geom_point()+
   theme_bw(base_size = 22)+
   geom_hline(yintercept = 50, linetype = "dashed")+
   ylim(0,100)
 
-ratio_graph_food
+ratio_graph_food_rep
 
 #Difference Graph
 
-diff_graph_food <- ggplot(data = diffsummary_food, aes(x=(difference), y = perc)) +
+diff_graph_food_rep <- ggplot(data = diffsummary_food_rep, aes(x=(difference), y = perc)) +
   labs(y="% of trials larger option choosen", x = "Difference")+
   geom_point()+
   theme_bw(base_size = 22)+
   geom_hline(yintercept = 50, linetype = "dashed")+
   ylim(0,100)
 
-diff_graph_food
+diff_graph_food_rep
 
 #Graph Ratio on the X axis with Difference as the grouping variable
 
-ratio_difference_graph_food <- ggplot(data = diff_ratio_summary_food, aes(x=ratio, y= perc)) +
+ratio_difference_graph_food_rep <- ggplot(data = diff_ratio_summary_food_rep, aes(x=ratio, y= perc)) +
   labs( y="Percent larger choosen", x = "Ratio")+
   geom_line(aes(colour = factor(difference)),
             size = 1)+
@@ -327,15 +323,15 @@ ratio_difference_graph_food <- ggplot(data = diff_ratio_summary_food, aes(x=rati
   ylim(20,100)+
   scale_x_continuous(breaks = c(.17, .2, .25,.33,.4, .5, .6, .67, .75, .8, .83))
 
-ratio_difference_graph_food
+ratio_difference_graph_food_rep
 
 
 
 #Graph Ratio grouped by subject bird
 
-ratio_bird_graph_food <- ggplot(data = ratio_bird_summary_food, aes(x=ratio, y= perc)) +
+ratio_bird_graph_food_rep <- ggplot(data = ratio_bird_summary_food_rep, aes(x=ratio, y= perc)) +
   labs(y="Percent larger choosen", x = "Ratio")+
-  geom_point(data = ratiosummary_food, size = 2)+
+  geom_point(data = ratiosummary_food_rep, size = 2)+
   geom_errorbar(data = ratio_bird_summary_means, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
   geom_line(aes(group = subject_bird, color = subject_bird), alpha = 0.5)+
   theme_bw(base_size = 22)+
@@ -349,14 +345,14 @@ ratio_bird_graph_food <- ggplot(data = ratio_bird_summary_food, aes(x=ratio, y= 
 #scale_x_continuous(c(0.15, 0.85, .1))
 #xlim(0.15, 0.85)
 
-ratio_bird_graph_food
+ratio_bird_graph_food_rep
 
 
 
 #Graph Difference by subject bird
 
-diff_bird_graph_food <- ggplot(data = diff_bird_summary_food, aes(x=difference, y= perc)) +
-  geom_point(data = diffsummary_food, size = 2) +
+diff_bird_graph_food_rep <- ggplot(data = diff_bird_summary_food_rep, aes(x=difference, y= perc)) +
+  geom_point(data = diffsummary_food_rep, size = 2) +
   geom_errorbar(data = diff_bird_summary_means, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
   geom_line(aes(group = subject_bird, color = subject_bird), alpha = 0.5)+
   theme_bw(base_size = 22)+
@@ -367,36 +363,8 @@ diff_bird_graph_food <- ggplot(data = diff_bird_summary_food, aes(x=difference, 
   geom_hline(yintercept = 50, linetype = "dashed")+
   ylim(20,100)
 
-diff_bird_graph_food
+diff_bird_graph_food_rep
 
 
-#Saving plots for use in merp
-#library(patchwork)
-#ratio_bird_graph_food + diff_bird_graph_food + ratio_difference_graph_food + plot_annotation(tag_levels = "a") + plot_layout(ncol = 2)
-#ggsave("figures/food_figures.png", scale = 2, height = 5, width = 7)
 
-#creating tables for BF values
-
-random_models <- c("(1|Subject)","(1|Pair)","(1|Subject)+(1|Pair)")
-
-fixed_models <- c( "ratio", "difference","difference + ratio", "difference * ratio")
-
-random_food_bf_df <- data.frame(Model = random_models,
-                                AIC = c(nonsocial_random_comparison_table$AIC[2:4]),
-                                BIC = c(nonsocial_random_comparison_table$BIC[2:4]),
-                                BF = c(nonsocial_random_comparison_table$BF[2:4]))
-random_food_bf_df[4] <- round(random_food_bf_df[4],digits = 2)
-
-fixed_food_bf_df <- data.frame(Model = fixed_models,
-                               AIC = c(nonsocial_fixed_comparison_table$AIC[2:5]),
-                               BIC = c(nonsocial_fixed_comparison_table$BIC[2:5]),
-                               BF = c(nonsocial_fixed_comparison_table$BF[2:5]))
-fixed_food_bf_df[4] <- round(fixed_food_bf_df[4],digits=2)
-
-
-random_food_bf_table <- formattable(random_food_bf_df ,
-                                    align =c("l","l","l","l"))
-
-fixed_food_bf_table <- formattable(fixed_food_bf_df,
-                                   align= c("l","l","l","l"))
 
