@@ -125,7 +125,7 @@ diff_bird_summary_food_rep <- df_food_rep %>%
   group_by(difference, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-diff_bird_summary_means_food_rep <- diff_bird_summary_food %>%
+diff_bird_summary_means_food_rep <- diff_bird_summary_food_rep %>%
   group_by(difference) %>%
   summarise(perc = mean(perc))
 
@@ -137,7 +137,7 @@ ratio_bird_summary_food_rep <- df_food_rep %>%
   group_by(ratio, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-ratio_bird_summary_means_food_rep <- ratio_bird_summary_food %>%
+ratio_bird_summary_means_food_rep <- ratio_bird_summary_food_rep %>%
   group_by(ratio) %>%
   summarise(perc = mean(perc))
 
@@ -151,11 +151,11 @@ diff_ratio_summary_food_rep <- df_food_rep %>%
 #1 sample t-test -------
 #First want to test if birds choose larger over smaller
 
-large_pref_ttest_food_rep <- t.test(birdsummary_food$perc, mu= 50, alternative = "two.sided")
+large_pref_ttest_food_rep <- t.test(birdsummary_food_rep$perc, mu= 50, alternative = "two.sided")
 
 large_pref_ttest_food_rep
 
-large_pref_ttest_bf_food_rep <- ttestBF(birdsummary_food$perc, mu= 50, alternative = "two.sided")
+large_pref_ttest_bf_food_rep <- ttestBF(birdsummary_food_rep$perc, mu= 50, alternative = "two.sided")
 
 
 # Model selection ----------------------------------------------
@@ -229,27 +229,27 @@ nonsocial_fixed_comparison_rep_table <- nonsocial_fixed_comparison_rep %>%
 
 #Calculating within subject confidence intervals----------------
 
-confidence_intv_difference_food_rep <- wsci(data = diff_bird_summary_food,
+confidence_intv_difference_food_rep <- wsci(data = diff_bird_summary_food_rep,
                                         id = "subject_bird",
                                         dv = "perc",
                                         factors = "difference",
                                         method = "Morey")
 
 
-diff_bird_summary_means$upper <- confidence_intv_difference_food_rep$perc + diff_bird_summary_means$perc
+diff_bird_summary_means_food_rep$upper <- confidence_intv_difference_food_rep$perc + diff_bird_summary_means_food_rep$perc
 
-diff_bird_summary_means$lower <-  diff_bird_summary_means$perc - confidence_intv_difference_food_rep$perc
+diff_bird_summary_means_food_rep$lower <-  diff_bird_summary_means_food_rep$perc - confidence_intv_difference_food_rep$perc
 
 confidence_intv_ratio_food_rep <- wsci(data=
-                                     ratio_bird_summary_food,
+                                     ratio_bird_summary_food_rep,
                                    id = "subject_bird",
                                    dv = "perc",
                                    factors= "ratio",
                                    method = "Morey")
 
-ratio_bird_summary_means$upper <- confidence_intv_ratio_food_rep$perc + ratio_bird_summary_means$perc
+ratio_bird_summary_means_food_rep$upper <- confidence_intv_ratio_food_rep$perc + ratio_bird_summary_means_food_rep$perc
 
-ratio_bird_summary_means$lower <-  ratio_bird_summary_means$perc - confidence_intv_ratio_food_rep$perc
+ratio_bird_summary_means_food_rep$lower <-  ratio_bird_summary_means_food_rep$perc - confidence_intv_ratio_food_rep$perc
 
 #GRAPHING TIME!!!-----------------------------------
 
@@ -332,7 +332,7 @@ ratio_difference_graph_food_rep
 ratio_bird_graph_food_rep <- ggplot(data = ratio_bird_summary_food_rep, aes(x=ratio, y= perc)) +
   labs(y="Percent larger choosen", x = "Ratio")+
   geom_point(data = ratiosummary_food_rep, size = 2)+
-  geom_errorbar(data = ratio_bird_summary_means, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
+  geom_errorbar(data = ratio_bird_summary_means_food_rep, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
   geom_line(aes(group = subject_bird, color = subject_bird), alpha = 0.5)+
   theme_bw(base_size = 22)+
   theme(legend.position =  "none",
@@ -353,7 +353,7 @@ ratio_bird_graph_food_rep
 
 diff_bird_graph_food_rep <- ggplot(data = diff_bird_summary_food_rep, aes(x=difference, y= perc)) +
   geom_point(data = diffsummary_food_rep, size = 2) +
-  geom_errorbar(data = diff_bird_summary_means, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
+  geom_errorbar(data = diff_bird_summary_means_food_rep, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
   geom_line(aes(group = subject_bird, color = subject_bird), alpha = 0.5)+
   theme_bw(base_size = 22)+
   theme(legend.position =  "none",

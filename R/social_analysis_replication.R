@@ -88,7 +88,7 @@ diff_bird_summary_social_rep <- df_social_rep %>%
   group_by(difference, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-diff_bird_summary_means_social_rep <- diff_bird_summary_social %>%
+diff_bird_summary_means_social_rep <- diff_bird_summary_social_rep %>%
   group_by(difference) %>%
   summarise(perc = mean(perc))
 
@@ -100,7 +100,7 @@ ratio_bird_summary_social_rep <- df_social_rep %>%
   group_by(ratio, subject_bird) %>%
   summarise(perc = mean(choice_num)*100)
 
-ratio_bird_summary_means_social_rep <- ratio_bird_summary_social %>%
+ratio_bird_summary_means_social_rep <- ratio_bird_summary_social_rep %>%
   group_by(ratio) %>%
   summarise(perc = mean(perc))
 
@@ -113,11 +113,11 @@ diff_ratio_summary_social_rep <- df_social_rep %>%
 #1 sample t-test ---------
 #test if birds choose larger over smaller
 
-large_pref_ttest_social_rep <- t.test(birdsummary_social$perc, mu= 50, alternative = "two.sided")
+large_pref_ttest_social_rep <- t.test(birdsummary_social_rep$perc, mu= 50, alternative = "two.sided")
 
 large_pref_ttest_social_rep
 
-large_pref_ttest_bf_social_rep <- ttestBF(birdsummary_social$perc, mu= 50, alternative = "two.sided")
+large_pref_ttest_bf_social_rep <- ttestBF(birdsummary_social_rep$perc, mu= 50, alternative = "two.sided")
 
 # Model selection: Subject_bird Random effect ----------------------------------------------
 
@@ -196,26 +196,26 @@ bf_difference_social_rep <- social_model_comparison_rep_table$BF[3]/social_model
 
 #Calculating within subject confidence intervals----------------
 
-confidence_intv_difference_social_rep <- wsci(data = diff_bird_summary_social,
+confidence_intv_difference_social_rep <- wsci(data = diff_bird_summary_social_rep,
                                           id = "subject_bird",
                                           dv = "perc",
                                           factors = "difference",
                                           method = "Morey")
 
 
-diff_bird_summary_means_social$upper <- confidence_intv_difference_social_rep$perc + diff_bird_summary_means_social$perc
+diff_bird_summary_means_social_rep$upper <- confidence_intv_difference_social_rep$perc + diff_bird_summary_means_social_rep$perc
 
-diff_bird_summary_means_social$lower <-  diff_bird_summary_means_social$perc - confidence_intv_difference_social_rep$perc
+diff_bird_summary_means_social_rep$lower <-  diff_bird_summary_means_social_rep$perc - confidence_intv_difference_social_rep$perc
 
-confidence_intv_ratio_social_rep <- wsci(data= ratio_bird_summary_social,
+confidence_intv_ratio_social_rep <- wsci(data= ratio_bird_summary_social_rep,
                                      id = "subject_bird",
                                      dv = "perc",
                                      factors= "ratio",
                                      method = "Morey")
 
-ratio_bird_summary_means_social$upper <- confidence_intv_ratio_social_rep$perc + ratio_bird_summary_means_social$perc
+ratio_bird_summary_means_social_rep$upper <- confidence_intv_ratio_social_rep$perc + ratio_bird_summary_means_social_rep$perc
 
-ratio_bird_summary_means_social$lower <-  ratio_bird_summary_means_social$perc - confidence_intv_ratio_social_rep$perc
+ratio_bird_summary_means_social_rep$lower <-  ratio_bird_summary_means_social_rep$perc - confidence_intv_ratio_social_rep$perc
 
 
 #GRAPHING TIME!!!-----------------------------
@@ -302,7 +302,7 @@ ratio_difference_graph_social_rep
 ratio_bird_graph_social_rep <- ggplot(data = ratio_bird_summary_social_rep, aes(x=ratio, y= perc)) +
   labs(y="Percent larger choosen", x = "Ratio")+
   geom_point(data = ratiosummary_social_rep, size = 2)+
-  geom_errorbar(data = ratio_bird_summary_means_social, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
+  geom_errorbar(data = ratio_bird_summary_means_social_rep, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
   geom_line(aes(group = subject_bird, color = subject_bird), alpha = 0.5)+
   theme_bw(base_size = 22)+
   theme(legend.position =  "none",
@@ -321,7 +321,7 @@ ratio_bird_graph_social_rep
 
 diff_bird_graph_social_rep <- ggplot(data = diff_bird_summary_social_rep, aes(x=difference, y= perc)) +
   geom_point(data = diffsummary_social_rep, size = 2) +
-  geom_errorbar(data = diff_bird_summary_means_social, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
+  geom_errorbar(data = diff_bird_summary_means_social_rep, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
   geom_line(aes(group = subject_bird, color = subject_bird), alpha = 0.5)+
   theme_bw(base_size = 22)+
   theme(legend.position =  "none",

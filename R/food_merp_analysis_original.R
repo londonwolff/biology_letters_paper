@@ -9,6 +9,7 @@ library(bayestestR)
 library(performance)
 library(here)
 library(papaja)
+library(formattable)
 
 #upload individual bird sheets off the excel sheet------
 
@@ -411,3 +412,4 @@ random_food_bf_table <- formattable(random_food_bf_df ,
 
 fixed_food_bf_table <- formattable(fixed_food_bf_df,
                                    align= c("l","l","l","l"))
+
