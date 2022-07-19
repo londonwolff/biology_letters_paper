@@ -10,6 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Appendix
+
+
+
+We first found the best-fitting random effect structure, then added this random structure to all of the possible fixed effect structures, leaving us with the final best fitting model for each data set overall. 
+We included models with no fixed effect and either (1) no random effects (intercept only), (2) subject as a random effect, (3) number pair as a random effect (to account for each bird repeatedly seeing each pair multiple times), and (4) both subject and number pair as random effects. For example, the model with both subject and pair as random effects ran using the `glmer()` function from the _lme4_ package [@R-lme4]. We then used Bayes factors to select the model with the best-fitting random effect structure. We added the chosen random effect structure to our fixed effects to find the best-fitting model for the data set overall. The five fixed effects models were: (1) no fixed effects (intercept only), (2) ratio as a fixed effect, (3) difference as a fixed effect, (4) both difference and ratio as a fixed effects but _without_ an interaction, and (5) both difference and ratio as fixed effects _with_ an interaction. The model with both difference and ratio as fixed effects with an interaction term ran using the `glm()` function. We calculated Bayes factors using the `test_performance()` function from the _performance_ package [@Ludeckestrengejacke.etal.2021], which estimates Bayes factors from model BIC values using  Wagenmakers' [@Wagenmakers.2007] equation. The best fitting model has the highest Bayes factor. The second hypothesis will be supported if difference and ratio are both included as main effects in the best fitting model while the third hypothesis will be supported if the interaction is included.
+
 \renewcommand{\thetable}{A\arabic{table}}
 \setcounter{table}{0}
 \renewcommand{\thefigure}{A\arabic{figure}}
