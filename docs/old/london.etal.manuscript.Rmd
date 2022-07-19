@@ -50,6 +50,7 @@ library(here)
 library(patchwork)
 library(formattable)
 library(knitr)
+library(BMA)
 
 source(here("R/social_merp_analysis_original.R"))
 source(here("R/food_merp_analysis_original.R"))
@@ -96,11 +97,11 @@ printbf <- function(x, digits = 2, cutoff = NULL) {
 
 # Introduction
 
-Many animal species have demonstrated the ability to quantify objects in their environment, including bees [@Dacke.Srinivasan.2008], fish [@Agrillo.etal.2008; @Agrillo.Dadda.2007;@Agrillo.etal.2011], amphibians [@Uller.etal.2003], birds [@Xia.etal.2001;@Emmerton.Renner.2006;@Emmerton.Renner.2009], and mammals [@Vonk.Beran.2012] but especially primates [@Nieder.2018;@Call.2000;@Beran.2001]. As these animals are not closely related phylogenetically, some diverging hundreds of millions of years apart from each other [@Nieder.2018], quantification skills must have strong adaptive value. These adaptive benefits can be broken down into two main subgroups: benefits for survival and reproduction. Survival benefits include but are not limited to navigation, predator avoiding, territory defense, and cooperative hunting/foraging [@Nieder.2020;@Agrillo.etal.2017;@Yang.Chiao.2016]. For example, wolves are more likely to capture a buffalo, if they cooperatively hunt in groups of 9-13 [@MacNulty.etal.2014]. Reproduction benefits of numerical competence include courtship, mating, and avoiding brood parasitism [@White.etal.2009;@Carazo.etal.2012;@Arak.1983]. Having some form of numeric competence must be an important cognitive skill that incurs fitness benefits for survival and reproduction. 
+Many animal species have demonstrated the ability to quantify objects in their environment, including bees [@Dacke.Srinivasan.2008], fish [@Agrillo.etal.2008; @Agrillo.Dadda.2007;@Agrillo.etal.2011], amphibians [@Uller.etal.2003], birds [@Xia.etal.2001;@Emmerton.Renner.2006;@Emmerton.Renner.2009], and mammals [@Vonk.Beran.2012; @Nieder.2018;@Call.2000;@Beran.2001]. Quantification skills have strong adaptive value for survival and reproduction [@Nieder.2018], playing a role in navigation, predator avoidance, territory defense, and foraging, courtship, mating, and avoiding brood parasitism [@White.etal.2009;@Carazo.etal.2012;@Arak.1983;@Nieder.2020;@Agrillo.etal.2017;@Yang.Chiao.2016]. Yet it remains unclear if the same cognitive processes apply across these different adaptive problems.
 
-Two distinct cognitive systems, the object tracking system (OTS) and the approximate number system (ANS), are thought to describe how animals represent numbers [@Ditz.Nieder.2016;@Hyde.2011]. The object tracking system (OTS) is a visual mechanism that tracks up to four objects precisely while the approximate number system (ANS) is a mental system that supports the estimation of numerical quantity without relying on language or symbols [@Nieder.2020]. The most important difference to highlight is that the OTS works on  small (3 or 4) but precise numbers while the ANS works on approximate quantities of larger sizes [@Nieder.2020;@Feigenson.etal.2004]. Current literature demonstrates that animals will use the absolute number of items and therefore the OTS when assessing numerical stimuli in some cases[@Dacke.Srinivasan.2008;@Cantlon.Brannon.2006;@Emmerton.Renner.2006]. While animals use other cues such as surface area covered [@Stancher.etal.2015;@Gomez-Laplaza.Gerlai.2013], density [@Bertamini.etal.2018;@Gomez-Laplaza.etal.2019], or size of items [@Stevens.etal.2007;@Emmerton.Renner.2009] instead, of counting each object individually to estimate approximate quantities via the ANS. 
+One of the key cognitive processes proposed for quantification is the _approximate number system_, which involves the approximate estimation of numerical quantity without relying on language or symbols [@Feigenson.etal.2004;@Nieder.2020]. The approximate number system may in fact not use actual number (that is, the precise individuation of objects) but instead may rely on other cues such as surface area covered [@Stancher.etal.2015;@Gomez-Laplaza.Gerlai.2013], density [@Bertamini.etal.2018;@Gomez-Laplaza.etal.2019], or size of items [@Stevens.etal.2007;@Emmerton.Renner.2009] instead, of counting each object individually to estimate approximate quantities via the ANS. **[Not sure if ANS includes these other cues.]**
 
-Within the ANS, estimates are approximated through the use of numerical ratios and differences through the _numerical magnitude effect_ and the  _numerical distance effect_ [@Ditz.Nieder.2016;@Dehaene.etal.1998]. A numerical ratio is the mathematical quotient between two numbers: 2/4 has a ratio of 0.5. A numerical difference is the mathematical difference between two numbers: 4-2 has a difference of 2. The _numerical magnitude effect_ asserts that, at a given numerical difference, discrimination worsens with increasing magnitude, which is equivalent to a decreasing numerical ratio. Essentially, it becomes harder to discriminate as the numerical ratio approaches 1. The _numerical distance effect_ asserts that number discrimination improves with increasing numerical difference between two values. Essentially, it becomes easier to discriminate as the options become more dissimilar. Taken together, these two effects describe Weber’s Law [@Nieder.2020]. Quantity discriminations that follow Weber’s law are a clear signature of the internal ANS and data showing difference and ratio effects illustrate the use of approximate amounts rather than precise numbers.
+Within the approximate number system, quantities are approximated through the use of numerical ratios and differences through the _numerical magnitude effect_ and the  _numerical distance effect_ [@Ditz.Nieder.2016;@Dehaene.etal.1998]. A numerical ratio is the mathematical quotient between two numbers: 2/4 has a ratio of 0.5. A numerical difference is the mathematical difference between two numbers: 4-2 has a difference of 2. The _numerical magnitude effect_ asserts that, at a given numerical difference, discrimination worsens with increasing magnitude, which is equivalent to a decreasing numerical ratio. Essentially, it becomes harder to discriminate as the numerical ratio approaches 1. The _numerical distance effect_ asserts that number discrimination improves with increasing numerical difference between two values. Essentially, it becomes easier to discriminate as the options become more dissimilar. Taken together, these two effects describe Weber’s Law [@Nieder.2020]. Quantity discriminations that follow Weber’s law are a clear signature of the internal ANS and data showing difference and ratio effects illustrate the use of approximate amounts rather than precise numbers.
 
 Past animal research investigating numerical cognition has found evidence that number is a relevant stimulus cue to which animals are sensitive across a number of contexts [@Agrillo.Beran.2013;@Agrillo.Bisazza.2014]. Most of these numerical discrimination tasks use food or objects as stimuli [@Call.2000;@Beran.2001;@Kelly.2016;@Scarf.etal.2011;@Rugani.etal.2013]. In previous studies, accuracy decreased as the ratio between the values approached 1, a direct confirmation of the _numerical magnitude effect_ [@Ditz.Nieder.2016;@Cantlon.Brannon.2006; @Merten.Nieder.2009;@Hanus.Call.2007;@Evans.etal.2009]. The second half of Weber’s Law has been confirmed showing animals discriminate between a pair of numbers with more accuracy at larger numerical differences, _numerical distance effect_, [@Ditz.Nieder.2016;@Kelly.2016;@Tornick.etal.2015;@Ditz.Nieder.2015]. However, a subset of studies looking at fish use conspecifics (members of the same species) to assess numerical cognition [@Buckingham.etal.2007;@Agrillo.etal.2008;@Gomez-Laplaza.Gerlai.2016]. Many species prefer to be in larger groups, presumably because this dilutes their probability of being captured by predators [@Krause.Ruxton.2002;@Silk.etal.2014]. Though some studies show an effect of both difference and ratio on social preference [@Agrillo.Dadda.2007;@Agrillo.etal.2008], others only show an effect of ratio [@Buckingham.etal.2007;@Gomez-Laplaza.Gerlai.2011]. In all four of these conspecific item studies, subjects were better at discriminating ratios above one half than below. This is in accordance with the numerical magnitude effect, with only one of the four providing evidence that fish were capable of discriminating ratios below 1:2. Research shows ratio and difference effects in animals across contexts, yet no one has looked at context effects on numerical preference within a single test population of any one species.
 
@@ -190,7 +191,7 @@ The best-fitting random effect structure for the food item data was the intercep
 
 ```{r foodgraphs, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:foodgraphs-cap)"}
 
-include_graphics(here("figures/food_figures.PNG"))
+include_graphics(here("figures/food_apparatus.PNG"))
 
 ```
 
@@ -206,7 +207,7 @@ The same fixed effect structures were used in the social as the food study: an e
 
 ```{r socialgraphs, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:socialgraphs-cap)"}
 
-include_graphics(here("figures/social_figures.PNG"))
+include_graphics(here("figures/social_apparatus.PNG"))
 
 
 ```
@@ -261,7 +262,7 @@ All procedures were conducted in an ethical and responsible manner, in full comp
 
 ```{r modeltable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:modeltable-cap)"}
 
-include_graphics(here("figures/model_structures.PNG")) 
+# include_graphics(here("figures/model_structures.PNG")) 
 
 
 ```
@@ -272,7 +273,7 @@ include_graphics(here("figures/model_structures.PNG"))
 
 ```{r bftable, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:bftable-cap)"}
 
-include_graphics(here("figures/BF_values.png"))
+# include_graphics(here("figures/BF_values.png"))
 
 
 ```
@@ -282,7 +283,7 @@ include_graphics(here("figures/BF_values.png"))
 
 ```{r pairstable, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:pairstable-cap)"}
 
-include_graphics(here("figures/factorial_pair_table.png"))
+# include_graphics(here("figures/factorial_pair_table.png"))
 
 ```
 
