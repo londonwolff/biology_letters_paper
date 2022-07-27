@@ -8,8 +8,6 @@ library(bayestestR)
 library(performance)
 library(here)
 library(papaja)
-# library(formattable)
-
 
 # Functions ---------------------------------------------------------------
 
@@ -151,10 +149,6 @@ analyze_data <- function(df, type, rep) {
 
   ratio_bird_summary_means$lower <-  ratio_bird_summary_means$percent_larger - confidence_intv_ratio$percent_larger
 
-
-  #Creating output to use for Rmarkdown scripts
-
-
 #Plots-----------------------------------
 
 #Graph Ratio grouped by subject bird
@@ -190,7 +184,6 @@ diff_bird_graph <- ggplot(data = diff_bird_summary, aes(x=difference, y= percent
 
 diff_bird_graph
 
-
 #creating tables for BF values
 
 random_models <- c("(1|Subject)","(1|Pair)","(1|Subject)+(1|Pair)")
@@ -216,6 +209,8 @@ random_bf_table <- apa_table(random_bf_df ,
 fixed_bf_table <- apa_table(fixed_bf_df,
                               align= c("l","l","l","l"))
 
+#Creating Output to use for manuscript
+
 output <- list(ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = diff_bird_summary_means, CI_ratio = ratio_bird_summary_means,  best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_bf_table)
 }
 
@@ -230,7 +225,7 @@ food1 <- all_data |>
 
 food2 <- all_data |>
   filter(study == "food" & rep == 2) |>
-  filter(!subject %in% c("Robin", "Basil"))
+  filter(!subject %in% c("Basil", "Rooster"))
 
 social1 <- all_data |>
   filter(study == "social" & rep == 1) |>
@@ -250,11 +245,12 @@ social1_results <- analyze_data(social1, "social", "1")
 social2_results <- analyze_data(social2, "social", "2")
 
 
-
 # Build plots -------------------------------------------------------------
 
 library(patchwork)
-food1_results$diff_fig + food1_results$ratio_fig
+food1_results$diff_fig + food1_results$ratio_fig + food2_results$diff_fig + food2_results$ratio_fig
+
+social1_results$diff_fig + social1_results$ratio_fig + social2_results$diff_fig + social2_results$ratio_fig
 
 # Stooge Preferences -------------------------------
 
@@ -351,3 +347,4 @@ sum_stooge_rel_sex <- df %>%
 
 sum_stooge_rel_sex <- sum_stooge_rel_sex %>%
   select(individual, female_percent, male_percent, overall_percent)
+
