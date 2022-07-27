@@ -20,7 +20,7 @@ analyze_data <- function(df, type, rep) {
     group_by(subject) %>%
     summarise(n = n(),
               percent_larger = mean(choose_larger, na.rm = TRUE) * 100,
-              sd = sd(choose_larger)) %>%
+              sd = sd(choose_larger, na.rm = TRUE)) %>%
     mutate(se=sd/sqrt(8)) %>%
     mutate(ic=se*qt((1-0.05)/2 + .5, n-1))
 
