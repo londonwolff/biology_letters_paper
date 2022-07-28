@@ -248,9 +248,10 @@ social2_results <- analyze_data(social2, "social", "2")
 # Build plots -------------------------------------------------------------
 
 library(patchwork)
-food1_results$diff_fig + food1_results$ratio_fig + food2_results$diff_fig + food2_results$ratio_fig
+food_figures <- food1_results$diff_fig + food1_results$ratio_fig + food2_results$diff_fig + food2_results$ratio_fig + plot_annotation(tag_levels = 'A')
 
-social1_results$diff_fig + social1_results$ratio_fig + social2_results$diff_fig + social2_results$ratio_fig
+social_figures <- social1_results$diff_fig + social1_results$ratio_fig + social2_results$diff_fig + social2_results$ratio_fig + plot_annotation(tag_levels = 'A')
+
 
 # Stooge Preferences -------------------------------
 
