@@ -8,6 +8,7 @@ library(bayestestR)
 library(performance)
 library(here)
 library(papaja)
+library(dplyr)
 
 # Functions ---------------------------------------------------------------
 
@@ -154,7 +155,7 @@ analyze_data <- function(df, type, rep) {
 #Graph Ratio grouped by subject bird
 
 ratio_bird_graph <- ggplot(data = ratio_bird_summary, aes(x=ratio, y= percent_larger)) +
-  labs(y="percent_largerent larger choosen", x = "Ratio")+
+  labs(y="percent larger choosen", x = "Ratio")+
   geom_line(aes(group = subject, color = subject), alpha = 0.5)+
   geom_point(data = ratiosummary, size = 2)+
   geom_errorbar(data = ratio_bird_summary_means, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
@@ -172,13 +173,13 @@ ratio_bird_graph <- ggplot(data = ratio_bird_summary, aes(x=ratio, y= percent_la
 
 diff_bird_graph <- ggplot(data = diff_bird_summary, aes(x=difference, y= percent_larger)) +
   geom_line(aes(group = subject, color = subject), alpha = 0.5)+
-  geom_point(data = diffsummary, size = 2) +
+   labs( y="percent larger choosen", x = "Difference")+
+ geom_point(data = diffsummary, size = 2) +
   geom_errorbar(data = diff_bird_summary_means, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
   theme_bw(base_size = 22)+
   theme(legend.position =  "none",
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_blank())+
-  labs( y="Percent larger choosen", x = "Difference")+
   geom_hline(yintercept = 50, linetype = "dashed")+
   ylim(20,100)
 
@@ -211,9 +212,8 @@ fixed_bf_table <- apa_table(fixed_bf_df,
 
 #Creating Output to use for manuscript
 
-output <- list(ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = diff_bird_summary_means, CI_ratio = ratio_bird_summary_means,  best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_bf_table)
+output <- list(summarystats = birdsummary, ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = diff_bird_summary_means, CI_ratio = ratio_bird_summary_means,  best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_bf_table)
 }
-
 
 # Import data -------------------------------------------------------------
 
@@ -229,15 +229,15 @@ food2 <- all_data |>
 
 social1 <- all_data |>
   filter(study == "social" & rep == 1) |>
-  filter(!subject %in% c("Baloo"))
+  filter(!subject %in% c("Baloo")) |>
+  filter(!small_num %in% 0)
 
 social2 <- all_data |>
   filter(study == "social" & rep == 2) |>
   filter(!subject %in% c())
 
 
-# Analyze data ------------------------------------------------------------
-
+# Analyze data -----------------------------------------------------
 
 food1_results <- analyze_data(food1, "food", "1")
 food2_results <- analyze_data(food2, "food", "2")
@@ -253,7 +253,16 @@ food_figures <- food1_results$diff_fig + food1_results$ratio_fig + food2_results
 social_figures <- social1_results$diff_fig + social1_results$ratio_fig + social2_results$diff_fig + social2_results$ratio_fig + plot_annotation(tag_levels = 'A')
 
 
+
+
+
+
+
+
+
+
 # Stooge Preferences -------------------------------
+#Analysis for individual preference per bird. Do not run with the regular script for right now when running all the graphs.
 
 #input data
 data_phase_1 <- read_csv(here("data/phase_1_social_complete.csv"))

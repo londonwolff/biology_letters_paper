@@ -58,10 +58,7 @@ library(patchwork)
 library(formattable)
 library(knitr)
 
-source(here("R/social_merp_analysis_original.R"))
-source(here("R/food_merp_analysis_original.R"))
-source(here("R/social_analysis_replication.R"))
-source(here("R/food_analysis_replication.R"))
+source(here("R/analysis.R"))
 r_refs(file = "r-references.bib")
 my_citations <- cite_r(file = "r-references.bib")
 
@@ -159,7 +156,7 @@ To test our second and third hypotheses, whether numerical difference and ratio 
 
 ## Food Experiment
 
-Our first hypothesis predicted that subjects would choose the larger number of mealworms over the smaller number overall across the numerical pairs. On average, our subjects in the first replicate of the food study chose the larger option `r mean(birdsummary_food$perc)`% of the time +/- `r sd(birdsummary_food$perc)` and `r mean(birdsummary_food_rep$perc)`% of the time +/- `r sd(birdsummary_food_rep$perc)` in the second replicate. One sample t-tests provided strong and moderate evidence (respectively) that preferences were above chance (50%) in both replicate 1 (`r apa_print(large_pref_ttest_food)$statistic`, `r apa_print(large_pref_ttest_bf_food)$statistic`) and replicate 2 (`r apa_print(large_pref_ttest_food_rep)$statistic`, `r apa_print(large_pref_ttest_bf_food_rep)$statistic`).
+Our first hypothesis predicted that subjects would choose the larger number of mealworms over the smaller number overall across the numerical pairs. On average, our subjects in the first replicate of the food study chose the larger option `r mean(birdsummary_food$perc)`% of the time +/- `r sd(birdsummary_food$perc)` and `r mean(birdsummary_food_rep$perc)`% of the time +/- `r sd(birdsummary_food_rep$perc)` in the second replicate. One sample t-tests provided strong and moderate evidence (respectively) that preferences were above chance (50%) in both replicate 1 (`r apa_print(ttest$)$statistic`, `r apa_print(large_pref_ttest_bf_food)$statistic`) and replicate 2 (`r apa_print(large_pref_ttest_food_rep)$statistic`, `r apa_print(large_pref_ttest_bf_food_rep)$statistic`).
  
 To investigate our other two hypotheses, we used model selection with mixed effect models. Hypothesis two posits that pinyon jays prefer higher differences and lower ratios, which would predict both difference and ratio are included as main effects in the best-fitting model. For both replicates, the best-fitting random effect structure for the food item data was the intercept only model, or no random effect structure. <!--The inclusion of only subject as a random effect (Replicate 1:`r printbf(nonsocial_random_comparison_table$BF[2])`, Replicate 2: `r printbf(nonsocial_random_comparison_rep_table$BF[2])` ) was under 0.33, providing evidence that this random effect structure was not supported by the data.--> Therefore, we included no random effect structure in the second stage of comparisons looking at fixed effects. The five fixed effect model structures we compared included the (1) intercept only model against the model with (2) ratio as a fixed effect, (3) difference as a fixed effect, (4) both difference and ratio as a fixed effects but without an interaction, and (5) both difference and ratio as fixed effects with an interaction. The model with only the main effect of ratio (Replicate 1: `r printbf(nonsocial_fixed_comparison_table$BF[2])`, Replicate 2: `r printbf(nonsocial_fixed_comparison_rep_table$BF[2])`) best fit both data sets (see Tables ?? and ?? for full results). Thus, subjects in the food study used the ratio between the two numbers of mealworms to choose between options, with stronger preferences for larger options at smaller ratios (Figure \ref{fig:foodgraphs}). Consequently, this only partially supports our second hypothesis, since difference was not included in the best fitting model (Figure \ref{fig:foodgraphs}).  Additionally, our third hypothesis was not supported, as both difference and ratio were included in the best fitting model. 
 
@@ -168,7 +165,7 @@ To investigate our other two hypotheses, we used model selection with mixed effe
 
 ```{r foodgraphs, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:foodgraphs-cap)"}
 
-include_graphics(here("figures/food_figures.png"))
+include_graphics(food_figures)
 
 ```
 
@@ -182,7 +179,7 @@ For hypotheses 2 and 3, we tested all possible random effects (subject, pair, an
 
 ```{r socialgraphs, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:socialgraphs-cap)"}
 
-include_graphics(here("figures/social_figures.png"))
+include_graphics(social_figures)
 
 
 ```
