@@ -212,7 +212,7 @@ fixed_bf_table <- apa_table(fixed_bf_df,
 
 #Creating Output to use for manuscript
 
-output <- list(summarystats = birdsummary, ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = diff_bird_summary_means, CI_ratio = ratio_bird_summary_means,  best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_bf_table)
+output <- list(ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = diff_bird_summary_means, CI_ratio = ratio_bird_summary_means,  best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_comparison_table)
 }
 
 # Import data -------------------------------------------------------------
