@@ -8,7 +8,7 @@ library(bayestestR)
 library(performance)
 library(here)
 library(papaja)
-library(dplyr)
+# library(dplyr)
 
 # Functions ---------------------------------------------------------------
 
@@ -155,7 +155,7 @@ analyze_data <- function(df, type, rep) {
 #Graph Ratio grouped by subject bird
 
 ratio_bird_graph <- ggplot(data = ratio_bird_summary, aes(x=ratio, y= percent_larger)) +
-  labs(y="percent larger choosen", x = "Ratio")+
+  labs(y = "Percent larger choosen", x = "Ratio")+
   geom_line(aes(group = subject, color = subject), alpha = 0.5)+
   geom_point(data = ratiosummary, size = 2)+
   geom_errorbar(data = ratio_bird_summary_means, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
@@ -173,7 +173,7 @@ ratio_bird_graph <- ggplot(data = ratio_bird_summary, aes(x=ratio, y= percent_la
 
 diff_bird_graph <- ggplot(data = diff_bird_summary, aes(x=difference, y= percent_larger)) +
   geom_line(aes(group = subject, color = subject), alpha = 0.5)+
-   labs( y="percent larger choosen", x = "Difference")+
+   labs(y = "Percent larger choosen", x = "Difference")+
  geom_point(data = diffsummary, size = 2) +
   geom_errorbar(data = diff_bird_summary_means, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
   theme_bw(base_size = 22)+
@@ -249,8 +249,10 @@ social2_results <- analyze_data(social2, "social", "2")
 
 library(patchwork)
 food_figures <- food1_results$diff_fig + food1_results$ratio_fig + food2_results$diff_fig + food2_results$ratio_fig + plot_annotation(tag_levels = 'A')
+ggsave(here("figures/food_figure.png"), width = 14, height = 10)
 
 social_figures <- social1_results$diff_fig + social1_results$ratio_fig + social2_results$diff_fig + social2_results$ratio_fig + plot_annotation(tag_levels = 'A')
+ggsave(here("figures/social_figure.png"), width = 14, height = 10)
 
 
 
@@ -290,7 +292,7 @@ df$bird_sex <- ifelse(df$subject_bird %in% female_birds, "female", "male")
 df <- df %>%
   select(id, subject_bird, bird_sex, everything())
 
-View(df)
+# View(df)
 
 # Create column of birds that were choosen and create columns showing how often each bird was choosen and not choosen.
 
