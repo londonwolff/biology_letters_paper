@@ -218,7 +218,7 @@ NSF-1658837). We would like to thank Kylie Hughes and Katie Carey for caring for
 
 ## Ethics approval
 
-All procedures were conducted in an ethical and responsible manner, in full compliance with all relevant codes of experimentation and legislation and were approved by the UNL Internal Review Board (protocol # 17922) and Institutional Animal Care and Use Committee (protocol # 1621).
+All procedures were conducted in an ethical and responsible manner, in full compliance with all relevant codes of experimentation and legislation and were approved by the UNL Internal Review Board (protocol # 17922) and Institutional Animal Care and Use Committee (protocol # 1621). 
 
 \newpage
  

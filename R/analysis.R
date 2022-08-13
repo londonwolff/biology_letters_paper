@@ -165,8 +165,9 @@ ratio_bird_graph <- ggplot(data = ratio_bird_summary, aes(x=ratio, y= percent_la
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_blank())+
   geom_hline(yintercept = 50, linetype = "dashed")+
-  ylim(20,100)+
-  scale_x_continuous(breaks = c(.17, .2, .25,.33,.4, .5, .6, .67, .75, .8, .83))
+  scale_x_continuous(breaks = c(.17, .2, .25,.33,.4, .5, .6, .67, .75, .8, .83))+
+  scale_y_continuous(breaks=seq(10,100,10))+
+  ylim(10,110)
 
 
 #Graph Difference by subject bird
@@ -181,7 +182,8 @@ diff_bird_graph <- ggplot(data = diff_bird_summary, aes(x=difference, y= percent
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_blank())+
   geom_hline(yintercept = 50, linetype = "dashed")+
-  ylim(20,100)
+  scale_y_continuous(breaks=seq(10,100,10))+
+  ylim(10,110)
 
 diff_bird_graph
 
@@ -234,7 +236,8 @@ social1 <- all_data |>
 
 social2 <- all_data |>
   filter(study == "social" & rep == 2) |>
-  filter(!subject %in% c())
+  filter(!subject %in% c()) |>
+  filter(!small_num %in% 0)
 
 
 # Analyze data -----------------------------------------------------
@@ -253,10 +256,6 @@ ggsave(here("figures/food_figure.png"), width = 14, height = 10)
 
 social_figures <- social1_results$diff_fig + social1_results$ratio_fig + social2_results$diff_fig + social2_results$ratio_fig + plot_annotation(tag_levels = 'A')
 ggsave(here("figures/social_figure.png"), width = 14, height = 10)
-
-
-
-
 
 
 
