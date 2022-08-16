@@ -34,7 +34,7 @@ library(here)
 
 # Define functions -------------------------------------------------------------
 
-# analyze an experiment's data
+# Analyze an experiment's data
 analyze_data <- function(df, type, rep) {
 
   # Calculate difference and ratio
@@ -122,15 +122,6 @@ analyze_data <- function(df, type, rep) {
   best_random_effect_model <- eval(parse(text = random_comparison_table$Name[which(random_comparison_table$BF == max(random_comparison_table$BF))]))
   best_random_effect <- sub("choose_larger ~ ", "", best_random_effect_model$formula)
 
-  ### Extract BICs
-  # bic1_random <- random_comparison$BIC[1] # empty random model
-  # bic2_random <- random_comparison$BIC[2]
-  # bic3_random <- random_comparison$BIC[3]
-  # bic4_random <- random_comparison$BIC[4]
-  #
-  # # Convert BIC values to Bayes factor
-  # bf_values_random <- bic_to_bf(c(bic1_random, bic2_random, bic3_random, bic4_random), denominator = bic1_random)
-
   # All random effect structures examined found that the intercept only random effect model or an empty model was the best model structure so no random effect structure was added to the fixed effect models.
 
 
@@ -141,29 +132,15 @@ analyze_data <- function(df, type, rep) {
   fixed_no_interaction_model <- glm(formula = choose_larger ~ difference + ratio, data = df, family = binomial) # no interaction term with main effects.
   full_fixed_model <- glm(formula = choose_larger ~ difference * ratio, data = df, family = binomial) # full model
 
-  ## Likelihood ratio tests for model comparison
-
+  # Likelihood ratio tests for model comparison
   fixed_model_comparison <- compare_performance(random_effect_intercept, fixed_ratio_model, fixed_difference_model, fixed_no_interaction_model, full_fixed_model)
 
   fixed_bayes_comparison <- bayesfactor_models(random_effect_intercept, fixed_ratio_model, fixed_difference_model, fixed_no_interaction_model, full_fixed_model)
-
-  ## Extract BICs from table to convert to Bayes factors
-  # bic1 <- fixed_model_comparison$BIC[1]
-  # bic2 <- fixed_model_comparison$BIC[2]
-  # bic3 <- fixed_model_comparison$BIC[3]
-  # bic4 <- fixed_model_comparison$BIC[4]
-  # bic5 <- fixed_model_comparison$BIC[5]
-  #
-  # ## Convert BICs to Bayes Factorss
-  #
-  # # Convert BIC values to Bayes factor
-  # bf_values <- bic_to_bf(c(bic1, bic2, bic3, bic4, bic5), denominator = bic1)
 
   fixed_comparison_table <- fixed_model_comparison |>
     mutate(BF = as.numeric(fixed_bayes_comparison))
 
   # Determine the model of best fit
-
   bestfit <- eval(parse(text = fixed_comparison_table$Name[which(fixed_comparison_table$BIC == min(fixed_comparison_table$BIC))]))
 
 
@@ -215,7 +192,6 @@ analyze_data <- function(df, type, rep) {
     BIC = random_comparison_table$BIC,
     BF = random_comparison_table$BF
   )
-  # random_bf_df[4] <- round(random_bf_df[4], digits = 2)
 
   fixed_bf_df <- tibble(
     Model = fixed_models,
@@ -223,21 +199,14 @@ analyze_data <- function(df, type, rep) {
     BIC = fixed_comparison_table$BIC,
     BF = fixed_comparison_table$BF
   )
-  # fixed_bf_df[4] <- round(fixed_bf_df[4], digits = 2)
 
+  random_bf_table <- apa_table(random_bf_df)
+  fixed_bf_table <- apa_table(fixed_bf_df)
 
-  random_bf_table <- apa_table(random_bf_df)#,
-  #                              align = c("l", "l", "l", "l")
-  # )
-
-  fixed_bf_table <- apa_table(fixed_bf_df)#,
-  #                             align = c("l", "l", "l", "l")
-  # )
-
-  # Creating Output to use for manuscript
-
+  # Create Output to use for manuscript
   output <- list(ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = choice_means_subject_diff, CI_ratio = choice_means_ratio_means, best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_comparison_table)
 }
+
 
 # Import data ------------------------------------------------------------------
 
