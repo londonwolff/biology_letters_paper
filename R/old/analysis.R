@@ -155,35 +155,36 @@ analyze_data <- function(df, type, rep) {
 #Graph Ratio grouped by subject bird
 
 ratio_bird_graph <- ggplot(data = ratio_bird_summary, aes(x=ratio, y= percent_larger)) +
-  labs(y = "Percent larger choosen", x = "Ratio")+
-  geom_line(aes(group = subject, color = subject), alpha = 0.5)+
-  geom_point(data = ratiosummary, size = 2)+
-  geom_errorbar(data = ratio_bird_summary_means, aes(x=ratio, ymin= lower, ymax = upper), width = 0)+
-  theme_bw(base_size = 22)+
+  labs(y = "Percent larger choosen", x = "Ratio") +
+  geom_line(aes(group = subject, color = subject), alpha = 0.5) +
+  geom_point(data = ratiosummary, size = 2) +
+  geom_errorbar(data = ratio_bird_summary_means, aes(x=ratio, ymin= lower, ymax = upper), width = 0) +
+  theme_bw(base_size = 22) +
   theme(legend.position =  "none",
         axis.text.x = element_text(angle = 60, hjust = 1),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank())+
-  geom_hline(yintercept = 50, linetype = "dashed")+
-  scale_x_continuous(breaks = c(.17, .2, .25,.33,.4, .5, .6, .67, .75, .8, .83))+
-  scale_y_continuous(breaks=seq(10,100,10))+
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) +
+        geom_hline(yintercept = 50, linetype = "dashed") +
+  scale_x_continuous(breaks = c(.17, .2, .25,.33,.4, .5, .6, .67, .75, .8, .83)) +
+  scale_y_continuous(breaks=seq(10,100,10)) +
   ylim(10,110)
 
 
 #Graph Difference by subject bird
 
 diff_bird_graph <- ggplot(data = diff_bird_summary, aes(x=difference, y= percent_larger)) +
-  geom_line(aes(group = subject, color = subject), alpha = 0.5)+
-   labs(y = "Percent larger choosen", x = "Difference")+
+  geom_line(aes(group = subject, color = subject), alpha = 0.5) +
+   labs(y = "Percent larger choosen", x = "Difference") +
  geom_point(data = diffsummary, size = 2) +
-  geom_errorbar(data = diff_bird_summary_means, aes(x=difference, ymin= lower, ymax = upper), width = 0)+
-  theme_bw(base_size = 22)+
+  geom_errorbar(data = diff_bird_summary_means, aes(x=difference, ymin= lower, ymax = upper), width = 0) +
+  theme_bw(base_size = 22) +
   theme(legend.position =  "none",
         panel.grid.major = element_blank(),
         panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank())+
-  geom_hline(yintercept = 50, linetype = "dashed")+
-  scale_y_continuous(breaks=seq(10,100,10))+
+        panel.grid.minor.y = element_blank()) +
+  geom_hline(yintercept = 50, linetype = "dashed") +
+  scale_y_continuous(breaks=seq(10,100,10)) +
   ylim(10,110)
 
 diff_bird_graph
