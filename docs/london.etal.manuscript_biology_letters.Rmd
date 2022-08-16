@@ -10,9 +10,14 @@ author:
     address: B83 East Stadium, University of Nebraska, Lincoln, Lincoln, NE, USA 68588. ORCID 0000-0001-8359-2619
   - name: Jeffrey R. Stevens
     affiliation: '1'
-    corresponding: yes
+    corresponding: no
     email: jeffrey.r.stevens@gmail.com
     address: B83 East Stadium, University of Nebraska, Lincoln, Lincoln, NE, USA 68588. ORCID 0000-0003-2375-1360
+  - name: Katie Carey
+    affiliation: '1'
+    corresponding: no
+    email: 
+    address: 
 
 affiliation:
   - id: '1'
