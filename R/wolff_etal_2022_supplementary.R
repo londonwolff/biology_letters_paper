@@ -1,9 +1,14 @@
+##
+## Script name: wolff_etal_2022_supplementary.R
+##
+## Purpose of script: Analyze pinyon jay number preference data
+
 library(tidyverse)
 library(BayesFactor)
 library(bayestestR)
 library(here)
 
-# Stooge Preferences -------------------------------
+# Creating visuals for Stooge Preference Graphs-----------------------------
 #Analysis for individual preference per bird for the first repition
 
 #input data
