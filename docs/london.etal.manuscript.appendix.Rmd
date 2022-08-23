@@ -19,7 +19,7 @@ Our study population of 20 Pinyon Jays (_Gymnorhinus cyanocephalus_) were wild b
 
 Repetition 1: Eight Pinyon Jays (one female) completed all rounds of the food experiment and 10 Pinyon Jays (four female) completed all rounds of the social experiment. The Pinyon Jays in the food item experiment were housed two to a double cage, while the jays in the social experiment were individually housed. A further 17 Pinyon Jays (six female) from the colony were used as stooge conspecifics in the social experiment. This number includes six birds that had to be transferred out of use as stooge birds due to unrelated colony matters. Stooge birds were primarily housed socially and always in a separate room from the testing subjects. Two Pinyon Jays were dropped from the social experiment due to unrelated health concerns.
 
-Repetition 2: 4 Pinyon Jays (# female) completed all rounds of the food experiment and 10 Pinyon Jays (# female) completed all rounds of the social experiment. A further ## Pinyon Jays (# female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions. <!--Go through logs and check what all stooge birds were used for rep 2-->
+Repetition 2: Four Pinyon Jays (# female) completed all rounds of the food experiment and Ten Pinyon Jays (# female) completed all rounds of the social experiment. A further 8 Pinyon Jays (# female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions. 
 
 ### Food Item Habituation and Training  
 <!--check on capitalization for subheadings-->
@@ -125,4 +125,4 @@ include_graphics(here("figures/BF_values.png"))
 include_graphics(here("figures/factorial_pair_table.png"))
 
 ```
-<!--redo all the tables with apa_table instead of formattable and update the code intext-->
+<!--Update/proof read all the captions in supplementary-->
