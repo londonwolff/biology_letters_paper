@@ -10,7 +10,7 @@ library(papaja)
 library(here)
 
 # Create Visuals for Stooge Preference-----------------------------
-#Analysis for individual preference per bird for the first repition
+#Analysis for individual preference per bird for the first repetition
 
 #input data
 data_phase_1 <- read_csv(here("data/phase_1_social_complete.csv"))
@@ -185,13 +185,14 @@ ind_preference_table_2 <- df2 %>%
 ind_preference_table_2 <- ind_preference_table_2 %>%
   select(individual, female_percent, male_percent, overall_percent)
 
-#decdie if you want them in 2 tables or if you want it to be 2 large table. We talked about 1 large set up with every indivdiual birds sex and age listed. But should we maybe just do thtat for subjects. For example, make a different table with subject bird used, what experiments they were in and age, sex, etc. yes. I should make that.
+#decide if you want them in 2 tables or if you want it to be 1 large table.
 
 #Create table of factorial pairs with corresponding differences and ratios------------
 
 factorial_pairs_df <- data.frame(Pair=c("1/2","1/3","1/4","1/5","1/6","2/3","2/4","2/5","2/6","3/4","3/5","3/6","4/5","4/6","5/6"),
                                  Ratio=c("0.50","0.33","0.25","0.20","0.17","0.67","0.50","0.40","0.33","0.75","0.60","0.50","0.80","0.67","0.83"),
-                                 Difference=c("1","2","3","4","5","1","2","3","4","1","2","3","1","2","1"))
+                                 Difference=c("1","2","3","4","5","1","2","3","4","1","2","3","1","2","1"),
+                                 Social_2=c("X","X","X","X","X","X","X","X","X","X","X","","","",""))
 
 ##add row from rep 2 social pairs we completed.
 
@@ -258,12 +259,20 @@ subject_bird_info <- code_summary %>%
   pivot_wider(names_from = unique_code, values_from = n, values_fill = 0) %>%
   select(subject, everything())
 
-subject_bird_info$food_1 <-  ifelse(subject_bird_info$food_1 == "0", 0, 1)
+subject_bird_info$food_1 <-  ifelse(subject_bird_info$food_1 == "0", "", "X")
 
-subject_bird_info$food_2 <-  ifelse(subject_bird_info$food_2 == "0", 0, 1)
+subject_bird_info$food_2 <-  ifelse(subject_bird_info$food_2 == "0", "", "X")
 
-subject_bird_info$social_1 <-  ifelse(subject_bird_info$food_2 == "0", 0, 1)
+subject_bird_info$social_1 <-  ifelse(subject_bird_info$social_1 == "0", "", "X")
 
-subject_bird_info$social_2 <-  ifelse(subject_bird_info$food_2 == "0", 0, 1)
+subject_bird_info$social_2 <-  ifelse(subject_bird_info$social_2 == "0", "", "X")
 
-subject_bird_info_table <- apa_table(subject_bird_info)
+bird_age_df <- data.frame(subject = c("Uno", "Dartagnan","Dumbledore","Fern","Fozzie","He-man", "Mork","Mote","Mulder","Prudence","Robin","Saffron","Basil","Dill","Rooster","Flute", "Hippolyta","Juniper","Black Elk","Chicklet","Juan"),
+                          age = c( 12, 10, 11,15, 12, 12, 12,14,11,10,14,12,15,15,12, 14, 14,15, 10, 12,19))
+
+subject_bird_info_merged <- merge(subject_bird_info, bird_age_df, all = FALSE)
+subject_bird_info_merged <- subject_bird_info_merged %>%
+  select(subject, sex, age, everything())
+
+subject_bird_info_table <- apa_table(subject_bird_info_merged)
+
