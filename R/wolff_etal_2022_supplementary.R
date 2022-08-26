@@ -1,8 +1,3 @@
-##
-## Script name: wolff_etal_2022_supplementary.R
-##
-## Purpose of script: Analyze pinyon jay number preference data
-
 library(tidyverse)
 library(BayesFactor)
 library(bayestestR)
@@ -197,6 +192,7 @@ factorial_pairs_df <- data.frame(Pair=c("1/2","1/3","1/4","1/5","1/6","2/3","2/4
 ##add row from rep 2 social pairs we completed.
 
 factorial_pairs_table <- apa_table(factorial_pairs_df)
+ggsave(here("figures/factorial_pairs_table.png"))
 
 
 #Creating Fixed Effect Model Selection Table---------
@@ -206,6 +202,7 @@ fixed_effect_df <- data.frame(Model = c("Intercept Only Model", "Ratio Only Mode
 
 
 fixed_effect_structure_table <-apa_table(fixed_effect_df)
+ggsave(here("figures/fixed_effect_structure_table.PNG"))
 
 #Creating Random Effect Model Selection Table-----------
 
@@ -213,6 +210,7 @@ random_effect_df <- data.frame(Model = c("Intercept Only Model", "Subject Only M
                                Formula = c("Choice~1","Choice~(1|Subject)","Choice~(1|Pair)","Choice~(1|Subject)+(1|Pair)"))
 
 random_effect_structure_table <- apa_table(random_effect_df)
+ggsave(here("figures/random_effect_structure_table.PNG"))
 
 #Creating Bayes Factor tables for random & fixed effects
 
@@ -275,4 +273,5 @@ subject_bird_info_merged <- subject_bird_info_merged %>%
   select(subject, sex, age, everything())
 
 subject_bird_info_table <- apa_table(subject_bird_info_merged)
+ggsave(here("figures/subject_bird_info_table.png"), width = 14, height = 10)
 

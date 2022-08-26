@@ -253,3 +253,5 @@ social_figures <- social1_results$diff_fig + social1_results$ratio_fig +
   social2_results$diff_fig + social2_results$ratio_fig +
   plot_annotation(tag_levels = "A")
 ggsave(here("figures/social_figure.png"), width = 14, height = 10)
+
+

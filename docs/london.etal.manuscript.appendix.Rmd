@@ -4,8 +4,23 @@ output: pdf_document
 date: '2022-07-15'
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r include=FALSE}
+
+library(here)
+library(patchwork)
+library(formattable)
+library(knitr)
+
+source(here("R/wolff_etal_2022_rcode.R"))
+
+
+typeset_scientific <- function(x) {
+  x <- gsub("e\\+00$", "", x)
+  x <- gsub("e\\+0?(\\d+)$", " \\\\times 10\\^\\{\\1\\}", x)
+  x <- gsub("e\\-0?(\\d+)$", " \\\\times 10\\^\\{-\\1\\}", x)
+  x
+knitr::opts_chunk$set(echo = TRUE) 
+}
 ```
 
 
@@ -22,7 +37,6 @@ Repetition 1: Eight Pinyon Jays (one female) completed all rounds of the food ex
 Repetition 2: Four Pinyon Jays (# female) completed all rounds of the food experiment and Ten Pinyon Jays (# female) completed all rounds of the social experiment. A further 8 Pinyon Jays (# female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions. 
 
 ### Food Item Habituation and Training  
-<!--check on capitalization for subheadings-->
 Prior to experimental sessions, all birds had to be habituated to the experimental room, cage, and stand and then experience training. Depending on the bird this took between 9-16 weeks as each bird was ran once a day between 11:00-13:00 CST. Subjects experienced four training phases in total; each aimed at teaching the bird a different piece of the paradigm. The first phase (rear cup habituation) habituated subjects to the apparatus. The second phase (front dish habituation) encouraged the birds to place their heads through holes at the front of the cage to consume mealworms from the dishes on the trays. The third phase (moving dish training) introduced the subjects to the fact that the dish on the unchosen side moved out of reach. The forth phase (mixed reward training) taught the subjects to quickly make a choice between zero or three mealworms, eat, and then set up for another trial in quick succession. 
 
 For rear cup habituation, the experimenter brought a subject from their home cage and released them into the test cage. Five mealworms were placed in each of the two feeding bowls into slots at the back of the cage. After three minutes, the experimenter counted the number of mealworms consumed in each food dish and returned the subject to its home cage.
@@ -45,6 +59,19 @@ Each bird experienced 10 repetitions for each of the 15 numerical pairs between 
 
 During habituation, three consecutive days of no choices and/or no eating of mealworms on one particular side triggered side de-bias training. During experimental sessions, there were two triggers for de-bias training: either not completing the first 0 vs. 3 practice test trial correctly or when a bird chose the same side for 10 consecutive trials. De-biasing training consisted of three mealworms placed in the dish the subject avoided and no mealworms in the side they preferred. The subject was allowed up to one minute to select the dish that contained mealworms. If the bird did not make a choice or eat any mealworms in the allotted time, we slide both trays all the way out of the stand, placed them out of view of the bird, waited a few seconds, then began the trial over. If they ate within the minute, we reset as soon as they ate until they had five total opportunities to eat. The bird returned to habituation or experimental sessions once they successfully chose the avoided side immediately and ate at least 60% of the mealworms provided. 
 
+### Food Apparatus  
+
+The apparatus for the food experiment included a bird cage (72 x 48 x 48 cm) abutting a plastic stand with sliding trays that contained mealworms (Figure \ref{fig:foodapp}). The stand was set at a 15 degree angle tilted toward the subject to facilitate mealworm viewing. The stand had two pvc pipe lined channels the same width as our plexiglass trays. Each plexiglass tray had a standard petri dish placed half an inch away from the front of each tray. Mealworms were placed in the front two thirds of the petri dish so the subjects could easily reach the mealworms and they were evenly distributed across the available area. Within the cage were three perches. One large free standing perch stood in the middle of the cage, while two small perches attached to each side of the cage a few inches back from the front. Subjects started each trial perched on the large free standing perch, and they chose an option by landing on the smaller left or right perches. They then consumed the mealworms associated with their decision while the unchosen side was removed immediately.
+
+<!--(foodapp)-->
+(ref:foodapp-cap) Food experiment apparatus (overhead view).
+```{r, socialapp, out.width="100%", fig.align="center", fig.cap = "(ref:socialapp-cap)"}
+
+include_graphics(here("figures/social_apparatus.PNG"))
+
+```
+
+
 ### Social Experiment habitutation and Training
 
 Prior to experimentation, we habituated all birds to both the experimental room and the apparatus. For habituation, we attached a stainless steal cup to the front of each bird cage. For a habituation session, the experimenter placed five mealworms in each of the cups. The experimenter then brought the subject into the room, pulled up both doors, and showed the subject each arm of the maze for six seconds, randomizing between subjects the side shown first. The subject was then gently placed on the bottom of the testing chamber as close to the center as possible with the bird facing away from their options. Once the subject crossed the threshold of a door, the door was quietly and swiftly closed behind them and the bird explored the chosen arm and consumed the mealworms for two minutes. After the two minutes expired, the experimenter removed the subject from the apparatus and recorded the number of mealworms consumed. 
@@ -63,11 +90,6 @@ Repetition 2: Each bird experienced 10 repetitions for each of the 15 numerical 
 
 If any subject chose either the left or right side for six consecutive sessions in either habituation or experimentation, they experienced side de-biasing. For side de-biasing, only one door was open in the apparatus, the door leading to the side the subject avoided. We placed five mealworms in the food cup at the end of that arm with no stooge birds present. The bird had up to five minutes to walk/fly past the door into the correct side and three minutes once the door shut behind them to eat the mealworms. Subjects experienced five consecutive trials in a de-biasing session. The subject returned to habituation or experimental sessions once they successfully choose the avoided side immediately upon release and ate at least 60% of the mealworms provided.
 
-### Food Apparatus  
-<!-- Should the apparatus discriptions be in the methods sections respectivley?or should I do a seperate section with just the apparatus pics? --> 
-
-The apparatus for the food experiment included a bird cage (72 x 48 x 48 cm) abutting a plastic stand with sliding trays that contained mealworms (Figure \ref{fig:foodapp}). The stand was set at a 15 degree angle tilted toward the subject to facilitate mealworm viewing. The stand had two pvc pipe lined channels the same width as our plexiglass trays. Each plexiglass tray had a standard petri dish placed half an inch away from the front of each tray. Mealworms were placed in the front two thirds of the petri dish so the subjects could easily reach the mealworms and they were evenly distributed across the available area. Within the cage were three perches. One large free standing perch stood in the middle of the cage, while two small perches attached to each side of the cage a few inches back from the front. Subjects started each trial perched on the large free standing perch, and they chose an option by landing on the smaller left or right perches. They then consumed the mealworms associated with their decision while the unchosen side was removed immediately.
-
 ### Social Apparatus 
 
 The apparatus (Figure \ref{fig:socialapp}) took the form of a Y maze formed out of chicken wire, plastic sheets, and Plexiglas. The subject entered a large chamber at the base of the maze before choosing one of two arms of the Y maze. At the entrance to both arms, a guillotine style door was closed after the bird walked or flew past it, thus making a choice between the option on the left or right. At the end of each arm, was a large bird cage housing the stooge birds. Each cage had two lengthwise perches for the stooge birds to use and one small perch hanging from the ceiling.
@@ -79,7 +101,8 @@ The apparatus (Figure \ref{fig:socialapp}) took the form of a Y maze formed out 
 include_graphics(here("figures/social_apparatus.PNG"))
 
 ```
-<!--I have pictures of the apparatus and I have diagrams. Which should we use?-->
+
+
 #Data Analysis, continued 
 Data were analyzed and processed for the project using `r my_citations`.
 
@@ -96,33 +119,39 @@ To explore random effect structure, we included models with no fixed effect and 
 \renewcommand{\thefigure}{A\arabic{figure}}
 \setcounter{figure}{0} <!--don't remember what this syntax does -->
 
+
+<!--(bftable)
+  (ref:bftable-cap) Bayes factor, BIC, and AIC values per model (a) Random effect models and Bayes factor, BIC, and AIC values for the food study (b) Fixed effect models and Bayes factor, BIC, and AIC values for the food study (c) Random effect models and Bayes factor, BIC, and AIC values for the social study. (d) Fixed effect models and Bayes factor, BIC, and AIC values for the social study. Reminder: _BF_ > 3 show moderate evidence for the alternative hypothesis while _BF_ < 0.33 show moderate evidence for the null hypothesis. A _BF_ in between 3 and 0.33 is inconclusive.-->
+
+<!--(pairstable)-->
+  (ref:pairstable-cap) Factorial pair combinations used each experiment. We used every factorial pair from 1 to 6 resulting in 15 combinations. The second and third columns show the ratio and difference for each pair, respectively. The last column shows the 11 pairs used in the second replicate of social 2 as this is the only phase of this experiment that did not use all possible pairs. 
+
+```{r pairstable, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:pairstable-cap)"}
+
+include_graphics(here("figures/.png"))
+
+```
+
+
 <!--(modeltable)-->
   (ref:modeltable-cap) Random and fixed effect model structures (a) The four random effect models with their corresponding formulas. (b) The five fixed effect models with their corresponding formulas. Choice represents the binary dependent variable of larger or smaller item chosen by the subject.   
 
 ```{r modeltable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:modeltable-cap)"}
 
-include_graphics(here("figures/model_structures.PNG")) 
+include_graphics(here("figures/.png")) 
+
+
+```
+
+<!--(birdinfotable)-->
+  (ref:birdinfotable-cap) 
+```{r modeltable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:modeltable-cap)"}
+
+include_graphics(here("figures/subject_bird_info_table.png")) 
 
 
 ```
 
 
-<!--(bftable)-->
-  (ref:bftable-cap) Bayes factor, BIC, and AIC values per model (a) Random effect models and Bayes factor, BIC, and AIC values for the food study (b) Fixed effect models and Bayes factor, BIC, and AIC values for the food study (c) Random effect models and Bayes factor, BIC, and AIC values for the social study. (d) Fixed effect models and Bayes factor, BIC, and AIC values for the social study. Reminder: _BF_ > 3 show moderate evidence for the alternative hypothesis while _BF_ < 0.33 show moderate evidence for the null hypothesis. A _BF_ in between 3 and 0.33 is inconclusive.
 
-```{r bftable, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:bftable-cap)"}
-
-include_graphics(here("figures/BF_values.png"))
-
-
-```
-
-<!--(paristable)-->
-  (ref:pairstable-cap) Factorial pair combinations used each experiment. We used every factorial pair from 1 to 6 resulting in 15 combinations. The second and third columns show the ratio and difference for each pair, respectively. 
-
-```{r pairstable, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:pairstable-cap)"}
-
-include_graphics(here("figures/factorial_pair_table.png"))
-
-```
 <!--Update/proof read all the captions in supplementary-->
