@@ -12,7 +12,7 @@ library(formattable)
 library(knitr)
 
 source(here("R/wolff_etal_2022_rcode.R"))
-
+my_citations <- cite_r(file = "r-references.bib")
 
 typeset_scientific <- function(x) {
   x <- gsub("e\\+00$", "", x)
@@ -34,7 +34,7 @@ Our study population of 20 Pinyon Jays (_Gymnorhinus cyanocephalus_) were wild b
 
 Repetition 1: Eight Pinyon Jays (one female) completed all rounds of the food experiment and 10 Pinyon Jays (four female) completed all rounds of the social experiment. The Pinyon Jays in the food item experiment were housed two to a double cage, while the jays in the social experiment were individually housed. A further 17 Pinyon Jays (six female) from the colony were used as stooge conspecifics in the social experiment. This number includes six birds that had to be transferred out of use as stooge birds due to unrelated colony matters. Stooge birds were primarily housed socially and always in a separate room from the testing subjects. Two Pinyon Jays were dropped from the social experiment due to unrelated health concerns.
 
-Repetition 2: Four Pinyon Jays (# female) completed all rounds of the food experiment and Ten Pinyon Jays (# female) completed all rounds of the social experiment. A further 8 Pinyon Jays (# female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions. 
+Repetition 2: Four Pinyon Jays (# female) completed all rounds of the food experiment and Ten Pinyon Jays (# female) completed all rounds of the social experiment. A further 8 Pinyon Jays (# female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions. <!--double check female numbers-->
 
 ### Food Item Habituation and Training  
 Prior to experimental sessions, all birds had to be habituated to the experimental room, cage, and stand and then experience training. Depending on the bird this took between 9-16 weeks as each bird was ran once a day between 11:00-13:00 CST. Subjects experienced four training phases in total; each aimed at teaching the bird a different piece of the paradigm. The first phase (rear cup habituation) habituated subjects to the apparatus. The second phase (front dish habituation) encouraged the birds to place their heads through holes at the front of the cage to consume mealworms from the dishes on the trays. The third phase (moving dish training) introduced the subjects to the fact that the dish on the unchosen side moved out of reach. The forth phase (mixed reward training) taught the subjects to quickly make a choice between zero or three mealworms, eat, and then set up for another trial in quick succession. 
@@ -65,9 +65,9 @@ The apparatus for the food experiment included a bird cage (72 x 48 x 48 cm) abu
 
 <!--(foodapp)-->
 (ref:foodapp-cap) Food experiment apparatus (overhead view).
-```{r, socialapp, out.width="100%", fig.align="center", fig.cap = "(ref:socialapp-cap)"}
+```{r, foodapp, out.width="100%", fig.align="center", fig.cap = "(ref:socialapp-cap)"}
 
-include_graphics(here("figures/social_apparatus.PNG"))
+include_graphics(here("figures/food_apparatus.PNG"))
 
 ```
 
@@ -103,7 +103,7 @@ include_graphics(here("figures/social_apparatus.PNG"))
 ```
 
 
-#Data Analysis, continued 
+#Data Analysis
 Data were analyzed and processed for the project using `r my_citations`.
 
 Prior to analysis, we transformed the left and right choice variable from each trial into a binary operator, with 1 representing a choice for the larger option and 0 representing a choice for the smaller option. We also created variables with the numerical difference between each number pair by subtracting the larger number from the smaller (6-1 = 5), as well as creating the ratio by dividing the smaller by the larger number (1/6 = 0.16). Our hypotheses explore the relationship between our binary outcome variable, choice of the larger or smaller stimuli, and which possible mechanism, difference or ratio, subjects use to make choices when presented with either food or social items. 
@@ -128,7 +128,7 @@ To explore random effect structure, we included models with no fixed effect and 
 
 ```{r pairstable, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:pairstable-cap)"}
 
-include_graphics(here("figures/.png"))
+factorial_pairs_table 
 
 ```
 
@@ -138,17 +138,17 @@ include_graphics(here("figures/.png"))
 
 ```{r modeltable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:modeltable-cap)"}
 
-include_graphics(here("figures/.png")) 
-
+ 
+fixed_effect_structure_table
 
 ```
 
 <!--(birdinfotable)-->
   (ref:birdinfotable-cap) 
-```{r modeltable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:modeltable-cap)"}
+```{r birdinfotable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:birdinfotable-cap)"}
 
-include_graphics(here("figures/subject_bird_info_table.png")) 
-
+ 
+subject_bird_info_table
 
 ```
 

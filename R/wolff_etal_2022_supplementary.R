@@ -35,7 +35,7 @@ df <- df %>%
 
 # View(df)
 
-# Create column of birds that were choosen and create columns showing how often each bird was choosen and not choosen.
+# Create column of birds that were chosen and create columns showing how often each bird was choosen and not choosen.
 
 df$choosenbirds <- ifelse(df$large_choice == "Y", df$largebirds, df$smallbirds)
 
@@ -100,6 +100,21 @@ sum_stooge_rel_sex <- df %>%
 
 sum_stooge_rel_sex <- sum_stooge_rel_sex %>%
   select(individual, female_percent, male_percent, overall_percent)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #Same code for 2nd repititon-----------------
 
@@ -184,33 +199,29 @@ ind_preference_table_2 <- ind_preference_table_2 %>%
 
 #Create table of factorial pairs with corresponding differences and ratios------------
 
-factorial_pairs_df <- data.frame(Pair=c("1/2","1/3","1/4","1/5","1/6","2/3","2/4","2/5","2/6","3/4","3/5","3/6","4/5","4/6","5/6"),
-                                 Ratio=c("0.50","0.33","0.25","0.20","0.17","0.67","0.50","0.40","0.33","0.75","0.60","0.50","0.80","0.67","0.83"),
-                                 Difference=c("1","2","3","4","5","1","2","3","4","1","2","3","1","2","1"),
-                                 Social_2=c("X","X","X","X","X","X","X","X","X","X","X","","","",""))
+#factorial_pairs_df <- data.frame(Pair=c("1/2","1/3","1/4","1/5","1/6","2/3","2/4","2/5","2/6","3/4","3/5","3/6","4/5","4/6","5/6"),
+                                 #Ratio=c("0.50","0.33","0.25","0.20","0.17","0.67","0.50","0.40","0.33","0.75","0.60","0.50","0.80","0.67","0.83"),
+                                 #Difference=c("1","2","3","4","5","1","2","3","4","1","2","3","1","2","1"),
+                                 #Social_2=c("X","X","X","X","X","X","X","X","X","X","X","","","",""))
 
-##add row from rep 2 social pairs we completed.
-
-factorial_pairs_table <- apa_table(factorial_pairs_df)
-ggsave(here("figures/factorial_pairs_table.png"))
-
+#factorial_pairs_table <- apa_table(factorial_pairs_df)
 
 #Creating Fixed Effect Model Selection Table---------
 
-fixed_effect_df <- data.frame(Model = c("Intercept Only Model", "Ratio Only Model","Difference Only Model", "Both Fixed Effects, No Interaction", "Both Fixed Effects, With Interaction"),
-                              Formula = c("Choice~1","Choice~Ratio","Choice~Difference","Choice~Ratio+Difference","Choice~Ratio*Difference"))
+#fixed_effect_df <- data.frame(Model = c("Intercept Only Model", "Ratio Only Model","Difference Only Model", "Both Fixed Effects, No Interaction", "Both Fixed Effects, With Interaction"),
+                              #Formula = c("Choice~1","Choice~Ratio","Choice~Difference","Choice~Ratio+Difference","Choice~Ratio*Difference"))
 
 
-fixed_effect_structure_table <-apa_table(fixed_effect_df)
-ggsave(here("figures/fixed_effect_structure_table.PNG"))
+#fixed_effect_structure_table <-apa_table(fixed_effect_df)
+
 
 #Creating Random Effect Model Selection Table-----------
 
-random_effect_df <- data.frame(Model = c("Intercept Only Model", "Subject Only Model","Pair Only Model", "Both Subject and Pair"),
-                               Formula = c("Choice~1","Choice~(1|Subject)","Choice~(1|Pair)","Choice~(1|Subject)+(1|Pair)"))
+#random_effect_df <- data.frame(Model = c("Intercept Only Model", "Subject Only Model","Pair Only Model", "Both Subject and Pair"),
+                               #Formula = c("Choice~1","Choice~(1|Subject)","Choice~(1|Pair)","Choice~(1|Subject)+(1|Pair)"))
 
-random_effect_structure_table <- apa_table(random_effect_df)
-ggsave(here("figures/random_effect_structure_table.PNG"))
+#random_effect_structure_table <- apa_table(random_effect_df)-->
+
 
 #Creating Bayes Factor tables for random & fixed effects
 
@@ -242,36 +253,5 @@ random_social_bf_table <- apa_table(random_social_bf_df)
 
 fixed_social_bf_table <- apa_table(fixed_social_bf_df)
 
-#Subject Bird Demographic And Experiment Information--------------
 
-all_data <- read_csv(here("data/wolff_etal_2022_data.csv"))
-
-all_data <- all_data %>%
-  unite(unique_code, c(study, rep))
-
-code_summary <- all_data |>
-  group_by(unique_code, sex, subject) |>
-  summarise(n = n(),)
-
-subject_bird_info <- code_summary %>%
-  pivot_wider(names_from = unique_code, values_from = n, values_fill = 0) %>%
-  select(subject, everything())
-
-subject_bird_info$food_1 <-  ifelse(subject_bird_info$food_1 == "0", "", "X")
-
-subject_bird_info$food_2 <-  ifelse(subject_bird_info$food_2 == "0", "", "X")
-
-subject_bird_info$social_1 <-  ifelse(subject_bird_info$social_1 == "0", "", "X")
-
-subject_bird_info$social_2 <-  ifelse(subject_bird_info$social_2 == "0", "", "X")
-
-bird_age_df <- data.frame(subject = c("Uno", "Dartagnan","Dumbledore","Fern","Fozzie","He-man", "Mork","Mote","Mulder","Prudence","Robin","Saffron","Basil","Dill","Rooster","Flute", "Hippolyta","Juniper","Black Elk","Chicklet","Juan"),
-                          age = c( 12, 10, 11,15, 12, 12, 12,14,11,10,14,12,15,15,12, 14, 14,15, 10, 12,19))
-
-subject_bird_info_merged <- merge(subject_bird_info, bird_age_df, all = FALSE)
-subject_bird_info_merged <- subject_bird_info_merged %>%
-  select(subject, sex, age, everything())
-
-subject_bird_info_table <- apa_table(subject_bird_info_merged)
-ggsave(here("figures/subject_bird_info_table.png"), width = 14, height = 10)
 

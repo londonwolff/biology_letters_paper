@@ -254,4 +254,135 @@ social_figures <- social1_results$diff_fig + social1_results$ratio_fig +
   plot_annotation(tag_levels = "A")
 ggsave(here("figures/social_figure.png"), width = 14, height = 10)
 
+#Supplementary Figures and Table Code---------------------------------------
+
+bird_ages <- c(17,12,13,14,12,12,17,13,16,17,16,13,14,13,14,16,16,17,14,16,13,16,14,12,16,16,14,14,14,14,13)
+
+#Subject Bird Demographic And Experiment Information------------------------
+
+bird_demographic_table_data <- all_data %>%
+  unite(unique_code, c(study, rep))
+
+code_summary <- bird_demographic_table_data |>
+  group_by(unique_code, sex, subject) |>
+  summarise(n = n(),)
+
+subject_bird_info <- code_summary %>%
+  pivot_wider(names_from = unique_code, values_from = n, values_fill = 0) %>%
+  select(subject, everything())
+
+subject_bird_info$food_1 <-  ifelse(subject_bird_info$food_1 == "0", "", "X")
+
+subject_bird_info$food_2 <-  ifelse(subject_bird_info$food_2 == "0", "", "X")
+
+subject_bird_info$social_1 <-  ifelse(subject_bird_info$social_1 == "0", "", "X")
+
+subject_bird_info$social_2 <-  ifelse(subject_bird_info$social_2 == "0", "", "X")
+
+bird_age_df <- data.frame(subject = c("Uno", "Dartagnan","Dumbledore","Fern","Fozzie","He-man", "Mork","Mote","Mulder","Prudence","Robin","Saffron","Basil","Dill","Rooster","Flute", "Hippolyta","Juniper","Black Elk","Chicklet","Juan"),
+                          age = c( 12, 10, 11,15, 12, 12, 12,14,11,10,14,12,15,15,12, 14, 14,15, 10, 12,19))
+
+subject_bird_info_merged <- merge(subject_bird_info, bird_age_df, all = FALSE)
+subject_bird_info_merged <- subject_bird_info_merged %>%
+  select(subject, sex, age, everything())
+
+subject_bird_info_table <- apa_table(subject_bird_info_merged)
+
+#Create table of factorial pairs with corresponding differences and ratios------------
+
+factorial_pairs_df <- data.frame(Pair=c("1/2","1/3","1/4","1/5","1/6","2/3","2/4","2/5","2/6","3/4","3/5","3/6","4/5","4/6","5/6"),
+                                 Ratio=c("0.50","0.33","0.25","0.20","0.17","0.67","0.50","0.40","0.33","0.75","0.60","0.50","0.80","0.67","0.83"),
+                                 Difference=c("1","2","3","4","5","1","2","3","4","1","2","3","1","2","1"),
+                                 Social_2=c("X","X","X","X","X","X","X","X","X","X","X","","","",""))
+
+factorial_pairs_table <- apa_table(factorial_pairs_df)
+
+#Creating Fixed Effect Model Selection Table---------------
+
+fixed_effect_df <- data.frame(Model = c("Intercept Only Model", "Ratio Only Model","Difference Only Model", "Both Fixed Effects, No Interaction", "Both Fixed Effects, With Interaction"),
+                              Formula = c("Choice~1","Choice~Ratio","Choice~Difference","Choice~Ratio+Difference","Choice~Ratio*Difference"))
+
+
+fixed_effect_structure_table <-apa_table(fixed_effect_df)
+
+
+#Creating Random Effect Model Selection Table----------------
+
+random_effect_df <- data.frame(Model = c("Intercept Only Model", "Subject Only Model","Pair Only Model", "Both Subject and Pair"),
+                               Formula = c("Choice~1","Choice~(1|Subject)","Choice~(1|Pair)","Choice~(1|Subject)+(1|Pair)"))
+
+random_effect_structure_table <- apa_table(random_effect_df)
+
+#Creating Subject Bird Preference table--------------------------
+
+#THIS IS WHERE YOUR AT!!!!!!!
+
+# Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen.
+
+individual_preference_df <- all_data
+individual_preference_df$choosenbirds <- ifelse(all_data$choose_larger == "1", all_data$largebirds, all_data$smallbirds)
+
+individual_preference_df <- individual_preference_df %>%
+  mutate(Cash = ifelse(str_detect(choosenbirds, "Cash"), 1, 0),
+         Scully = ifelse(str_detect(choosenbirds, "Scully"), 1, 0),
+         Mork = ifelse(str_detect(choosenbirds, "Mork"), 1, 0),
+         Mulder = ifelse(str_detect(choosenbirds, "Mulder"), 1, 0),
+         Ariel = ifelse(str_detect(choosenbirds, "Ariel"), 1, 0),
+         Pease = ifelse(str_detect(choosenbirds, "Pease"), 1, 0),
+         Hagrid = ifelse(str_detect(choosenbirds, "Hagrid"), 1, 0),
+         Egeus = ifelse(str_detect(choosenbirds, "Egeus"), 1, 0),
+         Commanche = ifelse(str_detect(choosenbirds, "Commanche"), 1, 0),
+         Sapphire = ifelse(str_detect(choosenbirds, "Sapphire"), 1, 0),
+         Zappa = ifelse(str_detect(choosenbirds, "Zappa"), 1, 0),
+         Quince = ifelse(str_detect(choosenbirds, "Quince"), 1, 0),
+         Sebastan = ifelse(str_detect(choosenbirds, "Sebastan"), 1, 0),
+         Hermia = ifelse(str_detect(choosenbirds, "Hermia"), 1, 0),
+         Saffron = ifelse(str_detect(choosenbirds, "Saffron"), 1, 0),
+         Hippo = ifelse(str_detect(choosenbirds, "Hippo"), 1, 0),
+         Chicklet = ifelse(str_detect(choosenbirds, "Chicklet"), 1, 0))
+
+# Create column of birds that were NOT chosen and create columns showing how often each bird was NOT choosen and not choosen.
+
+individual_preference_df$rejectedbirds <- ifelse(individual_preference_df$choose_larger == "0", individual_preference_df$largebirds, individual_preference_df$smallbirds)
+
+individual_preference_df <- individual_preference_df %>%
+  mutate(Cash_rejected = ifelse(str_detect(rejectedbirds, "Cash"), 1, 0),
+         Scully_rejected = ifelse(str_detect(rejectedbirds, "Scully"), 1, 0),
+         Mork_rejected = ifelse(str_detect(rejectedbirds, "Mork"), 1, 0),
+         Mulder_rejected = ifelse(str_detect(rejectedbirds, "Mulder"), 1, 0),
+         Ariel_rejected = ifelse(str_detect(rejectedbirds, "Ariel"), 1, 0),
+         Pease_rejected = ifelse(str_detect(rejectedbirds, "Pease"), 1, 0),
+         Hagrid_rejected = ifelse(str_detect(rejectedbirds, "Hagrid"), 1, 0),
+         Egeus_rejected = ifelse(str_detect(rejectedbirds, "Egeus"), 1, 0),
+         Commanche_rejected = ifelse(str_detect(rejectedbirds, "Commanche"), 1, 0),
+         Sapphire_rejected = ifelse(str_detect(rejectedbirds, "Sapphire"), 1, 0),
+         Zappa_rejected = ifelse(str_detect(rejectedbirds, "Zappa"), 1, 0),
+         Quince_rejected = ifelse(str_detect(rejectedbirds, "Quince"), 1, 0),
+         Sebastan_rejected = ifelse(str_detect(rejectedbirds, "Sebastan"), 1, 0),
+         Hermia_rejected = ifelse(str_detect(rejectedbirds, "Hermia"), 1, 0),
+         Saffron_rejected = ifelse(str_detect(rejectedbirds, "Saffron"), 1, 0),
+         Hippo_rejected = ifelse(str_detect(rejectedbirds, "Hippo"), 1, 0),
+         Chicklet_rejected = ifelse(str_detect(rejectedbirds, "Chicklet"), 1, 0))
+
+individual_preference_df <- relocate(individual_preference_df, rejectedbirds, .before = Cash)
+
+#graph of values for the relationship of birds looking at the sex of subject birds
+
+individual_preference_table <- individual_preference_df %>%
+  filter(small_num != 0) %>%
+  group_by(sex) %>%
+  summarize(across(Cash:Chicklet_rejected, sum)) %>%
+  pivot_longer(-sex, names_to = "individual", values_to="presence") %>%
+  mutate(chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"), individual=str_replace(individual, "_rejected", "")) %>%
+  unite(sex_chosen, c("sex", "chosen")) %>%
+  pivot_wider(individual, names_from = sex_chosen, values_from = presence) %>%
+  mutate(total_trials = female_chosen + male_chosen + female_unchosen + male_unchosen,
+         female_percent = female_chosen/(female_chosen+ female_unchosen)*100,
+         male_percent = male_chosen/(male_chosen + male_unchosen)*100,
+         overall_percent = (female_chosen + male_chosen) / (female_chosen + male_chosen + female_unchosen + male_unchosen)*100) %>%
+  arrange(overall_percent)
+
+
+
+
 
