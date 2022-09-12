@@ -31,6 +31,7 @@ library(bayestestR)
 library(performance)
 library(papaja)
 library(here)
+library(ggcorrplot)
 
 # Define functions -------------------------------------------------------------
 
@@ -204,7 +205,7 @@ analyze_data <- function(df, type, rep) {
   fixed_bf_table <- apa_table(fixed_bf_df)
 
   # Create Output to use for manuscript
-  output <- list(ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = choice_means_subject_diff, CI_ratio = choice_means_ratio_means, best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_comparison_table)
+  output <- list(ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = choice_means_subject_diff, CI_ratio = choice_means_ratio_means, best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_bf_table, fixed_bf_df = fixed_bf_df)
 }
 
 
@@ -317,9 +318,11 @@ random_effect_structure_table <- apa_table(random_effect_df)
 
 # Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen.
 
-individual_preference_df <- all_data
-  #filter(study != food) #why doesn't this work?
-individual_preference_df$choosenbirds <- ifelse(all_data$choose_larger == "1", all_data$largebirds, all_data$smallbirds)
+individual_preference_df <- all_data %>%
+  filter(study != "food")
+
+individual_preference_df$choosenbirds <- ifelse(individual_preference_df$choose_larger == "1", individual_preference_df$largebirds, individual_preference_df$smallbirds)
+
 
 individual_preference_df <- individual_preference_df %>%
   mutate(Cash = ifelse(str_detect(choosenbirds, "Cash"), 1, 0),
@@ -365,38 +368,36 @@ individual_preference_df <- individual_preference_df %>%
 
 individual_preference_df <- relocate(individual_preference_df, rejectedbirds, .before = Cash)
 
-#graph of values for the relationship of birds looking at the sex of subject birds
+#creating table of values for replication 1
 
-individual_preference_summary_cash <- individual_preference_df |>
-  group_by(subject, Cash) |>
-  summarise(
-    n = n())
+individual_preference_table_1 <- individual_preference_df %>%
+  filter(rep == "1") %>%
+  group_by(sex) %>%
+  summarize(across(Cash:Chicklet_rejected, sum)) %>%
+  pivot_longer(-sex, names_to = "individual", values_to="presence") %>%
+  mutate(chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"), individual=str_replace(individual, "_rejected", "")) %>%
+  unite(sex_chosen, c("sex", "chosen")) %>%
+  pivot_wider(individual, names_from = sex_chosen, values_from = presence) %>%
+  mutate(total_trials = Female_chosen + Male_chosen + Female_rejected + Male_rejected,
+         Female_percent = Female_chosen/(Female_chosen+ Female_rejected)*100,
+         Male_percent = Male_chosen/(Male_chosen + Male_rejected)*100,
+         overall_percent = (Female_chosen + Male_chosen) / (Female_chosen + Male_chosen + Female_rejected + Male_rejected)*100) %>%
+  arrange(overall_percent)
 
-individual_preference_summary_cash_reject <- individual_preference_df |>
-  group_by(subject, Cash_rejected) |>
-  summarise(
-    n = n())
-
-#individual_preference_table <- individual_preference_df %>%
-  filter(study != food) %>%
-  group_by(subject) %>%
-  summarize(across(Cash:Chicklet, sum))
-
-#individual_preference_table <- individual_preference_df %>%
-  #filter(small_num != 0) %>%
-  #group_by(sex) %>%
-  #summarize(across(Cash:Chicklet_rejected, sum)) %>%
-  #pivot_longer(-sex, names_to = "individual", values_to="presence") %>%
-  #mutate(chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"), individual=str_replace(individual, "_rejected", "")) %>%
-  #unite(sex_chosen, c("sex", "chosen")) %>%
-  #pivot_wider(individual, names_from = sex_chosen, values_from = presence) %>%
-  #mutate(total_trials = female_chosen + male_chosen + female_unchosen + male_unchosen,
-         #female_percent = female_chosen/(female_chosen+ female_unchosen)*100,
-         #male_percent = male_chosen/(male_chosen + male_unchosen)*100,
-         #overall_percent = (female_chosen + male_chosen) / (female_chosen + male_chosen + #female_unchosen + male_unchosen)*100) %>%
-  #arrange(overall_percent)
-
-
+#creating table of values for replication 2
+individual_preference_table_2 <- individual_preference_df %>%
+  filter(rep == "2") %>%
+  group_by(sex) %>%
+  summarize(across(Cash:Chicklet_rejected, sum)) %>%
+  pivot_longer(-sex, names_to = "individual", values_to="presence") %>%
+  mutate(chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"), individual=str_replace(individual, "_rejected", "")) %>%
+  unite(sex_chosen, c("sex", "chosen")) %>%
+  pivot_wider(individual, names_from = sex_chosen, values_from = presence) %>%
+  mutate(total_trials = Female_chosen + Male_chosen + Female_rejected + Male_rejected,
+         Female_percent = Female_chosen/(Female_chosen+ Female_rejected)*100,
+         Male_percent = Male_chosen/(Male_chosen + Male_rejected)*100,
+         overall_percent = (Female_chosen + Male_chosen) / (Female_chosen + Male_chosen + Female_rejected + Male_rejected)*100) %>%
+  arrange(overall_percent)
 
 
 
