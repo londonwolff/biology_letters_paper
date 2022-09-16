@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.29)  8 SEP 2022 17:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.8)  15 SEP 2022 10:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **london.etal.manuscript.appendix.tex
 (./london.etal.manuscript.appendix.tex
 LaTeX2e <2022-06-01> patch level 5
-L3 programming layer <2022-08-23> (c:/Users/London/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
+L3 programming layer <2022-08-30> (c:/Users/London/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (c:/Users/London/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
@@ -315,7 +315,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 )
 \Hy@SectionHShift=\skip53
 ) (c:/Users/London/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-File: l3backend-pdftex.def 2022-08-23 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2022-08-30 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count288
 \l__pdf_internal_box=\box54
 )
@@ -417,28 +417,29 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {c:/Users/London/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 
-LaTeX Warning: Reference `fig:foodapp' on page 2 undefined on input line 262.
+LaTeX Warning: Reference `fig:foodapp' on page 2 undefined on input line 261.
 
 [2]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 280.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 279.
 (c:/Users/London/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 <../figures/food_apparatus.png, id=32, 320.69812pt x 305.14pt>
 File: ../figures/food_apparatus.png Graphic file (type png)
 <use ../figures/food_apparatus.png>
-Package pdftex.def Info: ../figures/food_apparatus.png  used on input line 287.
+Package pdftex.def Info: ../figures/food_apparatus.png  used on input line 286.
 (pdftex.def)             Requested size: 320.712pt x 305.1532pt.
 [3 <../figures/food_apparatus.PNG>]
 
-LaTeX Warning: Reference `fig:socialapp' on page 4 undefined on input line 369.
+LaTeX Warning: Reference `fig:socialapp' on page 4 undefined on input line 376.
 
-<../figures/social_apparatus.png, id=44, 563.10374pt x 364.36125pt>
+[4]
+<../figures/social_apparatus.png, id=54, 563.10374pt x 364.36125pt>
 File: ../figures/social_apparatus.png Graphic file (type png)
 <use ../figures/social_apparatus.png>
-Package pdftex.def Info: ../figures/social_apparatus.png  used on input line 389.
+Package pdftex.def Info: ../figures/social_apparatus.png  used on input line 396.
 (pdftex.def)             Requested size: 469.75604pt x 303.9598pt.
-[4] [5 <../figures/social_apparatus.PNG>] [6]
+[5 <../figures/social_apparatus.PNG>] [6]
 
 ! LaTeX Error: Environment threeparttable undefined.
 
@@ -446,15 +447,15 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.514 \begin{threeparttable}
+l.554 \begin{threeparttable}
                              
 Here is how much of TeX's memory you used:
- 11002 strings out of 479489
- 174098 string characters out of 5873243
- 480227 words of memory out of 5000000
- 29504 multiletter control sequences out of 15000+600000
+ 11003 strings out of 477035
+ 174128 string characters out of 5826645
+ 519509 words of memory out of 5000000
+ 31956 multiletter control sequences out of 15000+600000
  507095 words of font info for 53 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,6n,77p,336b,439s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,6n,77p,336b,455s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 !  ==> Fatal error occurred, no output PDF file produced!

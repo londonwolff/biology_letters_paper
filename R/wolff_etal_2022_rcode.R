@@ -220,7 +220,7 @@ food1 <- all_data |>
 
 food2 <- all_data |>
   filter(study == "food" & rep == 2) |>
-  filter(!subject %in% c("Basil", "Rooster"))
+  filter(!subject %in% c("Basil", "Robin"))
 
 social1 <- all_data |>
   filter(study == "social" & rep == 1) |>
@@ -398,6 +398,4 @@ individual_preference_table_2 <- individual_preference_df %>%
          Male_percent = Male_chosen/(Male_chosen + Male_rejected)*100,
          overall_percent = (Female_chosen + Male_chosen) / (Female_chosen + Male_chosen + Female_rejected + Male_rejected)*100) %>%
   arrange(overall_percent)
-
-
 
