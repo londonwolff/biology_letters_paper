@@ -1,0 +1,265 @@
+---
+title: "Supplementary Materials"
+format: pdf
+execute: 
+  echo: false
+bibliography: [r-references.bib, merp_references.bib]
+---
+
+
+```{r include=FALSE}
+
+library(here)
+# library(patchwork)
+# library(formattable)
+library(knitr)
+library(kableExtra)
+
+source(here("R/wolff_etal_2022_rcode.R"))
+my_citations <- cite_r(file = "r-references.bib", pkgs = c("BayesFactor", "bayestestR", "ggcorrplot", "here", "kableExtra", "knitr", "lme4", "papaja", "patchwork", "performance", "tidyverse"), omit = FALSE)
+
+typeset_scientific <- function(x) {
+  x <- gsub("e\\+00$", "", x)
+  x <- gsub("e\\+0?(\\d+)$", " \\\\times 10\\^\\{\\1\\}", x)
+  x <- gsub("e\\-0?(\\d+)$", " \\\\times 10\\^\\{-\\1\\}", x)
+  x
+knitr::opts_chunk$set(echo = TRUE) 
+}
+```
+
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{table}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{figure}{0} 
+
+
+
+# Methods
+
+## Subjects
+
+Our study population of 20 pinyon jays (_Gymnorhinus cyanocephalus_) were wild born and locally housed. Researchers captured these birds in either Arizona or California (United States Fish and Wildlife permit MB694205) between 2006 and 2011. At capture, they were estimated to be between one and three years of age. The colony has an age range of `r range(bird_ages)[1]` $-$ `r range(bird_ages)[2]` years with a mean of `r printnum(mean(bird_ages))` years. 
+
+The University of Nebraska-Lincoln Institutional Animal Care and Use Committee approved this project (protocol number 1867 and 2059), and all procedures conformed to the ASAB/ABS Guidelines for the use of animals in research. All subjects have completed prior cognitive and behavioral experiments in their tenure with the lab. The colony is handled by humans extensively. 
+
+<!-- Replicate 1: Eight pinyon jays (one female) completed all rounds of the food experiment and 10 pinyon jays (four female) completed all rounds of the social experiment. The pinyon jays in the food item experiment were housed two to a double cage, while the jays in the social experiment were individually housed. A further 17 pinyon jays (six female) from the colony were used as stooge conspecifics in the social experiment. This number includes six birds that had to be transferred out of use as stooge birds due to unrelated colony matters. Stooge birds were primarily housed socially and always in a separate room from the testing subjects. Two pinyon jays were dropped from the social experiment due to unrelated health concerns. -->
+
+<!-- Replicate 2: Four pinyon jays (two female) completed all rounds of the food experiment and ten pinyon jays (one female) completed all rounds of the social experiment. A further 8 pinyon jays (four female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions.  -->
+
+## Food Experiment
+
+### Apparatus  
+
+The apparatus for the food experiment included a bird cage (72 $\times$ 48 $\times$ 48 cm) abutting a plastic stand with sliding trays that contained mealworms (@fig-foodapp). The stand was set at a 15 degree angle tilted toward the subject to facilitate mealworm viewing. The stand had two channels the same width as the plexiglas trays. Each plexiglas tray had a standard petri dish placed half an inch away from the front of each tray. Mealworms were placed in the front two thirds of the petri dish so the subjects could easily reach the mealworms, and they were evenly distributed across the available area. Within the cage were three perches. One large free-standing perch stood in the middle of the cage, while two small perches attached to each side of the cage a few inches back from the front. Subjects started each trial perched on the large free standing perch, and they chose an option by landing on the smaller left or right perches. They then consumed the mealworms associated with their decision while the unchosen side was removed immediately.
+
+<!--(foodapp)-->
+```{r}
+#| label: fig-foodapp
+#| fig-cap: "Food experiment apparatus (overhead view)"
+#| out-width: "50%"
+
+include_graphics(here("figures/food_apparatus.PNG"))
+
+```
+
+### Habituation and Training  
+Prior to experimental sessions, all birds were habituated to the experimental room, cage, and stand and then experience training. Depending on the bird this took between 9-16 weeks, as each bird was ran once a day between 11:00-15:00 CST. Subjects experienced four training phases in total; each aimed at teaching the bird a different piece of the paradigm. The first phase (rear cup habituation) habituated subjects to the apparatus. The second phase (front dish habituation) encouraged the birds to place their heads through holes at the front of the cage to consume mealworms from the dishes on the trays. The third phase (moving dish training) introduced the subjects to the fact that the dish on the unchosen side moved out of reach. The fourth phase (mixed reward training) taught the subjects to quickly make a choice between zero or three mealworms, eat, and then set up for another trial in quick succession. 
+
+For rear cup habituation, the experimenter brought a subject from their home cage and released them into the test cage. Five mealworms were placed in each of the two feeding bowls into slots at the back of the cage. After three minutes, the experimenter counted the number of mealworms consumed in each food dish and returned the subject to its home cage.
+
+For front dish habituation, the experimenter brought a subject from their home cage into the test cage. Three mealworms were placed in both dishes on the Plexiglass trays. The experimenter pushed the trays forward to present the dishes to the subject in one swift and smooth motion. After three minutes, the experimenter counted the number of mealworms eaten in each dish and returned the subject to their home cage.
+
+Moving dish training was identical to  front dish habituation, except the experimenter pulled back the tray in front of the unchosen perch. If subjects ate all three mealworms before three minutes expired, we repeated this process. If the bird did not finish their mealworms we waited the rest of the three minutes before returning them to their home cage.
+
+The mixed reward training was identical to the moving dish training, except one of the dishes held no mealworms while the other held three mealworms and subjects completed six of these 30-second trials per session.
+
+Subjects progressed to a new phase when they successfully consumed at least 70% of the mealworms offered in their current phase for three consecutive days. Subjects could also move to a previous phase if  they consumed less than 25% of the mealworms offered on five out of seven days of training. 
+
+### Procedure
+
+All experimental sessions ran between 11:00-15:00. The subjects were not on a restricted diet. Subjects were fed for the day directly after completing their respective test trials for the day. One experimenter conducted each session. The first trial of the session consisted of one round of mixed reward training. If they failed this check, the experimenter completed two more rounds of mixed reward training. If they failed two out of three of these trials this triggered de-bias training. If they succeed, they continued to the experimental trials. For these trials, the experimenter placed the appropriate number of mealworms in each of the dishes, with mealworms placed 2.5 cm away from each other. The subject then started the trial on the back perch and hopped forward to one of the front perches to signal choice. The experimenter then removed the opposite dish and the subject had up to three minutes to consume their mealworms. If the subject did not make a choice and/or finish all mealworms within 3 minutes, we ended the session. Once the subject consumed all mealworms, we immediately started the next trial. The first trial of the day where the subject did not finish all their chosen mealworms triggered a stop on that day's session. Subjects completed on average 4 trials per session. 
+
+<!-- Each bird experienced 10 repetitions for each of the 15 numerical pairs between 1 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.). The side of the larger option was pseudo randomized with no left or right runs longer than three in a row. We organized the pairs into 10 blocks. Each block was randomized within itself and had one instance of each factorial pair. The order the subjects ran in a particular day was also randomized. -->
+
+### Side-Bias Protocol
+
+During habituation, three consecutive days of no choices and/or no eating of mealworms on one particular side triggered side de-bias training. During experimental sessions, there were two triggers for de-bias training: either not completing the first 0 vs. 3 practice test trial correctly or when a bird chose the same side for 10 consecutive trials. De-biasing training consisted of three mealworms placed in the dish the subject avoided and no mealworms in the side they preferred. The subject was allowed up to one minute to select the dish that contained mealworms. If the bird did not make a choice or eat any mealworms in the allotted time, we slide both trays all the way out of the stand, placed them out of view of the bird, waited a few seconds, then began the trial over. If they ate within the minute, we reset as soon as they ate until they had five total opportunities to eat. The bird returned to habituation or experimental sessions once they successfully chose the avoided side immediately and ate at least 60% of the mealworms provided. 
+
+
+
+## Social Experiment 
+
+### Apparatus 
+
+The apparatus (@fig-socialapp) was a Y-maze formed out of chicken wire, plastic sheets, and Plexiglas. **Please give dimensions** The subject entered a large chamber at the base of the maze before choosing one of two arms of the Y-maze. At the entrance to both arms, a guillotine style door was closed after the bird walked or flew past it, thus making a choice between the option on the left or right. At the end of each arm, was a large bird cage (72 $\times$ 48 $\times$ 48 cm) housing the stooge birds. Each cage had two lengthwise perches for the stooge birds to use and one small perch hanging from the ceiling.
+
+<!--(socialapp)-->
+```{r}
+#| label: fig-socialapp
+#| fig-cap: "Social experiment apparatus (overhead view)"
+#| out-width: "75%"
+
+include_graphics(here("figures/social_apparatus.PNG"))
+
+```
+
+### Habitutation and Training
+
+Prior to experimentation, we habituated all birds to both the experimental room and the apparatus. For habituation, we attached a stainless steal cup to the front of each bird cage. For a habituation session, the experimenter placed five mealworms in each of the cups. The experimenter then brought the subject into the room, pulled up both doors, and showed the subject each arm of the maze for six seconds, randomizing between subjects the side shown first. The subject was then gently placed on the bottom of the testing chamber as close to the center as possible with the bird facing away from their options. Once the subject crossed the threshold of a door, the door was quietly and swiftly closed behind them and the bird explored the chosen arm and consumed the mealworms for two minutes. After the two minutes expired, the experimenter removed the subject from the apparatus and recorded the number of mealworms consumed. 
+
+Subjects experienced 1 habituation session per day for five days a week. They completed habituation once they consistently consumed at least 80% of the mealworms offered to them in both arms of the apparatus and had no significant signs of a side bias. Depending on the bird, this took between 4-6 weeks. 
+
+### Procedure
+
+All experimental trials ran between 09:00-17:00 CST, with birds being run once or twice a day depending on personnel. The subjects were not food restricted. During replicate 1, two experimenters were present at each session: the ‘handler’ handled the subject, while the ‘recorder’ handled the camera, whiteboard, and the guillotine doors. The experimenter placed stooge birds in their respective cages and allowed them to acclimate to the room for 10 minutes before experimentation. The handler then placed  the subject inside the apparatus and showed them each option for six seconds (counter balancing which was shown first) before releasing the subject into the chamber. Once the subject crossed the threshold of one of the doors, the recorder closed *both* doors gently but swiftly. After three minutes elapsed, the handler collected the subject and returned them to their home cage. These steps repeated until all birds had run through the experiment. During replicate 2, the recorder's duties were absorbed into the experimenter and the guillotine doors were held open by hooks on the wall to allow the experiment to run smoothly with only one person. 
+
+Replicate 1: Each subject experienced 5 repetitions for each of the 21 numerical pairs between 0 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.). The side of the larger option was pseudo randomized with no left or right runs longer than 3 in a row. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. The order in which the subjects ran in a particular day was also randomized. Only the 15 numerical pairs between 1 and 6 were analyzed. 
+
+Replicate 2: Each bird experienced 10 repetitions for each of the following 17 numerical pairs between 1 and 6 except for the four pairs that required more than eight stooge birds (4/5, 3/6, 4/6, 5/6). This was done in an effort to better account for individual bird preference among the subjects for certain stooge birds. Randomization was the same for both replicates. 
+
+### Side-Bias Protocol
+
+If any subject chose either the left or right side for six consecutive sessions in either habituation or experimentation, they experienced side de-biasing. For side de-biasing, only one door was open in the apparatus, the door leading to the side the subject avoided. We placed five mealworms in the food cup at the end of that arm with no stooge birds present. The bird had up to five minutes to walk/fly past the door into the correct side and three minutes once the door shut behind them to eat the mealworms. Subjects experienced five consecutive trials in a de-biasing session. The subject returned to habituation or experimental sessions once they successfully choose the avoided side immediately upon release and ate at least 60% of the mealworms provided.
+
+
+## Data Analysis
+
+Data were analyzed and processed for the project using `r my_citations`.
+
+Prior to analysis, we transformed the left and right choice variable from each trial into a binary outcome, with 1 representing a choice for the larger option and 0 representing a choice for the smaller option. We also created variables with the numerical difference between each number pair by subtracting the larger number from the smaller (6 $-$ 1 = 5), as well as creating the ratio by dividing the smaller by the larger number (1/6 = 0.16). Our hypotheses explore the relationship between our binary outcome variable, choice of the larger or smaller stimuli, and which possible mechanism, difference or ratio, subjects use to make choices when presented with either food or social items. 
+
+Our first hypothesis investigated whether pinyon jays prefer larger over smaller numbers of food items and conspecifics. To test this, we conducted a one sample t-test of preference for larger numbers. Therefore, we calculated the mean *percent preference for larger numbers* for each subject and used the t-test to compare the subject means to 50. We perform both frequentist and Bayesian t-tests, with inferences based on Bayes factors. Bayes factors for t-tests were calculated using the `ttestBF` function from the _BayesFactor_ R package [@Morey.etal.2021] using default, noninformative priors.
+
+Our second hypothesis investigated whether numerical difference and ratio predict preferences between smaller and larger options and the third hypothesis investigated whether difference and ratio predicted preferences _independently_. To test these hypotheses, we used generalized linear mixed-effects modeling as the response variable was dichotomous and our subjects repeatedly made decision on the same number pairs. We used the trial-level choices for either the larger (coded as 1) or smaller (coded as 0) option available in the number pair as the response variable. To investigate our hypotheses, we used generalized logistic models to compare which combination of random (subject, pair, or both) and fixed (ratio, difference, or a combination of both) effects best describe each data set (food and social). We first found the best-fitting random effect structure, then added this random structure to all of the possible fixed effect structures, leaving us with the final best fitting model for each data set overall. 
+
+To explore random effect structure, we included models with no fixed effect and either (1) no random effects (intercept only), (2) subject as a random effect, (3) number pair as a random effect (to account for each bird repeatedly seeing each pair multiple times), and (4) both subject and number pair as random effects. For example, the model with both subject and pair as random effects ran using the `glmer()` function with the following structure: `glmer(choice ~ (1|subject)+ (1|pair), family = binomial)` (@tbl-modeltable a). We then used Bayes factors to select the model with the best-fitting random effect structure. We added the chosen random effect structure to our fixed effects to find the best-fitting model for the data set overall. The five fixed effects models were: (1) no fixed effects (intercept only), (2) ratio as a fixed effect, (3) difference as a fixed effect, (4) both difference and ratio as a fixed effects but _without_ an interaction, and (5) both difference and ratio as fixed effects _with_ an interaction. The model with both difference and ratio as fixed effects with an interaction term ran using the `glm()` function and the following structure: `glm(choice ~ difference * ratio, family = binomial)` (@tbl-modeltable b). We calculated Bayes factors using the `test_performance()` function from the _performance_ package [@Ludeckestrengejacke.etal.2021], which estimates Bayes factors from model BIC values using  Wagenmakers' [@Wagenmakers.2007] equation. The best fitting model has the highest Bayes factor. 
+
+The second hypothesis can be partially, fully, or unsupported depending on the amount of evidence for or against the models with only ratio or only difference. For example, if the Bayes factor for the ratio only model has at least moderate evidence supporting it that would mean that our hypothesis that pinyon jays prefer more items when the quantities have higher numerical ratios is supported. Similarly, if the difference only model has no evidence supporting it than our second hypothesis would be partially supported.
+
+The third hypothesis can be supported or unsupported based on the outcome of the `difference * ratio` interaction model. If pinyon jays choose items of different ratios and differences independently of each other than you would expect no evidence in support of the interaction model. Evidence in support of the interaction model would signify that choices of mealworms for the same ratio would vary based on the difference and visa versa. 
+
+# References
+
+::: {#refs}
+:::
+
+# Supplementary Tables
+
+<!--(birdinfotable)-->
+
+```{r birdinfotable}
+
+kable(subject_bird_info,
+      booktabs = TRUE, digits = 1, linesep = "",
+        align = "llccccc",
+        caption = "Subject bird information",
+        col.names = c("Subject", "Sex", "Age (years)", "Food 1", "Food 2", "Social 1", "Social 2"))
+
+```
+
+
+<!--(pairstable)-->
+
+```{r pairstable}
+
+factorial_pairs_df |> 
+  mutate(Pair = ifelse(Social_2 == "X", paste0(Pair, footnote_marker_symbol(1, "latex")), Pair)) |> 
+  select(-Social_2) |> 
+knitr::kable(booktabs = TRUE, digits = 0, linesep = "", escape = FALSE,
+             align = "lcc",
+             caption = "Factorial pair combinations",
+             col.names = c("Pair", "Ratio", "Difference")) |> 
+  kableExtra::footnote(symbol = "The 11 pairs used in replicate 2 of the social experiment.", general_title = "", threeparttable = TRUE, footnote_as_chunk = TRUE)
+
+```
+
+
+<!--(modeltable)-->
+
+```{r}
+#| label: tbl-modeltable
+#| tbl-cap: "Random and fixed effect model structures tested"
+#| tbl-subcap: 
+#|   - "Random effects"
+#|   - "Fixed effects"
+#| layout: "[[1], [-1], [1]]"
+#| fig-pos: 'H'
+
+kable(random_effect_df, booktabs = TRUE) |> 
+  column_spec(2, monospace = TRUE)
+
+kable(fixed_effect_df, booktabs = TRUE) |> 
+  column_spec(2, monospace = TRUE)
+
+#Need to figure out how to make into one graphic with a and b
+```
+
+
+<!--(bftablefood)-->
+
+```{r}
+#| label: tbl-bffood
+#| tbl-cap: "AIC, BIC, and Bayes factor values per model for the food experiment"
+#| tbl-subcap: 
+#|   - "Replicate 1 random effects"
+#|   - "Replicate 1 fixed effects"
+#|   - "Replicate 2 random effects"
+#|   - "Replicate 2 fixed effects"
+#| layout: "[[1], [-1], [1], [-1], [1], [-1], [1]]"
+#| fig-pos: 'H'
+
+knitr::kable(food1_results$random_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+
+knitr::kable(food1_results$fixed_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+
+knitr::kable(food2_results$random_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+
+knitr::kable(food2_results$fixed_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+```
+
+
+<!--(bftablesocial)-->
+
+```{r}
+#| label: tbl-bfsocial
+#| tbl-cap: "AIC, BIC, and Bayes factor values per model for the social experiment"
+#| tbl-subcap: 
+#|   - "Replicate 1 random effects"
+#|   - "Replicate 1 fixed effects"
+#|   - "Replicate 2 random effects"
+#|   - "Replicate 2 fixed effects"
+#| layout: "[[1], [-1], [1], [-1], [1], [-1], [1]]"
+#| fig-pos: 'H'
+
+knitr::kable(social1_results$random_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+
+knitr::kable(social1_results$fixed_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+
+knitr::kable(social2_results$random_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+
+knitr::kable(social2_results$fixed_table, booktabs = TRUE, digits = 2) |> 
+  column_spec(1, monospace = TRUE)
+```
+
+
+<!--(preferencetable)-->
+
+```{r preferencetable}
+individual_preference_table |> 
+  select(individual, total_trials, female_percent, male_percent, overall_percent) |> 
+  kable(booktabs = TRUE, digits = 1, linesep = "",
+        align = "lcccc",
+        caption = "Choice for individual stooge conspecifics",
+        col.names = c("Stooge", "Number of trials", "Female choice %", "Male choice %", "Overall choice %")) |> 
+  pack_rows(index = c("Experiment 1" = 15, "Experiment 2" = 8)) |> 
+  pack_rows(index = c("Males" = 9, "Females" = 6, "Males" = 5, "Females" = 3), italic = TRUE, bold = FALSE)
+```
+
+

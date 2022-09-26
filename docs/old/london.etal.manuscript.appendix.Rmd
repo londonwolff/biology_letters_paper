@@ -1,5 +1,5 @@
 ---
-title: "london.etal.manuscript.appendix"
+title: "Supplementary Materials"
 output: pdf_document
 date: '2022-07-15'
 ---
@@ -10,6 +10,7 @@ library(here)
 library(patchwork)
 library(formattable)
 library(knitr)
+library(kableExtra)
 
 source(here("R/wolff_etal_2022_rcode.R"))
 my_citations <- cite_r(file = "r-references.bib")
@@ -30,11 +31,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Subjects
 
-Our study population of 20 Pinyon Jays (_Gymnorhinus cyanocephalus_) were wild born and locally housed. Researchers captured these birds in either Arizona or California (United States Fish and Wildlife permit MB694205) between 2006 and 2011. At capture, they were estimated to be between one and three years of age. The colony has an age range of `r range(bird_ages)` years with a mean of `r mean(bird_ages)`years . The University of Nebraska-Lincoln Institutional Animal Care and Use Committee approved this project (protocol number 1867 and 2059), and all procedures conformed to the ASAB/ABS Guidelines for the use of animals in research. All subjects have completed prior cognitive and behavioral experiments in their tenure with the lab. The colony is handled by humans extensively. 
+Our study population of 20 pinyon jays (_Gymnorhinus cyanocephalus_) were wild born and locally housed. Researchers captured these birds in either Arizona or California (United States Fish and Wildlife permit MB694205) between 2006 and 2011. At capture, they were estimated to be between one and three years of age. The colony has an age range of `r range(bird_ages)` years with a mean of `r mean(bird_ages)`years . The University of Nebraska-Lincoln Institutional Animal Care and Use Committee approved this project (protocol number 1867 and 2059), and all procedures conformed to the ASAB/ABS Guidelines for the use of animals in research. All subjects have completed prior cognitive and behavioral experiments in their tenure with the lab. The colony is handled by humans extensively. 
 
-Repetition 1: Eight Pinyon Jays (one female) completed all rounds of the food experiment and 10 Pinyon Jays (four female) completed all rounds of the social experiment. The Pinyon Jays in the food item experiment were housed two to a double cage, while the jays in the social experiment were individually housed. A further 17 Pinyon Jays (six female) from the colony were used as stooge conspecifics in the social experiment. This number includes six birds that had to be transferred out of use as stooge birds due to unrelated colony matters. Stooge birds were primarily housed socially and always in a separate room from the testing subjects. Two Pinyon Jays were dropped from the social experiment due to unrelated health concerns.
+Repetition 1: Eight pinyon jays (one female) completed all rounds of the food experiment and 10 pinyon jays (four female) completed all rounds of the social experiment. The pinyon jays in the food item experiment were housed two to a double cage, while the jays in the social experiment were individually housed. A further 17 pinyon jays (six female) from the colony were used as stooge conspecifics in the social experiment. This number includes six birds that had to be transferred out of use as stooge birds due to unrelated colony matters. Stooge birds were primarily housed socially and always in a separate room from the testing subjects. Two pinyon jays were dropped from the social experiment due to unrelated health concerns.
 
-Repetition 2: Four Pinyon Jays (two female) completed all rounds of the food experiment and ten Pinyon Jays (one female) completed all rounds of the social experiment. A further 8 Pinyon Jays (four female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions. 
+Repetition 2: Four pinyon jays (two female) completed all rounds of the food experiment and ten pinyon jays (one female) completed all rounds of the social experiment. A further 8 pinyon jays (four female) from the colony were used as stooge conspecifics in the social experiment. Housing was the same in both repetitions. 
 
 ### Food Item Habituation and Training  
 Prior to experimental sessions, all birds had to be habituated to the experimental room, cage, and stand and then experience training. Depending on the bird this took between 9-16 weeks as each bird was ran once a day between 11:00-15:00 CST. Subjects experienced four training phases in total; each aimed at teaching the bird a different piece of the paradigm. The first phase (rear cup habituation) habituated subjects to the apparatus. The second phase (front dish habituation) encouraged the birds to place their heads through holes at the front of the cage to consume mealworms from the dishes on the trays. The third phase (moving dish training) introduced the subjects to the fact that the dish on the unchosen side moved out of reach. The forth phase (mixed reward training) taught the subjects to quickly make a choice between zero or three mealworms, eat, and then set up for another trial in quick succession. 
@@ -118,21 +119,23 @@ The second hypothesis can be partially, fully, or unsupported depending on the a
 
 The third hypothesis can be supported or unsupported based on the outcome of the `difference * ratio` interaction model. If pinyon jays choose items of different ratios and differences independently of each other than you would expect no evidence in support of the interaction model. Evidence in support of the interaction model would signify that choices of mealworms for the same ratio would vary based on the difference and visa versa. 
 
-\renewcommand{\thetable}{A\arabic{table}}
+# Supplementary tables
+
+\renewcommand{\thetable}{S\arabic{table}}
 \setcounter{table}{0}
-\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\thefigure}{S\arabic{figure}}
 \setcounter{figure}{0} 
 
 
 <!--(bftablefood)-->
   (ref:bftablefood-cap) Bayes factor, BIC, and AIC values per model for the food item experiment (a) Random effect models repetition 1 (b) Fixed effect models repetition 1 (c) Random effect models repetition 2 (d) Fixed effect models repetition 2. Reminder: _BF_ > 3 show moderate evidence for the alternative hypothesis while _BF_ < 0.33 show moderate evidence for the null hypothesis. A _BF_ in between 3 and 0.33 is inconclusive.
   
-```{r bftablefood, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:bftablefood-cap)"}
+```{r bftablefood, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:bftablefood-cap)", tbl-subcap: ["A table", "Another table"]}
+knitr::kable(list(food1_results$random_table, food1_results$fixed_table, food2_results$random_table, food2_results$fixed_table))
 
-food1_results$random_effects
-food1_results$fixed_effects
-food2_results$random_effects
-food2_results$fixed_effects
+
+
+
 
 #Need to figure out how to make into one graphic with a,b,c,d,etc
 
@@ -144,10 +147,10 @@ food2_results$fixed_effects
   
 ```{r bftablesocial, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:bftablesocial-cap)"}
 
-social1_results$random_effects
-social1_results$fixed_effects
-social2_results$random_effects
-social2_results$fixed_effects
+social1_results$random_table
+social1_results$fixed_table
+social2_results$random_table
+social2_results$fixed_table
 
 #Need to figure out how to make into one graphic with a,b,c,d,etc
 
@@ -159,7 +162,7 @@ social2_results$fixed_effects
 
 ```{r pairstable, fig.show="hold", out.width="70%", fig.align="center", fig.cap = "(ref:pairstable-cap)"}
 
-factorial_pairs_table 
+apa_table(factorial_pairs_df) 
 
 ```
 
@@ -169,8 +172,9 @@ factorial_pairs_table
 
 ```{r modeltable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:modeltable-cap)"}
 
-random_effect_structure_table
-fixed_effect_structure_table
+apa_table(random_effect_df)
+
+apa_table(fixed_effect_df)
 
 #Need to figure out how to make into one graphic with a and b
 ```
@@ -179,7 +183,7 @@ fixed_effect_structure_table
   (ref:birdinfotable-cap) Make caption once the figure is cleaned up after NA problem is figured out.
 ```{r birdinfotable, fig.show="hold", out.width="100%",  fig.align="center", fig.cap = "(ref:birdinfotable-cap)"}
 
-subject_bird_info_table
+apa_table(subject_bird_info)
 
 ```
 
