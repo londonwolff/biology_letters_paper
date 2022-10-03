@@ -136,7 +136,7 @@ The food experiment was conducted in a bird cage (72 x 48 x 48 cm) with three pe
 
 At the beginning of each trial, the experimenter placed the appropriate number of mealworms in each of the dishes. The subject hopped forward to one of the front perches to signal choice. The experimenter then removed the opposite dish and the subject had up to three minutes to consume the mealworms. Once the subject consumed all mealworms, the next trial began. Subjects experienced up to X trials per session and up to X trials per day. If the subject did not make a choice and/or did not finish all mealworms within three minutes, the session stopped.
 
-Each bird experienced 10 repetitions for each of the 15 numerical pairs between 1 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.; Table S2). The side of the larger option was pseudo-randomized with no left or right runs longer than three in a row. Subjects ran in a randomized order each day.
+Each bird experienced 10 repetitions for each of the 15 numerical pairs between 1 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.; Table S2). The side of the larger option was pseudo-randomized with no left or right runs longer than three in a row. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. Subjects ran in a randomized order each day.
 
 ## Social Experiment
 
@@ -146,9 +146,9 @@ The apparatus was a Y maze where the subject entered a large chamber at the base
 
 ### Experimental Procedure
 
-The experimenter held the subject inside the apparatus and showed them each option for six seconds before releasing them into the entrance chamber. Once the subject crossed the threshold of one of the doors, *both* doors were gently closed. After three minutes elapsed, the handler collected the subject and returned them to their home cage. Subjects experience one trial per session per day. **Did we increase this toward the end, or was that only numerical?**
+The experimenter held the subject inside the apparatus and showed them each option for six seconds before releasing them into the entrance chamber. Once the subject crossed the threshold of one of the doors, *both* doors were gently closed. After three minutes elapsed, the handler collected the subject and returned them to their home cage. Subjects experience one trial per one to two sessions per day.
 
-Each subject experienced five trials (replicate 1) or ten trials (replicate 2) for each of the numerical pairs between 1 and 6 (replicate 1). For replicate 2, we used all numerical pairs between 1 and 6 except those that required more than 8 birds (due to the constraints on the number of stooge conspecifics; Table S2). The side of the larger option was pseudo-randomized with no left or right runs longer than three consecutive trials. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. **Was this true for food, too?** Subjects ran in a randomized order each day.
+Each subject experienced five trials (replicate 1) or ten trials (replicate 2) for each of the numerical pairs between 1 and 6 (replicate 1). For replicate 2, we used all numerical pairs between 1 and 6 except those that required more than 8 birds (due to the constraints on the number of stooge conspecifics; Table S2). The side of the larger option was pseudo-randomized with no left or right runs longer than three consecutive trials. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. Subjects ran in a randomized order each day.
    
 ## Data Analysis
 
@@ -204,9 +204,17 @@ This research investigated how pinyon jays assess numbers of food items and cons
 
 This research was funded by a National Science Foundation grant (NSF-1658837). We would like to thank Kylie Hughes, Toria Biancalana, Hailey Wilson, Bailey Wilson, Isaac Martinez, and Rachel Bruner for helping run the experiments and care for our birds.
 
+## Author Contributions
+
+**Wolff:** Conceptualization, Data Curation, Formal Analysis, Methodology, Project Administration, Resources, Supervision, Software, Validation, Visualization, Writing – Original Draft Preparation, Writing-review & editing. **Trevino:** Investigation, Project Administration, Resources, Visualization, Writing – Review & Editing. **Stevens:** Conceptualization, Formal Analysis, Funding Acquisition, Methodology, Investigation, Software, Supervision, Validation, Visualization, Writing – review & editing. 
+
+**Conflict of interest:** The authors declared that no conflicts of interest exist.
+
+**Data Availability:** The data and analysis code are available at: https://.
+
 ## Ethics approval
 
-<!--All procedures were conducted in an ethical and responsible manner, in full compliance with all relevant codes of experimentation and legislation and were approved by the UNL Internal Review Board (protocol # 17922) and Institutional Animal Care and Use Committee (protocol # 1621). -->
+All procedures were conducted in an ethical and responsible manner, in full compliance with all relevant codes of experimentation and legislation and were approved by the UNL Internal Review Board (protocol # 17922) and Institutional Animal Care and Use Committee (protocol # 1621).
 
 \newpage
  

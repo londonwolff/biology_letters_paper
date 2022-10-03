@@ -207,8 +207,7 @@ This research investigated how pinyon jays assess numbers of food items and cons
 This research was funded by National Science Foundation grants (NSF-1062045,
 NSF-1658837). We would like to thank Kylie Hughes, Toria Biancalana, Hailey Wilson, Bailey Wilson, Isaac Martinez, and Rachel Bruner for helping run the experiments and caring for our birds.
 
-# Author Contributions
-
+## Author Contributions
 
 **Wolff:** Conceptualization, Data Curation, Formal Analysis, Methodology, Project Administration, Resources, Supervision, Software, Validation, Visualization, Writing – Original Draft Preparation, Writing-review & editing. **Trevino:** Investigation, Project Administration, Resources, Visualization, Writing – Review & Editing. **Stevens:** Conceptualization, Formal Analysis, Funding Acquisition, Methodology, Investigation, Software, Supervision, Validation, Visualization, Writing – review & editing. 
 
