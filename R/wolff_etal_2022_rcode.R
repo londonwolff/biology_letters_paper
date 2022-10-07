@@ -435,10 +435,6 @@ heatmap_df <- individual_preference_df |>
     Uno = Uno_chosen / (Uno_chosen + Uno_rejected) *100)|>
   select(individual, Basil:Uno)
 
-heatmap <- ggplot(heatmap_df, aes(individual, Y, fill = Z))+
-                  geom_tile()
-
-heatmap
 
 #Calculating avg trials per session
 sessions_avg_food1 <- food1 %>%
