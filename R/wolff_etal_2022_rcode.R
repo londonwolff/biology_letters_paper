@@ -412,8 +412,9 @@ individual_preference_table <- bind_rows(individual_preference_table_1, individu
          .after = individual) |>
   arrange(experiment, sex, overall_percent)
 
-#Creating corrplot for individual difference
-heatmap_df <- individual_preference_df |>
+#Creating heatmap for individual difference
+heatmap_df_1 <- individual_preference_df |>
+  filter(individual_preference_df$rep == "1") |>
   group_by(subject) |>
   summarize(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE))) |>
   pivot_longer(-subject, names_to = "individual", values_to = "presence") |>
@@ -424,28 +425,66 @@ heatmap_df <- individual_preference_df |>
   unite(subject_chosen, c("subject", "chosen")) |>
   pivot_wider(individual, names_from = subject_chosen, values_from = presence) |>
   rename(Black_Elk_chosen = "Black Elk_chosen",
-         Black_Elk_rejected = "Black Elk_rejected",
-         Heman_chosen = "He-man_chosen",
-         Heman_rejected = "He-man_rejected") |>
+         Black_Elk_rejected = "Black Elk_rejected") |>
   mutate(
     Basil = Basil_chosen / (Basil_chosen + Basil_rejected) *100,
     Black_Elk = Black_Elk_chosen / (Black_Elk_chosen + Black_Elk_rejected) *100,
-    Chicklet = Chicklet_chosen / (Chicklet_chosen + Chicklet_rejected) *100,
-    Dartagnan = Dartagnan_chosen / (Dartagnan_chosen + Dartagnan_rejected) *100,
     Dill = Dill_chosen / (Dill_chosen + Dill_rejected) *100,
-    Dumbledore = Dumbledore_chosen / (Dumbledore_chosen + Dumbledore_rejected) *100,
-    Fern = Fern_chosen / (Fern_chosen + Fern_rejected) *100,
     Flute = Flute_chosen / (Flute_chosen + Flute_rejected) *100,
-    Fozzie = Fozzie_chosen / (Fozzie_chosen + Fozzie_rejected) *100,
-    Heman = Heman_chosen / (Heman_chosen + Heman_rejected) *100,
-    Hippolyta = Hippolyta_chosen / (Hippolyta_chosen + Hippolyta_rejected) *100,
     Juan = Juan_chosen / (Juan_chosen + Juan_rejected) *100,
     Juniper = Juniper_chosen / (Juniper_chosen + Juniper_rejected) *100,
+    Robin = Robin_chosen / (Robin_chosen + Robin_rejected) *100,
+    Rooster = Rooster_chosen / (Rooster_chosen + Rooster_rejected) *100) |>
+  select(individual, Basil:Rooster)|>
+  na.omit()
+
+heatmap_1 <- heatmap_df_1 |>
+  pivot_longer(-individual, names_to = "subject", values_to = "percent") |>
+  ggplot(aes(x = subject, y = individual, fill = percent))+
+  geom_tile()+
+  scale_fill_continuous(low = "yellow",
+                        high = "blue",
+                        name = "Percent Choosen")+
+  labs(y = "Stooge Birds", x = "Subject Birds")
+
+heatmap_1
+
+#heatmap 2
+heatmap_df_2 <- individual_preference_df |>
+  filter(individual_preference_df$rep == "2") |>
+  group_by(subject) |>
+  summarize(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE))) |>
+  pivot_longer(-subject, names_to = "individual", values_to = "presence") |>
+  mutate(
+    chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"),
+    individual = str_replace(individual, "_rejected", "")
+  ) |>
+  unite(subject_chosen, c("subject", "chosen")) |>
+  pivot_wider(individual, names_from = subject_chosen, values_from = presence) |>
+  rename(Heman_chosen = "He-man_chosen",
+         Heman_rejected = "He-man_rejected") |>
+  mutate(
+    Dartagnan = Dartagnan_chosen / (Dartagnan_chosen + Dartagnan_rejected) *100,
+    Dumbledore = Dumbledore_chosen / (Dumbledore_chosen + Dumbledore_rejected) *100,
+    Fern = Fern_chosen / (Fern_chosen + Fern_rejected) *100,
+    Fozzie = Fozzie_chosen / (Fozzie_chosen + Fozzie_rejected) *100,
+    Heman = Heman_chosen / (Heman_chosen + Heman_rejected) *100,
     Mork = Mork_chosen / (Mork_chosen + Mork_rejected) *100,
     Mote = Mote_chosen / (Mote_chosen + Mote_rejected) *100,
     Mulder = Mulder_chosen / (Mulder_chosen + Mulder_rejected) *100,
     Prudence = Prudence_chosen / (Prudence_chosen + Prudence_rejected) *100,
-    Robin = Robin_chosen / (Robin_chosen + Robin_rejected) *100,
-    Rooster = Rooster_chosen / (Rooster_chosen + Rooster_rejected) *100,
     Uno = Uno_chosen / (Uno_chosen + Uno_rejected) *100)|>
-  select(individual, Basil:Uno)
+  select(individual, Dartagnan:Uno)|>
+  na.omit()
+
+heatmap_2 <- heatmap_df_2 |>
+  pivot_longer(-individual, names_to = "subject", values_to = "percent") |>
+  ggplot(aes(x = subject, y = individual, label = percent, fill = percent))+
+  geom_tile()+
+  scale_fill_continuous(low = "yellow",
+                        high = "blue",
+                        name = "Percent Choosen")+
+  labs(y = "Stooge Birds", x = "Subject Birds")
+
+heatmap_2
+
