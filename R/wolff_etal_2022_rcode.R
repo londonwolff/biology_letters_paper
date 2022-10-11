@@ -232,6 +232,8 @@ social2 <- all_data |>
   filter(!subject %in% c()) |>
   filter(!small_num %in% 0)
 
+combined_data <- bind_rows(food1, food2, social1, social2)
+
 
 # Analyze data -----------------------------------------------------------------
 
@@ -258,11 +260,24 @@ ggsave(here("figures/social_figure.png"), width = 14, height = 10)
 
 # Supplementary materials ---------------------------------------
 
+## Calculate mean trials per session ---------------------
+
+sessions_avg_food1 <- food1 %>%
+  group_by(subject, session) %>%
+  summarize(n())
+
+sessions_avg_food2 <- food2 %>%
+  group_by(subject, session) %>%
+  summarize(n())
+
+session_mean <- mean(c(sessions_avg_food1$`n()`,sessions_avg_food2$`n()`))
+
+
 ## Demographic table ------------------------
 
 bird_ages <- c(12, 10, 11, 15, 12, 12, 12, 14, 11, 10, 14, 12, 15, 15, 12, 14, 14, 15, 10, 12, 19)
 
-subject_bird_info <- all_data |>
+subject_bird_info <- combined_data |>
   unite(unique_code, c(study, rep)) |>
   group_by(unique_code, sex, subject) |>
   summarise(n = n()) |>
@@ -303,7 +318,7 @@ fixed_effect_df <- data.frame(
 
 # Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen.
 
-individual_preference_df <- all_data |>
+individual_preference_df <- combined_data |>
   filter(study != "food") |>
   mutate(
     chosenbirds = ifelse(choose_larger == "1", largebirds, smallbirds),
@@ -434,18 +449,3 @@ heatmap_df <- individual_preference_df |>
     Rooster = Rooster_chosen / (Rooster_chosen + Rooster_rejected) *100,
     Uno = Uno_chosen / (Uno_chosen + Uno_rejected) *100)|>
   select(individual, Basil:Uno)
-
-
-#Calculating avg trials per session
-sessions_avg_food1 <- food1 %>%
-  group_by(subject, session) %>%
-  summarize(n())
-
-sessions_avg_food2 <- food2 %>%
-  group_by(subject, session) %>%
-  summarize(n())
-
-session_avg <- c(sessions_avg_food1$`n()`,sessions_avg_food2$`n()`)
-mean(session_avg)
-
-
