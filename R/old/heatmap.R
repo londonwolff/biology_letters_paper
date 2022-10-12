@@ -1,3 +1,6 @@
+library(tidyverse)
+library(here)
+
 all_data <- read_csv(here("data/wolff_etal_2022_data.csv"))
 
 # Separate out data for each experiment
@@ -146,8 +149,11 @@ heatmap_df_1 <- individual_preference_df |>
   select(individual, Basil:Rooster)|>
   na.omit()
 
-heatmap_1 <- heatmap_df_1 |>
+heatmap_df_long_1 <- heatmap_df_1 |>
   pivot_longer(-individual, names_to = "subject", values_to = "percent") |>
+  mutate(replicate = 1, .before = 1)
+
+heatmap_1 <- heatmap_df_long_1 |>
   ggplot(aes(x = subject, y = individual, fill = percent))+
   geom_tile()+
   scale_fill_continuous(low = "yellow",
@@ -156,6 +162,8 @@ heatmap_1 <- heatmap_df_1 |>
   labs(y = "Stooge Birds", x = "Subject Birds")
 
 heatmap_1
+
+
 
 #heatmap 2
 heatmap_df_2 <- individual_preference_df |>
@@ -185,8 +193,11 @@ heatmap_df_2 <- individual_preference_df |>
   select(individual, Dartagnan:Uno)|>
   na.omit()
 
-heatmap_2 <- heatmap_df_2 |>
+heatmap_df_long_2 <- heatmap_df_2 |>
   pivot_longer(-individual, names_to = "subject", values_to = "percent") |>
+  mutate(replicate = 2, .before = 1)
+
+heatmap_2 <- heatmap_df_long_2 |>
   ggplot(aes(x = subject, y = individual, label = percent, fill = percent))+
   geom_tile()+
   scale_fill_continuous(low = "yellow",
@@ -195,3 +206,14 @@ heatmap_2 <- heatmap_df_2 |>
   labs(y = "Stooge Birds", x = "Subject Birds")
 
 heatmap_2
+
+
+heatmap_df_long <- bind_rows(heatmap_df_long_1, heatmap_df_long_2)
+
+heatmap_df_long |>
+  ggplot(aes(x = subject, y = individual, label = percent, fill = percent)) +
+  geom_tile() +
+  facet_wrap(~replicate, scales = "free") +
+  scale_fill_gradient2(midpoint = 50) +
+  labs(y = "Stooge Birds", x = "Subject Birds") +
+  theme_bw()
