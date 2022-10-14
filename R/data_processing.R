@@ -59,7 +59,8 @@ all_data <- bind_rows(food_raw_rep1, food_raw_rep2, social_raw_rep1, social_raw_
   fill(date) %>%
   fill(session) %>%
   filter(subject != "baloo") %>%
-  mutate(subject = fct_collapse(subject,
+  mutate(study = fct_recode(study, "Food" = "food", "Social" = "social"),
+    subject = fct_collapse(subject,
                                 Basil = "basil",
                                 "Black Elk" = "black elk",
                                 Chicklet = "chicklet",
@@ -76,7 +77,9 @@ all_data <- bind_rows(food_raw_rep1, food_raw_rep2, social_raw_rep1, social_raw_
          choice = str_replace_all(choice, "NC", NA_character_),
          choice = str_replace_all(choice, "L\\*", "L"),
          choose_larger = ifelse(large_side == choice, 1, ifelse(is.na(choice), NA, 0))
-         )
+         ) |>
+  rename("small_birds" = "smallbirds", "large_birds" = "largebirds")
+all_data$date[which(as.character(all_data$date) == "2025-02-22")] <- "2022-01-06 00:00:00"
 
 write_csv(all_data, here("data/wolff_etal_2022_data.csv"))
 
