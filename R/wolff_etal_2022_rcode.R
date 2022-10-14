@@ -215,20 +215,20 @@ all_data <- read_csv(here("data/wolff_etal_2022_data.csv"))
 
 # Separate out data for each experiment
 food1 <- all_data |>
-  filter(study == "food" & rep == 1) |>
+  filter(study == "Food" & rep == 1) |>
   filter(!subject %in% c("Mulder", "Dartagnan"))
 
 food2 <- all_data |>
-  filter(study == "food" & rep == 2) |>
+  filter(study == "Food" & rep == 2) |>
   filter(!subject %in% c("Basil", "Robin"))
 
 social1 <- all_data |>
-  filter(study == "social" & rep == 1) |>
+  filter(study == "Social" & rep == 1) |>
   filter(!subject %in% c("Baloo")) |>
   filter(!small_num %in% 0)
 
 social2 <- all_data |>
-  filter(study == "social" & rep == 2) |>
+  filter(study == "Social" & rep == 2) |>
   filter(!subject %in% c()) |>
   filter(!small_num %in% 0)
 
@@ -237,10 +237,10 @@ combined_data <- bind_rows(food1, food2, social1, social2)
 
 # Analyze data -----------------------------------------------------------------
 
-food1_results <- analyze_data(food1, "food", "1")
-food2_results <- analyze_data(food2, "food", "2")
-social1_results <- analyze_data(social1, "social", "1")
-social2_results <- analyze_data(social2, "social", "2")
+food1_results <- analyze_data(food1, "Food", "1")
+food2_results <- analyze_data(food2, "Food", "2")
+social1_results <- analyze_data(social1, "Social", "1")
+social2_results <- analyze_data(social2, "Social", "2")
 
 
 # Build plots ------------------------------------------------------------------
@@ -263,14 +263,12 @@ ggsave(here("figures/social_figure.png"), width = 14, height = 10)
 ## Calculate mean trials per session ---------------------
 
 sessions_avg_food1 <- food1 %>%
-  group_by(subject, session) %>%
-  summarize(n())
+  count(subject, session)
 
 sessions_avg_food2 <- food2 %>%
-  group_by(subject, session) %>%
-  summarize(n())
+  count(subject, session)
 
-session_mean <- mean(c(sessions_avg_food1$`n()`,sessions_avg_food2$`n()`))
+session_mean <- mean(c(sessions_avg_food1$n,sessions_avg_food2$n))
 
 
 ## Demographic table ------------------------
@@ -319,9 +317,9 @@ fixed_effect_df <- data.frame(
 # Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen.
 
 individual_preference_df <- combined_data |>
-  filter(study != "food") |>
+  filter(study != "Food") |>
   mutate(
-    chosenbirds = ifelse(choose_larger == "1", largebirds, smallbirds),
+    chosenbirds = ifelse(choose_larger == "1", large_birds, small_birds),
     Cash = ifelse(str_detect(chosenbirds, "Cash"), 1, 0),
     Scully = ifelse(str_detect(chosenbirds, "Scully"), 1, 0),
     Mork = ifelse(str_detect(chosenbirds, "Mork"), 1, 0),
@@ -339,7 +337,7 @@ individual_preference_df <- combined_data |>
     Saffron = ifelse(str_detect(chosenbirds, "Saffron"), 1, 0),
     Hippolyta = ifelse(str_detect(chosenbirds, "Hippo"), 1, 0),
     Chicklet = ifelse(str_detect(chosenbirds, "Chicklet"), 1, 0),
-    rejectedbirds = ifelse(choose_larger == "0", largebirds, smallbirds),
+    rejectedbirds = ifelse(choose_larger == "0", large_birds, small_birds),
     Cash_rejected = ifelse(str_detect(rejectedbirds, "Cash"), 1, 0),
     Scully_rejected = ifelse(str_detect(rejectedbirds, "Scully"), 1, 0),
     Mork_rejected = ifelse(str_detect(rejectedbirds, "Mork"), 1, 0),
