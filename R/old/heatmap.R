@@ -153,6 +153,7 @@ heatmap_df_long_1 <- heatmap_df_1 |>
   pivot_longer(-individual, names_to = "subject", values_to = "percent") |>
   mutate(replicate = 1, .before = 1)
 
+
 heatmap_1 <- heatmap_df_long_1 |>
   ggplot(aes(x = subject, y = individual, fill = percent))+
   geom_tile()+
@@ -162,7 +163,6 @@ heatmap_1 <- heatmap_df_long_1 |>
   labs(y = "Stooge Birds", x = "Subject Birds")
 
 heatmap_1
-
 
 
 #heatmap 2
@@ -210,10 +210,23 @@ heatmap_2
 
 heatmap_df_long <- bind_rows(heatmap_df_long_1, heatmap_df_long_2)
 
-heatmap_df_long |>
-  ggplot(aes(x = subject, y = individual, label = percent, fill = percent)) +
+heatmap_visual <- heatmap_df_long |>
+  ggplot(aes(x = subject, y = individual, fill = percent)) +
   geom_tile() +
   facet_wrap(~replicate, scales = "free") +
   scale_fill_gradient2(midpoint = 50) +
   labs(y = "Stooge Birds", x = "Subject Birds") +
-  theme_bw()
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 70, hjust = 1))
+
+
+#thinking about sex
+
+sex_social1 <- social1 %>%
+  group_by(subject, sex) %>%
+  summarise()
+
+sex_social2 <- social2 %>%
+  group_by(subject, sex) %>%
+  summarise()
+
