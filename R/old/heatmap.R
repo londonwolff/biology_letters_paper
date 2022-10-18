@@ -205,10 +205,22 @@ heatmap_2 <- heatmap_df_long_2 |>
                         name = "Percent Choosen")+
   labs(y = "Stooge Birds", x = "Subject Birds")
 
-heatmap_2
-
-
 heatmap_df_long <- bind_rows(heatmap_df_long_1, heatmap_df_long_2)
+
+heatmap_df_long$individual = as.factor(heatmap_df_long$individual)
+
+heatmap_df_long$subject = as.factor(heatmap_df_long$subject)
+
+heatmap_df_long$subject <- fct_relevel(heatmap_df_long$subject, "Flute", "Juniper", "Robin", "Uno")
+
+heatmap_df_long$individual <- fct_relevel(heatmap_df_long$individual, "Egeus", "Hermia", "Hippolyta", "Quince", "Saffron", "Sapphire", "Scully")
+
+replicate <- c(1,2)
+hlines <- c(6.5, 4.5)
+hlines_in_plot <- data.frame(replicate, hlines)
+
+vlines <- c(3.5, 1.5)
+vlines_in_plot <- data.frame(replicate, vlines)
 
 heatmap_visual <- heatmap_df_long |>
   ggplot(aes(x = subject, y = individual, fill = percent)) +
@@ -216,17 +228,16 @@ heatmap_visual <- heatmap_df_long |>
   facet_wrap(~replicate, scales = "free") +
   scale_fill_gradient2(midpoint = 50) +
   labs(y = "Stooge Birds", x = "Subject Birds") +
+  scale_x_discrete(labels = ~ ifelse(.x == "Uno", paste0(.x, "*"), .x)
+  )+
+  scale_y_discrete(labels = ~ ifelse(.x == "Egeus", paste0(.x, "*"), .x)
+  )+
   theme_bw()+
-  theme(axis.text.x = element_text(angle = 70, hjust = 1))
+  theme(axis.text.x = element_text(angle = 70, hjust = 1))+
+  geom_hline(data = hlines_in_plot,
+             aes(yintercept = hlines))+
+  geom_vline(data = vlines_in_plot,
+             aes(xintercept = vlines))
 
-
-#thinking about sex
-
-sex_social1 <- social1 %>%
-  group_by(subject, sex) %>%
-  summarise()
-
-sex_social2 <- social2 %>%
-  group_by(subject, sex) %>%
-  summarise()
+heatmap_visual
 
