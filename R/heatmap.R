@@ -255,3 +255,7 @@ heatmap_visual <- heatmap_df_long |>
 
 heatmap_visual
 
+#Calculating Ns for replicates
+
+replicate1N <- c(56,21,630,163,134,350,406,454,600,570,179,131,206,350,400)
+replicate2N <- c(770,818,818,790,828,828,848,888)
