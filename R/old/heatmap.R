@@ -1,6 +1,7 @@
 library(tidyverse)
 library(here)
 
+
 all_data <- read_csv(here("data/wolff_etal_2022_data.csv"))
 
 # Separate out data for each experiment
@@ -162,9 +163,6 @@ heatmap_1 <- heatmap_df_long_1 |>
                         name = "Percent Choosen")+
   labs(y = "Stooge Birds", x = "Subject Birds")
 
-heatmap_1
-
-
 #heatmap 2
 heatmap_df_2 <- individual_preference_df |>
   filter(individual_preference_df$rep == "2") |>
@@ -207,14 +205,30 @@ heatmap_2 <- heatmap_df_long_2 |>
 
 heatmap_df_long <- bind_rows(heatmap_df_long_1, heatmap_df_long_2)
 
+#create asteriks next to female subject and stooge birds
+
+females_social <- c("Flute", "Juniper", "Robin", "Uno", "Egeus", "Hermia", "Hippolyta", "Quince", "Saffron", "Sapphire", "Scully")
+
+heatmap_df_long$individual <- ifelse(heatmap_df_long$individual %in% females_social, paste0(heatmap_df_long$individual, "*"), heatmap_df_long$individual)
+
+heatmap_df_long$subject <- ifelse(heatmap_df_long$subject %in% females_social, paste0(heatmap_df_long$subject, "*"), heatmap_df_long$subject)
+
+#Change character vectors to factors
+
 heatmap_df_long$individual = as.factor(heatmap_df_long$individual)
 
 heatmap_df_long$subject = as.factor(heatmap_df_long$subject)
 
-heatmap_df_long$subject <- fct_relevel(heatmap_df_long$subject, "Flute", "Juniper", "Robin", "Uno")
+#relevel subject and stooge birds
 
-heatmap_df_long$individual <- fct_relevel(heatmap_df_long$individual, "Egeus", "Hermia", "Hippolyta", "Quince", "Saffron", "Sapphire", "Scully")
+heatmap_df_long$subject <- fct_relevel(heatmap_df_long$subject, "Flute*", "Juniper*", "Robin*", "Uno*")
 
+heatmap_df_long$individual <- fct_relevel(heatmap_df_long$individual, "Egeus*", "Hermia*", "Hippolyta*", "Quince*", "Saffron*", "Sapphire*", "Scully*")
+
+heatmap_df_long$subject <- fct_recode(heatmap_df_long$subject, BlackElk = "Black_Elk")
+
+
+#neccasariy background to get correct lines on plot
 replicate <- c(1,2)
 hlines <- c(6.5, 4.5)
 hlines_in_plot <- data.frame(replicate, hlines)
@@ -222,18 +236,18 @@ hlines_in_plot <- data.frame(replicate, hlines)
 vlines <- c(3.5, 1.5)
 vlines_in_plot <- data.frame(replicate, vlines)
 
+#making ggplot element for the heatmap visual
 heatmap_visual <- heatmap_df_long |>
   ggplot(aes(x = subject, y = individual, fill = percent)) +
   geom_tile() +
   facet_wrap(~replicate, scales = "free") +
-  scale_fill_gradient2(midpoint = 50) +
+  scale_fill_gradient2(high = "#005AB5",
+                       low = "#139272",
+                       midpoint = 50) +
   labs(y = "Stooge Birds", x = "Subject Birds") +
-  scale_x_discrete(labels = ~ ifelse(.x == "Uno", paste0(.x, "*"), .x)
-  )+
-  scale_y_discrete(labels = ~ ifelse(.x == "Egeus", paste0(.x, "*"), .x)
-  )+
   theme_bw()+
-  theme(axis.text.x = element_text(angle = 70, hjust = 1))+
+  theme(axis.text.x = element_text(angle = 70, hjust = 1),
+        text = element_text(size = 16))+
   geom_hline(data = hlines_in_plot,
              aes(yintercept = hlines))+
   geom_vline(data = vlines_in_plot,

@@ -85,8 +85,6 @@ All experimental sessions ran between 11:00-15:00. The subjects were not on a re
 
 During habituation, three consecutive days of no choices and/or no eating of mealworms on one particular side triggered side de-bias training. During experimental sessions, there were two triggers for de-bias training: either not completing the first 0 vs. 3 practice test trial correctly or when a bird chose the same side for 10 consecutive trials. De-biasing training consisted of three mealworms placed in the dish the subject avoided and no mealworms in the side they preferred. The subject was allowed up to one minute to select the dish that contained mealworms. If the bird did not make a choice or eat any mealworms in the allotted time, we slide both trays all the way out of the stand, placed them out of view of the bird, waited a few seconds, then began the trial over. If they ate within the minute, we reset as soon as they ate until they had five total opportunities to eat. The bird returned to habituation or experimental sessions once they successfully chose the avoided side immediately and ate at least 60% of the mealworms provided. 
 
-
-
 ## Social Experiment 
 
 ### Apparatus 
@@ -137,6 +135,18 @@ To explore random effect structure, we included models with no fixed effect and 
 The second hypothesis can be partially, fully, or unsupported depending on the amount of evidence for or against the ratio only or difference only models. For example, if the Bayes factor for the ratio only model has at least moderate evidence our hypothesis that pinyon jays prefer more items when the quantities have higher numerical ratios is supported. If the difference only model has no evidence supporting it than our second hypothesis would be partially supported.
 
 The third hypothesis can be supported or unsupported based on the outcome of the `difference * ratio` interaction model. If pinyon jays choose items of different ratios and differences independently of each other than you would expect no evidence in support of the interaction model. Evidence in support of the interaction model would signify that choices of mealworms for the same ratio would vary based on the difference and visa versa. 
+
+###Individual Preference analysis
+
+Upon completion of the preregistered analysis we completed an exploratory analysis of subject bird preference for individual stooge birds. We first calculated per trial if a stooge bird was on the side chosen by each subject bird. A binary operator (0 for not chosen, 1 for chosen) was used to note if a specific stooge bird was chosen for each trial. We then created a second column noting if each stooge bird was offered on that particular trial. We then calculated an average of how often each stooge bird was chosen by each sex of subject birds (Table #). To more clearly visualize the individual relationships between subjects and stooge birds we created a heatmap (Table #). The below figure shows subject birds on the x axis with stooge birds on the y axis. For instance, BlackElk the subject bird choose Sapphire 71% of the time that she was offered as an option during the first replication. Alternatively, Juniper choose the stooge bird Hermia 25% of the time she was an option during replicate 1. 
+
+<!--(individualheatmap)-->
+
+```{r individualheatmap}
+
+heatmap_visual
+
+```
 
 # References
 
