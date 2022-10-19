@@ -50,21 +50,18 @@ analyze_data <- function(df, type, rep) {
   # Summarize data per subject
   choice_means_subject <- df |>
     group_by(subject) |>
-    summarise(
-      n = n(),
-      percent_larger = mean(choose_larger, na.rm = TRUE) * 100
-    )
+    summarise(n = n(), percent_larger = mean(choose_larger, na.rm = TRUE) * 100, .groups = "drop")
 
   # Difference
   # Summarize data per subject and difference level
   choice_means_subject_diff <- df |>
     group_by(difference, subject) |>
-    summarise(percent_larger = mean(choose_larger, na.rm = TRUE) * 100)
+    summarise(percent_larger = mean(choose_larger, na.rm = TRUE) * 100, .groups = "drop")
 
   # Summarize data per difference level
   choice_means_diff_means <- choice_means_subject_diff |>
     group_by(difference) |>
-    summarise(percent_larger = mean(percent_larger))
+    summarise(percent_larger = mean(percent_larger), .groups = "drop")
 
   # Within subject confidence intervals
   wsci_difference <- wsci(
@@ -81,12 +78,12 @@ analyze_data <- function(df, type, rep) {
   # Summarize data per subject and ratio level
   choice_means_subject_ratio <- df |>
     group_by(ratio, subject) |>
-    summarise(percent_larger = mean(choose_larger, na.rm = TRUE) * 100)
+    summarise(percent_larger = mean(choose_larger, na.rm = TRUE) * 100, .groups = "drop")
 
   # Summarize data per ratio level
   choice_means_ratio_means <- choice_means_subject_ratio |>
     group_by(ratio) |>
-    summarise(percent_larger = mean(percent_larger))
+    summarise(percent_larger = mean(percent_larger), .groups = "drop")
 
   # Within subject confidence intervals
   wsci_ratio <- wsci(
@@ -278,7 +275,7 @@ bird_ages <- c(12, 10, 11, 15, 12, 12, 12, 14, 11, 10, 14, 12, 15, 15, 12, 14, 1
 subject_bird_info <- combined_data |>
   unite(unique_code, c(study, rep)) |>
   group_by(unique_code, sex, subject) |>
-  summarise(n = n()) |>
+  summarise(n = n(), .groups = "drop") |>
   pivot_wider(names_from = unique_code, values_from = n, values_fill = 0) |>
   select(subject, everything()) |>
   mutate(across(contains("_"), ~ ifelse(.x == "0", "", "X"))) |>
@@ -314,7 +311,9 @@ fixed_effect_df <- data.frame(
 
 ## Bird preference table--------------------------
 
-# Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen.
+female_birds <- c("Flute", "Juniper", "Robin", "Uno", "Egeus", "Hermia", "Hippolyta", "Quince", "Saffron", "Sapphire", "Scully")
+
+# Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen
 
 individual_preference_df <- combined_data |>
   filter(study != "Food") |>
@@ -358,70 +357,46 @@ individual_preference_df <- combined_data |>
   ) |>
   relocate(rejectedbirds, .before = Cash)
 
+# Create table of values for replicate 1
 
-# creating table of values for replication 1
-
-individual_preference_table_1 <- individual_preference_df |>
-  filter(rep == "1") |>
-  group_by(sex) |>
-  summarize(across(Cash:Chicklet_rejected, sum)) |>
-  pivot_longer(-sex, names_to = "individual", values_to = "presence") |>
+individual_preference_table <- individual_preference_df |>
+  group_by(rep, sex) |>
+  summarise(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE)), .groups = "drop") |>
+  pivot_longer(-c(rep:sex), names_to = "stooge", values_to = "presence") |>
   mutate(
-    chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"),
-    individual = str_replace(individual, "_rejected", "")
+    chosen = ifelse(grepl(x = stooge, pattern = "_rejected"), "rejected", "chosen"),
+    stooge = str_replace(stooge, "_rejected", "")
   ) |>
   unite(sex_chosen, c("sex", "chosen")) |>
-  pivot_wider(individual, names_from = sex_chosen, values_from = presence) |>
+  pivot_wider(id_cols = rep:stooge, names_from = sex_chosen, values_from = presence) |>
   mutate(
     total_trials = Female_chosen + Male_chosen + Female_rejected + Male_rejected,
     female_percent = Female_chosen / (Female_chosen + Female_rejected) * 100,
     male_percent = Male_chosen / (Male_chosen + Male_rejected) * 100,
     overall_percent = (Female_chosen + Male_chosen) / (Female_chosen + Male_chosen + Female_rejected + Male_rejected) * 100
   ) |>
-  mutate(experiment = 1, .before = 1) |>
-  arrange(overall_percent) |>
-  filter(overall_percent != 0)
-
-# creating table of values for replication 2
-individual_preference_table_2 <- individual_preference_df |>
-  filter(rep == "2") |>
-  group_by(sex) |>
-  summarize(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE))) |>
-  pivot_longer(-sex, names_to = "individual", values_to = "presence") |>
-  mutate(
-    chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"),
-    individual = str_replace(individual, "_rejected", "")
-  ) |>
-  unite(sex_chosen, c("sex", "chosen")) |>
-  pivot_wider(individual, names_from = sex_chosen, values_from = presence) |>
-  mutate(
-    total_trials = Female_chosen + Male_chosen + Female_rejected + Male_rejected,
-    female_percent = Female_chosen / (Female_chosen + Female_rejected) * 100,
-    male_percent = Male_chosen / (Male_chosen + Male_rejected) * 100,
-    overall_percent = (Female_chosen + Male_chosen) / (Female_chosen + Male_chosen + Female_rejected + Male_rejected) * 100
-  ) |>
-  mutate(experiment = 2, .before = 1) |>
-  arrange(overall_percent) |>
-  filter(overall_percent != 0)
-
-individual_preference_table <- bind_rows(individual_preference_table_1, individual_preference_table_2) |>
+  arrange(rep, overall_percent) |>
+  filter(overall_percent != 0) |>
   mutate(sex = c("F", "F", "M", "M", "M", "M", "M", "F", "M", "M", "F", "F", "M", "M", "F", "M", "M", "F", "F", "M", "M", "M", "F"),
          sex = fct_relevel(sex, "M", "F"),
-         .after = individual) |>
-  arrange(experiment, sex, overall_percent)
+         .after = stooge) |>
+  arrange(rep, sex, overall_percent)
 
-#Creating heatmap for individual difference
+# Create heatmap for individual preference data
+
+## Replicate 1
+
 heatmap_df_1 <- individual_preference_df |>
   filter(individual_preference_df$rep == "1") |>
   group_by(subject) |>
-  summarize(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE))) |>
-  pivot_longer(-subject, names_to = "individual", values_to = "presence") |>
+  summarise(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE)), .groups = "drop") |>
+  pivot_longer(-subject, names_to = "stooge", values_to = "presence") |>
   mutate(
-    chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"),
-    individual = str_replace(individual, "_rejected", "")
+    chosen = ifelse(grepl(x = stooge, pattern = "_rejected"), "rejected", "chosen"),
+    stooge = str_replace(stooge, "_rejected", "")
   ) |>
   unite(subject_chosen, c("subject", "chosen")) |>
-  pivot_wider(individual, names_from = subject_chosen, values_from = presence) |>
+  pivot_wider(stooge, names_from = subject_chosen, values_from = presence) |>
   rename(Black_Elk_chosen = "Black Elk_chosen",
          Black_Elk_rejected = "Black Elk_rejected") |>
   mutate(
@@ -433,32 +408,26 @@ heatmap_df_1 <- individual_preference_df |>
     Juniper = Juniper_chosen / (Juniper_chosen + Juniper_rejected) *100,
     Robin = Robin_chosen / (Robin_chosen + Robin_rejected) *100,
     Rooster = Rooster_chosen / (Rooster_chosen + Rooster_rejected) *100) |>
-  select(individual, Basil:Rooster)|>
+  select(stooge, Basil:Rooster)|>
   na.omit()
 
-heatmap_1 <- heatmap_df_1 |>
-  pivot_longer(-individual, names_to = "subject", values_to = "percent") |>
-  ggplot(aes(x = subject, y = individual, fill = percent))+
-  geom_tile()+
-  scale_fill_continuous(low = "yellow",
-                        high = "blue",
-                        name = "Percent Choosen")+
-  labs(y = "Stooge Birds", x = "Subject Birds")
+heatmap_df_long_1 <- heatmap_df_1 |>
+  pivot_longer(-stooge, names_to = "subject", values_to = "percent") |>
+  mutate(replicate = 1, .before = 1)
 
-heatmap_1
+## Replicate 2
 
-#heatmap 2
 heatmap_df_2 <- individual_preference_df |>
   filter(individual_preference_df$rep == "2") |>
   group_by(subject) |>
-  summarize(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE))) |>
-  pivot_longer(-subject, names_to = "individual", values_to = "presence") |>
+  summarise(across(Cash:Chicklet_rejected, ~ sum(.x, na.rm = TRUE)), .groups = "drop") |>
+  pivot_longer(-subject, names_to = "stooge", values_to = "presence") |>
   mutate(
-    chosen = ifelse(grepl(x = individual, pattern = "_rejected"), "rejected", "chosen"),
-    individual = str_replace(individual, "_rejected", "")
+    chosen = ifelse(grepl(x = stooge, pattern = "_rejected"), "rejected", "chosen"),
+    stooge = str_replace(stooge, "_rejected", "")
   ) |>
   unite(subject_chosen, c("subject", "chosen")) |>
-  pivot_wider(individual, names_from = subject_chosen, values_from = presence) |>
+  pivot_wider(stooge, names_from = subject_chosen, values_from = presence) |>
   rename(Heman_chosen = "He-man_chosen",
          Heman_rejected = "He-man_rejected") |>
   mutate(
@@ -472,17 +441,40 @@ heatmap_df_2 <- individual_preference_df |>
     Mulder = Mulder_chosen / (Mulder_chosen + Mulder_rejected) *100,
     Prudence = Prudence_chosen / (Prudence_chosen + Prudence_rejected) *100,
     Uno = Uno_chosen / (Uno_chosen + Uno_rejected) *100)|>
-  select(individual, Dartagnan:Uno)|>
+  select(stooge, Dartagnan:Uno)|>
   na.omit()
 
-heatmap_2 <- heatmap_df_2 |>
-  pivot_longer(-individual, names_to = "subject", values_to = "percent") |>
-  ggplot(aes(x = subject, y = individual, label = percent, fill = percent))+
-  geom_tile()+
-  scale_fill_continuous(low = "yellow",
-                        high = "blue",
-                        name = "Percent Choosen")+
-  labs(y = "Stooge Birds", x = "Subject Birds")
+heatmap_df_long_2 <- heatmap_df_2 |>
+  pivot_longer(-stooge, names_to = "subject", values_to = "percent") |>
+  mutate(replicate = 2, .before = 1)
 
-heatmap_2
+# Combine data
+
+heatmap_df_long <- bind_rows(heatmap_df_long_1, heatmap_df_long_2)
+
+# Plot heatmaps for both replicates
+
+heatmap_visual <- heatmap_df_long |>
+  mutate(stooge = ifelse(stooge %in% female_birds, paste0(stooge, "*"), stooge),
+         subject = ifelse(subject %in% female_birds, paste0(subject, "*"), subject),
+         stooge = fct_relevel(stooge, "Egeus*", "Hermia*", "Hippolyta*", "Quince*", "Saffron*", "Sapphire*", "Scully*"),
+         subject =  fct_relevel(subject, "Flute*", "Juniper*", "Robin*", "Uno*"),
+         subject = fct_recode(subject, "Black Elk" = "Black_Elk"),
+         hline = ifelse(replicate == 1, 6.5, 4.5),
+         vline = ifelse(replicate == 1, 3.5, 1.5),
+         replicate = paste("Replicate", replicate)) |>
+  ggplot(aes(x = subject, y = stooge, fill = percent)) +
+  geom_tile() +
+  facet_wrap(~replicate, scales = "free") +
+  geom_hline(aes(yintercept = hline)) +
+  geom_vline(aes(xintercept = vline)) +
+  scale_fill_gradient2(high = "#005AB5",
+                       low = "#139272",
+                       midpoint = 50) +
+  labs(y = "Stooge Birds", x = "Subject Birds", fill = "Percent\nchoice") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 70, hjust = 1),
+        text = element_text(size = 16))
+
+ggsave(here("figures/individual_preference.png"), width = 8, height = 5)
 
