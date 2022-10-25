@@ -181,19 +181,6 @@ kable(subject_bird_info,
 ```
 
 
-<!--(stoogeinfotable)-->
-
-```{r tbl-stoogeinfotable}
-
-kable(stooge_bird_info,
-      booktabs = TRUE, digits = 1, linesep = "",
-        align = "llccc",
-        caption = "Subject bird information",
-        col.names = c("Subject", "Sex", "Age (years)", "Social 1 trials", "Social 2 trials"))
-
-```
-
-
 <!--(pairstable)-->
 
 ```{r}
