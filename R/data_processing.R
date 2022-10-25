@@ -60,7 +60,7 @@ all_data <- bind_rows(food_raw_rep1, food_raw_rep2, social_raw_rep1, social_raw_
   fill(session) %>%
   filter(subject != "baloo") %>%
   mutate(study = fct_recode(study, "Food" = "food", "Social" = "social"),
-    subject = fct_collapse(subject,
+         subject = fct_collapse(subject,
                                 Basil = "basil",
                                 "Black Elk" = "black elk",
                                 Chicklet = "chicklet",
@@ -70,14 +70,29 @@ all_data <- bind_rows(food_raw_rep1, food_raw_rep2, social_raw_rep1, social_raw_
                                 Hippolyta = "hippo",
                                 Juan = "juan",
                                 Juniper = "juniper",
-                                Robin = "robin"),
+                                Robin = "robin"
+         ),
+         smallbirds = str_replace(smallbirds, "peaseblossom", "Pease"),
+         largebirds = str_replace(largebirds, "peaseblossom", "Pease"),
+         smallbirds = str_replace(smallbirds, "Peaseblossom", "Pease"),
+         largebirds = str_replace(largebirds, "Peaseblossom", "Pease"),
+         smallbirds = str_replace(smallbirds, "Sappire", "Sapphire"),
+         largebirds = str_replace(largebirds, "Sappire", "Sapphire"),
+         smallbirds = str_replace(smallbirds, "sEBASTIAN", "Sebastian"),
+         largebirds = str_replace(largebirds, "sEBASTIAN", "Sebastian"),
+         smallbirds = str_replace(smallbirds, "Sebastan", "Sebastian"),
+         largebirds = str_replace(largebirds, "Sebastan", "Sebastian"),
+         smallbirds = str_replace(smallbirds, "Hippo", "Hippolyta"),
+         largebirds = str_replace(largebirds, "Hippo", "Hippolyta"),
+         smallbirds = str_replace(smallbirds, "Commanche", "Comanche"),
+         largebirds = str_replace(largebirds, "Commanche", "Comanche"),
          pair = paste(small_num, large_num, sep = "-"), .before = small_num) %>%
   mutate(sex = ifelse(subject %in% female_birds, "Female", "Male"), .after = subject) %>%
   mutate(choice = str_replace(choice, "NEEDS TO BE REDONE, ANIMAL CARE STAFF CAME IN TO TALK TO ME AND ROBIN ATE FROM BOTH SIDES", NA_character_),
          choice = str_replace_all(choice, "NC", NA_character_),
          choice = str_replace_all(choice, "L\\*", "L"),
          choose_larger = ifelse(large_side == choice, 1, ifelse(is.na(choice), NA, 0))
-         ) |>
+  ) |>
   rename("small_birds" = "smallbirds", "large_birds" = "largebirds")
 all_data$date[which(as.character(all_data$date) == "2025-02-22")] <- "2022-01-06 00:00:00"
 

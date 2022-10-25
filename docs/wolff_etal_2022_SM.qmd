@@ -23,8 +23,13 @@ typeset_scientific <- function(x) {
   x <- gsub("e\\+0?(\\d+)$", " \\\\times 10\\^\\{\\1\\}", x)
   x <- gsub("e\\-0?(\\d+)$", " \\\\times 10\\^\\{-\\1\\}", x)
   x
-knitr::opts_chunk$set(echo = TRUE) 
 }
+knitr::opts_chunk$set(echo = FALSE) 
+
+bird_info <- bind_rows(subject_bird_info, rename(stooge_bird_info, subject = stooge)) |> 
+  distinct(subject, .keep_all = TRUE) |> 
+  select(subject:age)
+
 ```
 
 \renewcommand{\thetable}{S\arabic{table}}
@@ -36,9 +41,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Methods
 
-## Subjects
+## Study population
 
-Our study population of 20 pinyon jays (_Gymnorhinus cyanocephalus_) were wild born and locally housed. Researchers captured these birds in either Arizona or California (United States Fish and Wildlife permit MB694205) between 2006 and 2011. At capture, they were estimated to be between one and three years of age. The colony has an age range of `r range(bird_ages)[1]` $-$ `r range(bird_ages)[2]` years with a mean of `r printnum(mean(bird_ages))` years. 
+Our study population of `r nrow(bird_info)` pinyon jays (_Gymnorhinus cyanocephalus_) were wild born and locally housed. Researchers captured these birds in either Arizona or California (United States Fish and Wildlife permit MB694205) between 2006 and 2011. At capture, they were estimated to be between one and three years of age. The colony has an age range of `r range(bird_info$age, na.rm = TRUE)[1]` $-$ `r range(bird_info$age, na.rm = TRUE)[2]` years with a mean of `r printnum(mean(bird_info$age, na.rm = TRUE))` years (@tbl-subjectinfotable & @tbl-stoogeinfotable). 
 
 The University of Nebraska-Lincoln Institutional Animal Care and Use Committee approved this project (protocol number 1867 and 2059), and all procedures conformed to the ASAB/ABS Guidelines for the use of animals in research. All subjects have completed prior cognitive and behavioral experiments in their tenure with the lab. The colony is handled by humans extensively. 
 
@@ -111,9 +116,9 @@ Subjects experienced 1 habituation session per day for five days a week. They co
 
 All experimental trials ran between 09:00-17:00 CST, with birds being run once or twice a day depending on personnel. The subjects were not food restricted. During replicate 1, two experimenters were present at each session: the ‘handler’ handled the subject, while the ‘recorder’ handled the camera, whiteboard, and the guillotine doors. The experimenter placed stooge birds in their respective cages and allowed them to acclimate to the room for 10 minutes before experimentation. The handler then placed  the subject inside the apparatus and showed them each option for six seconds (counter balancing which was shown first) before releasing the subject into the chamber. Once the subject crossed the threshold of one of the doors, the recorder closed *both* doors gently but swiftly. After three minutes elapsed, the handler collected the subject and returned them to their home cage. These steps repeated until all birds had run through the experiment. During replicate 2, the recorder's duties were absorbed into the experimenter and the guillotine doors were held open by hooks on the wall to allow the experiment to run smoothly with only one person. 
 
-Replicate 1: Each subject experienced 5 repetitions for each of the 21 numerical pairs between 0 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.). The side of the larger option was pseudo randomized with no left or right runs longer than 3 in a row. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. The order in which the subjects ran in a particular day was also randomized. Only the 15 numerical pairs between 1 and 6 were analyzed.  Subjects experience one trial per session and one session per day.  Subjects ran in a randomized order each day.
+Replicate 1: Each subject experienced 5 repetitions for each of the 21 numerical pairs between 0 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.). The side of the larger option was pseudo randomized with no left or right runs longer than 3 in a row. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. The order in which the subjects ran in a particular day was also randomized. Only the 15 numerical pairs between 1 and 6 were analyzed.  Subjects experience one trial per session and one session per day.  Subjects ran in a randomized order each day. Stooge birds participated in a mean of `r printnum(mean(stooge_bird_info$social1_trials, na.rm = TRUE), digits = 1)` and a median of  `r printnum(median(stooge_bird_info$social1_trials, na.rm = TRUE), digits = 1)` sessions across the replicate.
 
-Replicate 2: Each bird experienced 10 repetitions for each of the following 17 numerical pairs between 1 and 6 except for the four pairs that required more than eight stooge birds (4/5, 3/6, 4/6, 5/6). This was done in an effort to better account for individual bird preference among the subjects for certain stooge birds. Randomization was the same for both replicates.  Subjects experience one trial per session and one to two sessions per day. Subjects ran in a randomized order each day.
+Replicate 2: Each bird experienced 10 repetitions for each of the following 17 numerical pairs between 1 and 6 except for the four pairs that required more than eight stooge birds (4/5, 3/6, 4/6, 5/6). This was done in an effort to better account for individual bird preference among the subjects for certain stooge birds. Randomization was the same for both replicates.  Subjects experience one trial per session and one to two sessions per day. Subjects ran in a randomized order each day. Stooge birds participated in a mean of `r printnum(mean(stooge_bird_info$social2_trials, na.rm = TRUE), digits = 1)` and a median of  `r printnum(median(stooge_bird_info$social2_trials, na.rm = TRUE), digits = 1)` sessions across the replicate.
 
 ### Side-Bias Protocol
 
@@ -136,18 +141,23 @@ The second hypothesis can be partially, fully, or unsupported depending on the a
 
 The third hypothesis can be supported or unsupported based on the outcome of the `difference * ratio` interaction model. If pinyon jays choose items of different ratios and differences independently of each other than you would expect no evidence in support of the interaction model. Evidence in support of the interaction model would signify that choices of mealworms for the same ratio would vary based on the difference and visa versa. 
 
-###Individual Preference analysis
+## Individual Preference Analysis
 
-Upon completion of the preregistered analysis we conducted an exploratory examination of subject bird preference for individual stooge birds. We first calculated if each stooge bird was on the side chosen by each subject bird per trial. A binary operator (0 for not chosen, 1 for chosen) was used to note if a specific stooge bird was chosen for each trial. We then created a binary operator for if each stooge bird was offered on that particular trial. For instance, if Zappa was not chosen during a particular trial he was only *not* chosen if he was offered at all in either choice. Using these results we calculated how often each stooge bird was chosen by each sex of subject birds (@fig-preferencetable). Visualizing how often male and female subject birds choose each stooge bird. The female, Sapphire, was chosen 78.6% of the time she was on offer for male subject birds as appose to the 64.3% of the time for female subject birds. 
+Upon completion of the preregistered analysis, we conducted an exploratory examination of subject bird preferences for individual stooge birds. We first calculated the percentage of trials that each subject selected the side for each stooge separately for both replicates. @fig-individualpref shows these percentages with subject and stooge sex indicated. For example, the subject bird Black Elk choose Sapphire `r printnum(pluck(filter(heatmap_df_long, stooge == "Sapphire", subject == "Black_Elk"), 4), digits = 1)`% of the time that she was offered as an option during the replicate 1. Alternatively, Juniper choose the stooge bird Hermia `r printnum(pluck(filter(heatmap_df_long, stooge == "Hermia", subject == "Juniper"), 4), digits = 1)`% of the time she was an option during replicate 1. Due to bird colony facility maintenance, we used more stooge birds in replicate 1 than replicate 2. Therefore, birds met fewer times in replicate 1 but met more birds overall (@tbl-stoogeinfotable).
 
-To more clearly visualize the *individual* relationships between subjects and stooge birds we created a heatmap (@fig-individualheatmap) with the percentage of times each stooge bird was chosen by a subject bird per replicate. For example, the subject bird BlackElk choose Sapphire 71% of the time that she was offered as an option during the first replication. Alternatively, Juniper choose the stooge bird Hermia 25% of the time she was an option during replicate 1. Due to bird colony facility maintenance we used more stooge birds in replicate 1 than replicate 2 so birds saw each bird fewer times in replicate 1 but saw more birds overall. The average number of trials a stooge bird was offered in replicate 1 was `mean(replicate1N)` with a median of  `median(replicate1N)` while the average in replication 2 was `mean(replicate2N)` with a median of  `median(replicate2N)`. Birds with an * next to their name note Female status. 
+We calculated how often each stooge bird was chosen by aggregating over each sex of subject birds (@tbl-preferencetable) to visualize how often male and female subject birds choose each stooge bird. For instance, the most preferred stooge was the female, Sapphire, who was chosen `r printnum(pluck(filter(individual_preference_table, stooge == "Sapphire" & rep == 1), 10), digits = 1)`% of the time she was on offer for male subject birds and `r printnum(pluck(filter(individual_preference_table, stooge == "Sapphire" & rep == 1), 9), digits = 1)`% of the time for female subject birds. 
+
+<!-- To more clearly visualize the *individual* relationships between subjects and stooge birds we created a heatmap (@fig-individualheatmap) with the percentage of times each stooge bird was chosen by a subject bird per replicate. For example, the subject bird BlackElk choose Sapphire 71% of the time that she was offered as an option during the first replication. Alternatively, Juniper choose the stooge bird Hermia 25% of the time she was an option during replicate 1. Due to bird colony facility maintenance we used more stooge birds in replicate 1 than replicate 2 so birds saw each bird fewer times in replicate 1 but saw more birds overall. The average number of trials a stooge bird was offered in replicate 1 was `mean(replicate1N)` with a median of  `median(replicate1N)` while the average in replication 2 was `mean(replicate2N)` with a median of  `median(replicate2N)`. Birds with an * next to their name note Female status.  -->
  
 
 <!--(individualheatmap)-->
 
-```{r individualheatmap}
+```{r}
+#| label: fig-individualpref
+#| fig-cap: "Preference for individual stooges for replicates 1 and 2."
+#| out-width: "100%"
 
-heatmap_visual
+include_graphics(here("figures/individual_preference.png"))
 
 ```
 
@@ -158,9 +168,9 @@ heatmap_visual
 
 # Supplementary Tables
 
-<!--(birdinfotable)-->
+<!--(subjectinfotable)-->
 
-```{r birdinfotable}
+```{r tbl-subjectinfotable}
 
 kable(subject_bird_info,
       booktabs = TRUE, digits = 1, linesep = "",
@@ -171,9 +181,23 @@ kable(subject_bird_info,
 ```
 
 
+<!--(stoogeinfotable)-->
+
+```{r tbl-stoogeinfotable}
+
+kable(stooge_bird_info,
+      booktabs = TRUE, digits = 1, linesep = "",
+        align = "llccc",
+        caption = "Subject bird information",
+        col.names = c("Subject", "Sex", "Age (years)", "Social 1 trials", "Social 2 trials"))
+
+```
+
+
 <!--(pairstable)-->
 
-```{r pairstable}
+```{r}
+#| label: tbl-pairstable
 
 factorial_pairs_df |> 
   mutate(Pair = ifelse(Social_2 == "X", paste0(Pair, footnote_marker_symbol(1, "latex")), Pair)) |> 
@@ -264,9 +288,9 @@ knitr::kable(social2_results$fixed_table, booktabs = TRUE, digits = 2) |>
 
 <!--(preferencetable)-->
 
-```{r preferencetable}
+```{r tbl-preferencetable}
 individual_preference_table |> 
-  select(individual, total_trials, female_percent, male_percent, overall_percent) |> 
+  select(stooge, total_trials, female_percent, male_percent, overall_percent) |> 
   kable(booktabs = TRUE, digits = 1, linesep = "",
         align = "lcccc",
         caption = "Choice for individual stooge conspecifics",
