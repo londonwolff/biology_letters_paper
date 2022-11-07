@@ -315,7 +315,7 @@ female_birds <- c("Flute", "Juniper", "Robin", "Uno", "Egeus", "Hermia", "Hippol
 
 # Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen
 
-individual_preference_df <- combined_data |>
+individual_preference_df_old <- combined_data |>
   filter(study != "Food") |>
   mutate(
     chosenbirds = ifelse(choose_larger == "1", large_birds, small_birds),

@@ -422,7 +422,7 @@ individual_preference_table <- individual_preference_df |>
   relocate(sex, .after = stooge) |>
   arrange(rep, desc(sex), overall_percent)
 
-#Stooge ages  !!!!!!!!! HERER !!!!!!!!!
+#Stooge ages
 
 stooge_ages_df <- data.frame(stooge = c("Zappa", "Cash", "Pease", "Hagrid", "Bruno", "Mulder", "Mork", "Fox", "Comanche", "Sebastian", "Ariel", "Saffron", "Hermia", "Quince", "Scully", "Egeus", "Sapphire", "Chicklet", "Hippolyta"),
                                         age  = c(11,11,14,11,19,11,12,11,10,19,19,12,14,14,11,14,12,12,14))
