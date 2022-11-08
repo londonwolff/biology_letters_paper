@@ -1,6 +1,11 @@
 ---
 title: "Supplementary Materials"
 format: pdf
+geometry:
+  - left=1in
+  - right=1in
+  - top=1in
+  - bottom=1in
 execute: 
   echo: false
 bibliography: [r-references.bib, merp_references.bib]
@@ -12,8 +17,8 @@ bibliography: [r-references.bib, merp_references.bib]
 library(here)
 # library(patchwork)
 # library(formattable)
-library(knitr)
-library(kableExtra)
+# library(knitr)
+# library(kableExtra)
 
 source(here("R/wolff_etal_2022_rcode.R"))
 my_citations <- cite_r(file = "r-references.bib", pkgs = c("BayesFactor", "bayestestR", "ggcorrplot", "here", "kableExtra", "knitr", "lme4", "papaja", "patchwork", "performance", "tidyverse"), omit = FALSE)
@@ -24,7 +29,33 @@ typeset_scientific <- function(x) {
   x <- gsub("e\\-0?(\\d+)$", " \\\\times 10\\^\\{-\\1\\}", x)
   x
 }
-knitr::opts_chunk$set(echo = FALSE) 
+
+printbf <- function(x, digits = 2, cutoff = NULL) {
+  # Check if object is numeric, BFBayesFactor, or other
+  if (is.numeric(x)) {
+    bf <- x
+  } else if (class(x) == "BFBayesFactor") {
+    bf <- extractBF(x)$bf
+  } else {
+    stop("Object is not numeric or of class BFBayesFactor.")
+  }
+  # Format Bayes factor
+  if (is.null(cutoff)) {
+    if (bf > 1000 | bf < 0.001) {
+      bf <- typeset_scientific(sprintf("%.2e", bf))
+    }
+    p <- paste0("$\\mathrm{BF}_{\\textrm{10}} = ", printnum(bf), "$")
+  } else {
+    if (bf > cutoff) {
+      p <- paste0("$\\mathrm{BF}_{\\textrm{10}} > ", cutoff, "$")
+    } else if (bf <  1 / cutoff) {
+      p <- paste0("$\\mathrm{BF}_{\\textrm{10}} < ", printnum(1 / cutoff, digits = digits), "$")
+    } else {
+      p <- paste0("$\\mathrm{BF}_{\\textrm{10}} = ", printnum(bf), "$")
+    }
+  }
+  return(p)
+}
 
 bird_info <- bind_rows(subject_bird_info, rename(stooge_bird_info, subject = stooge)) |> 
   distinct(subject, .keep_all = TRUE) |> 
@@ -43,7 +74,7 @@ bird_info <- bind_rows(subject_bird_info, rename(stooge_bird_info, subject = sto
 
 ## Study population
 
-Our study population of `r nrow(bird_info)` pinyon jays (_Gymnorhinus cyanocephalus_) were wild born and locally housed. Researchers captured these birds in either Arizona or California (United States Fish and Wildlife permit MB694205) between 2006 and 2011. At capture, they were estimated to be between one and three years of age. The colony has an age range of `r range(bird_info$age, na.rm = TRUE)[1]` $-$ `r range(bird_info$age, na.rm = TRUE)[2]` years with a mean of `r printnum(mean(bird_info$age, na.rm = TRUE))` years (@tbl-subjectinfotable & @tbl-stoogeinfotable). 
+Our study population of `r nrow(bird_info)` pinyon jays (_Gymnorhinus cyanocephalus_) were wild born and locally housed. Researchers captured these birds in either Arizona or California (United States Fish and Wildlife permit MB694205) between 2006 and 2011. At capture, they were estimated to be between one and three years of age. The colony has an age range of `r range(bird_info$age, na.rm = TRUE)[1]` $-$ `r range(bird_info$age, na.rm = TRUE)[2]` years with a mean of `r printnum(mean(bird_info$age, na.rm = TRUE))` years (@tbl-subjectinfotable & @tbl-preferencetable). 
 
 The University of Nebraska-Lincoln Institutional Animal Care and Use Committee approved this project (protocol number 1867 and 2059), and all procedures conformed to the ASAB/ABS Guidelines for the use of animals in research. All subjects have completed prior cognitive and behavioral experiments in their tenure with the lab. The colony is handled by humans extensively. 
 
@@ -63,7 +94,7 @@ The apparatus for the food experiment included a bird cage (72 $\times$ 48 $\tim
 #| fig-cap: "Food experiment apparatus (overhead view)"
 #| out-width: "50%"
 
-include_graphics(here("figures/food_apparatus.PNG"))
+knitr::include_graphics(here("figures/food_apparatus.PNG"))
 
 ```
 
@@ -94,7 +125,7 @@ During habituation, three consecutive days of no choices and/or no eating of mea
 
 ### Apparatus 
 
-The apparatus (@fig-socialapp) was a Y-maze formed out of chicken wire, plastic sheets, and Plexiglas. **Please give dimensions** The subject entered a large chamber at the base of the maze before choosing one of two arms of the Y-maze. At the entrance to both arms, a guillotine style door was closed after the bird walked or flew past it, thus making a choice between the option on the left or right. At the end of each arm, was a large bird cage (72 $\times$ 48 $\times$ 48 cm) housing the stooge birds. Each cage had two lengthwise perches for the stooge birds to use and one small perch hanging from the ceiling.
+The apparatus (@fig-socialapp) was a Y-maze formed out of chicken wire, plastic sheets, and Plexiglas. The subject entered a large chamber at the base of the maze before choosing one of two arms of the Y-maze. At the entrance to both arms, guillotine-style doors were closed after the bird walked or flew past them, thus making a choice between the option on the left or right. At the end of each arm, was a large bird cage (72 $\times$ 48 $\times$ 48 cm) housing the stooge birds. Each cage had two lengthwise perches for the stooge birds to use and one small perch hanging from the ceiling.
 
 <!--(socialapp)-->
 ```{r}
@@ -102,7 +133,7 @@ The apparatus (@fig-socialapp) was a Y-maze formed out of chicken wire, plastic 
 #| fig-cap: "Social experiment apparatus (overhead view)"
 #| out-width: "75%"
 
-include_graphics(here("figures/social_apparatus.PNG"))
+knitr::include_graphics(here("figures/social_apparatus.PNG"))
 
 ```
 
@@ -114,7 +145,7 @@ Subjects experienced 1 habituation session per day for five days a week. They co
 
 ### Procedure
 
-All experimental trials ran between 09:00-17:00 CST, with birds being run once or twice a day depending on personnel. The subjects were not food restricted. During replicate 1, two experimenters were present at each session: the ‘handler’ handled the subject, while the ‘recorder’ handled the camera, whiteboard, and the guillotine doors. The experimenter placed stooge birds in their respective cages and allowed them to acclimate to the room for 10 minutes before experimentation. The handler then placed  the subject inside the apparatus and showed them each option for six seconds (counter balancing which was shown first) before releasing the subject into the chamber. Once the subject crossed the threshold of one of the doors, the recorder closed *both* doors gently but swiftly. After three minutes elapsed, the handler collected the subject and returned them to their home cage. These steps repeated until all birds had run through the experiment. During replicate 2, the recorder's duties were absorbed into the experimenter and the guillotine doors were held open by hooks on the wall to allow the experiment to run smoothly with only one person. 
+All experimental trials ran between 09:00-17:00 CST, with birds being run once or twice a day depending on personnel. The subjects were not food restricted. During replicate 1, two experimenters were present at each session: the ‘handler’ handled the subject, while the ‘recorder’ handled the camera, whiteboard, and the guillotine doors. The experimenter placed stooge birds in their respective cages and allowed them to acclimate to the room for 10 minutes before experimentation. The handler then placed  the subject inside the apparatus and showed them each option for six seconds (counter balancing which was shown first) before releasing the subject into the chamber. Once the subject crossed the threshold of one of the doors, the recorder closed both doors gently but swiftly. After three minutes elapsed, the handler collected the subject and returned them to their home cage. These steps repeated until all birds had run through the experiment. During replicate 2, the recorder's duties were absorbed into the experimenter and the guillotine doors were held open by hooks on the wall to allow the experiment to run smoothly with only one person. 
 
 Replicate 1: Each subject experienced 5 repetitions for each of the 21 numerical pairs between 0 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.). The side of the larger option was pseudo randomized with no left or right runs longer than 3 in a row. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. The order in which the subjects ran in a particular day was also randomized. Only the 15 numerical pairs between 1 and 6 were analyzed.  Subjects experience one trial per session and one session per day.  Subjects ran in a randomized order each day. Stooge birds participated in a mean of `r printnum(mean(stooge_bird_info$social1_trials, na.rm = TRUE), digits = 1)` and a median of  `r printnum(median(stooge_bird_info$social1_trials, na.rm = TRUE), digits = 1)` sessions across the replicate.
 
@@ -143,9 +174,11 @@ The third hypothesis can be supported or unsupported based on the outcome of the
 
 ## Individual Preference Analysis
 
-Upon completion of the preregistered analysis, we conducted an exploratory examination of subject bird preferences for individual stooge birds. We first calculated the percentage of trials that each subject selected the side for each stooge separately for both replicates. @fig-individualpref shows these percentages with subject and stooge sex indicated. For example, the subject bird Black Elk choose Sapphire `r printnum(pluck(filter(heatmap_df_long, stooge == "Sapphire", subject == "Black_Elk"), 4), digits = 1)`% of the time that she was offered as an option during the replicate 1. Alternatively, Juniper choose the stooge bird Hermia `r printnum(pluck(filter(heatmap_df_long, stooge == "Hermia", subject == "Juniper"), 4), digits = 1)`% of the time she was an option during replicate 1. Due to bird colony facility maintenance, we used more stooge birds in replicate 1 than replicate 2. Therefore, birds met fewer times in replicate 1 but met more birds overall (@tbl-stoogeinfotable).
+Upon completion of the preregistered analysis, we conducted an exploratory examination of subject bird preferences for individual stooge birds. We first calculated the percentage of trials that each subject selected the side for each stooge separately for both replicates. @fig-individualpref shows these percentages with subject and stooge sex indicated. For example, the subject bird Black Elk choose Sapphire `r printnum(pluck(filter(heatmap_df_long, stooge == "Sapphire", subject == "Black_Elk"), "percent"), digits = 1)`% of the time that she was offered as an option during the replicate 1. Alternatively, Juniper choose the stooge bird Hermia `r printnum(pluck(filter(heatmap_df_long, stooge == "Hermia", subject == "Juniper"), "percent"), digits = 1)`% of the time she was an option during replicate 1. Due to bird colony facility maintenance, we used more stooge birds in replicate 1 than replicate 2. Therefore, birds met fewer times in replicate 1 but met more birds overall (@tbl-preferencetable).
 
-We calculated how often each stooge bird was chosen by aggregating over each sex of subject birds (@tbl-preferencetable) to visualize how often male and female subject birds choose each stooge bird. For instance, the most preferred stooge was the female, Sapphire, who was chosen `r printnum(pluck(filter(individual_preference_table, stooge == "Sapphire" & rep == 1), 10), digits = 1)`% of the time she was on offer for male subject birds and `r printnum(pluck(filter(individual_preference_table, stooge == "Sapphire" & rep == 1), 9), digits = 1)`% of the time for female subject birds. 
+We calculated how often each stooge bird was chosen by aggregating over each sex of subject birds to illustrate how often male and female subject birds choose each stooge bird (@tbl-preferencetable). For instance, the most preferred stooge was the female, Sapphire, who was chosen `r printnum(pluck(filter(individual_preference_table, stooge == "Sapphire" & rep == 1), "male_percent"), digits = 1)`% of the time she was on offer for male subject birds and `r printnum(pluck(filter(individual_preference_table, stooge == "Sapphire" & rep == 1), "female_percent"), digits = 1)`% of the time for female subject birds. 
+
+While we see clear individual preferences, these choices do not differ depending on the sex of the stooge. Male subjects do not differ in their preferences between male or female stooges (`r apa_print(male_pref_ttest)$full_result`, `r printbf(male_pref_ttestbf)`). Though there were not enough female subjects to draw strong conclusions, there is anecdotal evidence for no difference in their preferences for male or female stooges (`r apa_print(female_pref_ttest)$full_result`, `r printbf(female_pref_ttestbf)`). Thus, identity matters for individual stooges, but preferences do not depend on sex of potential flock mates.
 
 <!-- To more clearly visualize the *individual* relationships between subjects and stooge birds we created a heatmap (@fig-individualheatmap) with the percentage of times each stooge bird was chosen by a subject bird per replicate. For example, the subject bird BlackElk choose Sapphire 71% of the time that she was offered as an option during the first replication. Alternatively, Juniper choose the stooge bird Hermia 25% of the time she was an option during replicate 1. Due to bird colony facility maintenance we used more stooge birds in replicate 1 than replicate 2 so birds saw each bird fewer times in replicate 1 but saw more birds overall. The average number of trials a stooge bird was offered in replicate 1 was `mean(replicate1N)` with a median of  `median(replicate1N)` while the average in replication 2 was `mean(replicate2N)` with a median of  `median(replicate2N)`. Birds with an * next to their name note Female status.  -->
  
@@ -157,25 +190,28 @@ We calculated how often each stooge bird was chosen by aggregating over each sex
 #| fig-cap: "Preference for individual stooges for replicates 1 and 2."
 #| out-width: "100%"
 
-include_graphics(here("figures/individual_preference.png"))
+knitr::include_graphics(here("figures/individual_preference.png"))
 
 ```
+
+\clearpage
 
 # References
 
 ::: {#refs}
 :::
 
-# Supplementary Tables
 
 <!--(subjectinfotable)-->
 
-```{r tbl-subjectinfotable}
+```{r}
+#| label: tbl-subjectinfotable
+#| tbl-cap: Subject bird information
 
-kable(subject_bird_info,
+knitr::kable(subject_bird_info,
       booktabs = TRUE, digits = 1, linesep = "",
         align = "llccccc",
-        caption = "Subject bird information",
+        # caption = "Subject bird information",
         col.names = c("Subject", "Sex", "Age (years)", "Food 1", "Food 2", "Social 1", "Social 2"))
 
 ```
@@ -185,19 +221,20 @@ kable(subject_bird_info,
 
 ```{r}
 #| label: tbl-pairstable
+#| tbl-cap: "Factorial pair combinations"
 
 factorial_pairs_df |> 
-  mutate(Pair = ifelse(Social_2 == "X", paste0(Pair, footnote_marker_symbol(1, "latex")), Pair)) |> 
+  mutate(Pair = ifelse(Social_2 == "X", paste0(Pair, kableExtra::footnote_marker_symbol(1, "latex")), Pair)) |> 
   select(-Social_2) |> 
 knitr::kable(booktabs = TRUE, digits = 0, linesep = "", escape = FALSE,
              align = "lcc",
-             caption = "Factorial pair combinations",
+             # caption = "Factorial pair combinations",
              col.names = c("Pair", "Ratio", "Difference")) |> 
-  kableExtra::footnote(symbol = "The 11 pairs used in replicate 2 of the social experiment.", general_title = "", threeparttable = TRUE, footnote_as_chunk = TRUE)
+  kableExtra::footnote(symbol = "Pairs used in Social 2.", general_title = "", footnote_as_chunk = TRUE)
 
 ```
 
-
+\newpage
 <!--(modeltable)-->
 
 ```{r}
@@ -209,11 +246,11 @@ knitr::kable(booktabs = TRUE, digits = 0, linesep = "", escape = FALSE,
 #| layout: "[[1], [-1], [1]]"
 #| fig-pos: 'H'
 
-kable(random_effect_df, booktabs = TRUE) |> 
-  column_spec(2, monospace = TRUE)
+knitr::kable(random_effect_df, booktabs = TRUE) |> 
+  kableExtra::column_spec(2, monospace = TRUE)
 
-kable(fixed_effect_df, booktabs = TRUE) |> 
-  column_spec(2, monospace = TRUE)
+knitr::kable(fixed_effect_df, booktabs = TRUE) |> 
+  kableExtra::column_spec(2, monospace = TRUE)
 
 #Need to figure out how to make into one graphic with a and b
 ```
@@ -233,16 +270,16 @@ kable(fixed_effect_df, booktabs = TRUE) |>
 #| fig-pos: 'H'
 
 knitr::kable(food1_results$random_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 
 knitr::kable(food1_results$fixed_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 
 knitr::kable(food2_results$random_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 
 knitr::kable(food2_results$fixed_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 ```
 
 
@@ -260,30 +297,33 @@ knitr::kable(food2_results$fixed_table, booktabs = TRUE, digits = 2) |>
 #| fig-pos: 'H'
 
 knitr::kable(social1_results$random_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 
 knitr::kable(social1_results$fixed_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 
 knitr::kable(social2_results$random_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 
 knitr::kable(social2_results$fixed_table, booktabs = TRUE, digits = 2) |> 
-  column_spec(1, monospace = TRUE)
+  kableExtra::column_spec(1, monospace = TRUE)
 ```
 
 
 <!--(preferencetable)-->
 
-```{r tbl-preferencetable}
+```{r}
+#| label: tbl-preferencetable
+#| tbl-cap: Choice for individual stooge conspecifics
+
 individual_preference_table |> 
-  select(stooge, total_trials, female_percent, male_percent, overall_percent) |> 
-  kable(booktabs = TRUE, digits = 1, linesep = "",
-        align = "lcccc",
-        caption = "Choice for individual stooge conspecifics",
-        col.names = c("Stooge", "Number of trials", "Female choice %", "Male choice %", "Overall choice %")) |> 
-  pack_rows(index = c("Experiment 1" = 15, "Experiment 2" = 8)) |> 
-  pack_rows(index = c("Males" = 9, "Females" = 6, "Males" = 5, "Females" = 3), italic = TRUE, bold = FALSE)
+  select(stooge, age, total_trials, female_percent, male_percent, overall_percent) |> 
+  knitr::kable(booktabs = TRUE, digits = 1, linesep = "",
+        align = "lccccc",
+        # caption = "Choice for individual stooge conspecifics",
+        col.names = c("Stooge", "Age", "Number of trials", "Female choice %", "Male choice %", "Overall choice %")) |> 
+  kableExtra::pack_rows(index = c("Experiment 1" = 17, "Experiment 2" = 8)) |> 
+  kableExtra::pack_rows(index = c("Males" = 11, "Females" = 6, "Males" = 4, "Females" = 4), italic = TRUE, bold = FALSE)
 ```
 
 

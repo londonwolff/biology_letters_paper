@@ -8,7 +8,7 @@
 ##
 ## Date Created: 2022-08-12
 ##
-## Date Finalized: 2022-08-12
+## Date Finalized: 2022-11-08
 ##
 ## License: All materials presented here are released under the Creative Commons Attribution 4.0 International Public License (CC BY 4.0).
 ##  You are free to:
@@ -205,6 +205,14 @@ analyze_data <- function(df, type, rep) {
   output <- list(ttest = large_pref_ttest, ttestbf = large_pref_ttest_bf, CI_difference = choice_means_subject_diff, CI_ratio = choice_means_ratio_means, best_model_fit = bestfit, diff_fig = diff_bird_graph, ratio_fig = ratio_bird_graph, random_table = random_bf_table, fixed_table = fixed_bf_table, fixed_bf_df = fixed_bf_df)
 }
 
+# Count the number of interactions with each stooge
+count_stooges <- function(stooge) {
+  stoogerejected <- paste0(stooge, "_rejected")
+  individual_preference_df <<- individual_preference_df |>
+    mutate(!!stooge := ifelse(str_detect(chosenbirds, stooge), 1, 0),
+           !!stoogerejected := ifelse(str_detect(rejectedbirds, stooge), 1, 0))
+}
+
 
 # Import data ------------------------------------------------------------------
 
@@ -277,7 +285,6 @@ sessions_social1 <- social1
 sum(str_count(social1$small_birds, "Fox")) + sum(str_count(social1$large_birds, "Fox"))
 
 
-
 ## Demographic table ------------------------
 
 subject_ages<- c(12, 11, 15, 12, 12, 12, 14,10,12,10, 15,12,14,14,15,14,15,10,12,19,11)
@@ -290,7 +297,9 @@ subject_bird_info <- combined_data |>
   select(subject, everything()) |>
   mutate(across(contains("_"), ~ ifelse(.x == "0", "", "X"))) |>
   add_column(age = subject_ages) |>
-  select(subject, sex, age, everything())
+  select(subject, sex, age, everything()) |>
+  arrange(desc(Food_1), desc(Social_2))
+subject_bird_info <- subject_bird_info[c(1:8, 10, 9, 11:21),]
 
 stooge_birds <- combined_data |>
   filter(grepl("Social", study)) |>
@@ -302,13 +311,19 @@ stooge_birds <- combined_data |>
   unique() |>
   sort()
 
+stooge_ages_df <- tibble(stooge = c("Zappa", "Cash", "Pease", "Hagrid", "Bruno", "Mulder", "Mork", "Fox", "Comanche", "Sebastian", "Ariel", "Saffron", "Hermia", "Quince", "Scully", "Egeus", "Sapphire", "Chicklet", "Hippolyta"),
+                         age  = c(11,11,14,11,19,11,12,11,10,19,19,12,14,14,11,14,12,12,14)) |>
+  arrange(stooge)
+
+
 stooge_bird_info <- tibble(stooge = stooge_birds,
                            sex = c("Male", "Male", "Male", "Male", "Male", "Female", "Male", "Male", "Female", "Female", "Male", "Male", "Male", "Female", "Female", "Female", "Female", "Male", "Male"),
-                           age = NA,
+                           age = stooge_ages_df$age,
                            social1_trials = map_dbl(stooge_birds, ~sum(str_count(social1$small_birds, .x)) + sum(str_count(social1$large_birds, .x))),
                            social2_trials = map_dbl(stooge_birds, ~sum(str_count(social2$small_birds, .x)) + sum(str_count(social2$large_birds, .x)))
 ) |>
   mutate(across(contains("social"), ~ na_if(.x, 0)))
+
 
 ## Table of factorial pairs ------------
 
@@ -336,18 +351,9 @@ fixed_effect_df <- data.frame(
 )
 
 
-## Bird preference table--------------------------
-
-# female_birds <- c("Flute", "Juniper", "Robin", "Uno", "Egeus", "Hermia", "Hippolyta", "Quince", "Saffron", "Sapphire", "Scully")
+## Bird preference table --------------------------
 
 # Create column of birds that were chosen and create columns showing how often each bird was chosen and not chosen
-
-count_stooges <- function(stooge) {
-  stoogerejected <- paste0(stooge, "_rejected")
-  individual_preference_df <<- individual_preference_df |>
-    mutate(!!stooge := ifelse(str_detect(chosenbirds, stooge), 1, 0),
-           !!stoogerejected := ifelse(str_detect(rejectedbirds, stooge), 1, 0))
-}
 
 individual_preference_df <- combined_data |>
   filter(study == "Social") |>
@@ -355,48 +361,6 @@ individual_preference_df <- combined_data |>
          rejectedbirds = ifelse(choose_larger == "0", large_birds, small_birds))
 
 map(stooge_bird_info$stooge, count_stooges)
-
-# individual_preference_df <- combined_data |>
-#   filter(study == "Social") |>
-#   mutate(
-#     chosenbirds = ifelse(choose_larger == "1", large_birds, small_birds),
-#     Cash = ifelse(str_detect(chosenbirds, "Cash"), 1, 0),
-#     Scully = ifelse(str_detect(chosenbirds, "Scully"), 1, 0),
-#     Mork = ifelse(str_detect(chosenbirds, "Mork"), 1, 0),
-#     Mulder = ifelse(str_detect(chosenbirds, "Mulder"), 1, 0),
-#     Ariel = ifelse(str_detect(chosenbirds, "Ariel"), 1, 0),
-#     Pease = ifelse(str_detect(chosenbirds, "Pease"), 1, 0),
-#     Hagrid = ifelse(str_detect(chosenbirds, "Hagrid"), 1, 0),
-#     Egeus = ifelse(str_detect(chosenbirds, "Egeus"), 1, 0),
-#     Comanche = ifelse(str_detect(chosenbirds, "Comanche"), 1, 0),
-#     Sapphire = ifelse(str_detect(chosenbirds, "Sapphire"), 1, 0),
-#     Zappa = ifelse(str_detect(chosenbirds, "Zappa"), 1, 0),
-#     Quince = ifelse(str_detect(chosenbirds, "Quince"), 1, 0),
-#     Sebastian = ifelse(str_detect(chosenbirds, "Sebastian"), 1, 0),
-#     Hermia = ifelse(str_detect(chosenbirds, "Hermia"), 1, 0),
-#     Saffron = ifelse(str_detect(chosenbirds, "Saffron"), 1, 0),
-#     Hippolyta = ifelse(str_detect(chosenbirds, "Hippolyta"), 1, 0),
-#     Chicklet = ifelse(str_detect(chosenbirds, "Chicklet"), 1, 0),
-#     rejectedbirds = ifelse(choose_larger == "0", large_birds, small_birds),
-#     Cash_rejected = ifelse(str_detect(rejectedbirds, "Cash"), 1, 0),
-#     Scully_rejected = ifelse(str_detect(rejectedbirds, "Scully"), 1, 0),
-#     Mork_rejected = ifelse(str_detect(rejectedbirds, "Mork"), 1, 0),
-#     Mulder_rejected = ifelse(str_detect(rejectedbirds, "Mulder"), 1, 0),
-#     Ariel_rejected = ifelse(str_detect(rejectedbirds, "Ariel"), 1, 0),
-#     Pease_rejected = ifelse(str_detect(rejectedbirds, "Pease"), 1, 0),
-#     Hagrid_rejected = ifelse(str_detect(rejectedbirds, "Hagrid"), 1, 0),
-#     Egeus_rejected = ifelse(str_detect(rejectedbirds, "Egeus"), 1, 0),
-#     Comanche_rejected = ifelse(str_detect(rejectedbirds, "Comanche"), 1, 0),
-#     Sapphire_rejected = ifelse(str_detect(rejectedbirds, "Sapphire"), 1, 0),
-#     Zappa_rejected = ifelse(str_detect(rejectedbirds, "Zappa"), 1, 0),
-#     Quince_rejected = ifelse(str_detect(rejectedbirds, "Quince"), 1, 0),
-#     Sebastian_rejected = ifelse(str_detect(rejectedbirds, "Sebastian"), 1, 0),
-#     Hermia_rejected = ifelse(str_detect(rejectedbirds, "Hermia"), 1, 0),
-#     Saffron_rejected = ifelse(str_detect(rejectedbirds, "Saffron"), 1, 0),
-#     Hippolyta_rejected = ifelse(str_detect(rejectedbirds, "Hippolyta"), 1, 0),
-#     Chicklet_rejected = ifelse(str_detect(rejectedbirds, "Chicklet"), 1, 0)
-#   ) |>
-#   relocate(rejectedbirds, .before = Cash)
 
 # Create table of values for replicate 1
 
@@ -418,14 +382,9 @@ individual_preference_table <- individual_preference_df |>
   ) |>
   arrange(rep, overall_percent) |>
   filter(overall_percent != 0) |>
-  left_join(select(stooge_bird_info, stooge, sex), by = "stooge") |>
-  relocate(sex, .after = stooge) |>
+  left_join(select(stooge_bird_info, stooge:age), by = "stooge") |>
+  relocate(sex:age, .after = stooge) |>
   arrange(rep, desc(sex), overall_percent)
-
-#Stooge ages
-
-stooge_ages_df <- data.frame(stooge = c("Zappa", "Cash", "Pease", "Hagrid", "Bruno", "Mulder", "Mork", "Fox", "Comanche", "Sebastian", "Ariel", "Saffron", "Hermia", "Quince", "Scully", "Egeus", "Sapphire", "Chicklet", "Hippolyta"),
-                                        age  = c(11,11,14,11,19,11,12,11,10,19,19,12,14,14,11,14,12,12,14))
 
 # Create heatmap for individual preference data
 
@@ -497,7 +456,13 @@ heatmap_df_long_2 <- heatmap_df_2 |>
 
 # Combine data
 
-heatmap_df_long <- bind_rows(heatmap_df_long_1, heatmap_df_long_2)
+heatmap_df_long <- bind_rows(heatmap_df_long_1, heatmap_df_long_2) |>
+  left_join(stooge_bird_info, by = "stooge") |>
+  select(replicate, stooge, stooge_sex = sex, subject, percent) |>
+  left_join(subject_bird_info, by = "subject") |>
+  select(replicate:subject, subject_sex = sex, percent) |>
+  mutate(subject_sex = ifelse(subject == "Black_Elk", "Male", subject_sex),
+         subject_sex = ifelse(subject == "Heman", "Male", subject_sex))
 
 # Plot heatmaps for both replicates
 
@@ -525,3 +490,30 @@ heatmap_visual <- heatmap_df_long |>
 
 ggsave(here("figures/individual_preference.png"), width = 8, height = 5)
 
+
+## Sex differences in preference ---------------------------------------------------------
+
+male_subject_data <- heatmap_df_long |>
+  filter(subject_sex == "Male")
+female_subject_data <- heatmap_df_long |>
+  filter(subject_sex == "Female")
+summary(lmer(percent ~ stooge_sex + (1 | subject) + (1 | stooge), data = male_subject_data))
+summary(lmer(percent ~ stooge_sex + (1 | subject) + (1 | stooge), data = female_subject_data))
+male_subject_data |>
+  group_by(stooge_sex) |>
+  summarise(mean(percent))
+male_subject_wide <- male_subject_data |>
+  group_by(subject, stooge_sex) |>
+  summarise(mean_percent = mean(percent)) |>
+  pivot_wider(id_cols = subject, names_from = stooge_sex, values_from = mean_percent)
+male_pref_ttest <- t.test(male_subject_wide$Male, male_subject_wide$Female, paired = TRUE)
+male_pref_ttestbf <- ttestBF(male_subject_wide$Male, male_subject_wide$Female, paired = TRUE)
+female_subject_data |>
+  group_by(stooge_sex) |>
+  summarise(mean(percent))
+female_subject_wide <- female_subject_data |>
+  group_by(subject, stooge_sex) |>
+  summarise(mean_percent = mean(percent)) |>
+  pivot_wider(id_cols = subject, names_from = stooge_sex, values_from = mean_percent)
+female_pref_ttest <- t.test(female_subject_wide$Male, female_subject_wide$Female, paired = TRUE)
+female_pref_ttestbf <- ttestBF(female_subject_wide$Male, female_subject_wide$Female, paired = TRUE)
