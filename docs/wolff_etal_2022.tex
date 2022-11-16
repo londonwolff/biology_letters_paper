@@ -155,7 +155,7 @@
     {}{\InnerPatchFailed}%
   }
 {}{\PatchFailed}
-\keywords{Corvid, Difference, Number, Quantity, Ratio\newline\indent Word count: 2446}
+\keywords{Corvid, Difference, Number, Quantity, Ratio\newline\indent Word count: 2468}
 \usepackage{lineno}
 
 \linenumbers
@@ -263,7 +263,7 @@ Each subject experienced five trials (replicate 1) or ten trials (replicate 2) f
 \hypertarget{data-analysis}{%
 \subsection{Data Analysis}\label{data-analysis}}
 
-All data were analyzed using the same pre-registered analyses (\url{https://aspredicted.org/RVH_MNB}) in R version 4.2.1 {[}38{]}. To test the first hypothesis, whether pinyon jays prefer larger over smaller quantities of food items and conspecifics, we conducted frequentist and Bayesian one sample t-tests.
+All data were analyzed using the same pre-registered analyses (\url{https://aspredicted.org/RVH_MNB}) in R version 4.2.2 {[}38{]}. To test the first hypothesis, whether pinyon jays prefer larger over smaller quantities of food items and conspecifics, we conducted frequentist and Bayesian one sample t-tests.
 
 To test our second and third hypotheses, whether numerical difference and ratio predict preferences between smaller and larger options independently, we used generalized linear mixed-effects modeling. We used trial-level choices for either the larger or smaller option as the response variable. To investigate our hypotheses, we used model selection to compare which combination of random (subject, number pair, or both) and fixed (ratio, difference, or a combination of both) effects best describe each data set (food and social)(Table S3). We draw inferences based on Bayesian statistics (BF\(_{10}\) values) where a BF\(_{10}\) \textgreater{} 3 is sufficient evidence for the alternative hypothesis, BF\(_{10}\) \textless{} 1/3 is sufficient evidence for the null hypothesis, and 1/3 \textless{} BF\(_{10}\) \textless{} 3 indicate neither hypothesis has evidence supporting it, suggesting the sample size is too small to draw conclusions {[}39{]}.
 
@@ -293,7 +293,7 @@ To test our second and third hypotheses, we used model selection on generalized 
 
 Hypothesis 1 predicted that subjects would choose the larger number of flock mates over the smaller. One sample t-tests provided evidence that our hypothesis was supported in replicate 1 (\(M = 55.33\), 95\% CI \([52.34, 58.32]\), \(t(9) = 4.03\), \(p = .003\), \(\mathrm{BF}_{\textrm{10}} = 16.67\)) but not supported in replicate 2 (\(M = 50.19\), 95\% CI \([47.06, 53.32]\), \(t(9) = 0.13\), \(p = .896\), \(\mathrm{BF}_{\textrm{10}} = 0.31\)).
 
-For hypotheses 2 and 3, we again used model selection. Models with no random effect structure performed best. For fixed effects, the intercept only model best fit the data (Replicate 1: \(\mathrm{BF}_{\textrm{10}} = 0.07\), Replicate 2: \(\mathrm{BF}_{\textrm{10}} = 0.06\)), suggesting that neither ratio nor difference influenced choice. Because no model other than the intercept only had evidence suggesting that it was true, neither hypotheses 2 or 3 were supported by the data (Figure \ref{fig:socialgraphs}).
+For hypotheses 2 and 3, we again used model selection. Models with no random effect structure performed best. For fixed effects, the intercept only model best fit the data (Replicate 1: \(\mathrm{BF}_{\textrm{10}} = 0.07\), Replicate 2: \(\mathrm{BF}_{\textrm{10}} = 0.06\)), suggesting that neither ratio nor difference influenced choice. Because no model other than the intercept only had evidence suggesting that it was true, neither hypotheses 2 or 3 were supported by the data (Figure \ref{fig:socialgraphs}). However, further analysis show clear individual choices that do not significantly differ depending on the sex of the stooge (See Supplementary FigureS3).
 
 
 
