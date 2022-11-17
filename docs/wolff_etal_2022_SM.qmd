@@ -92,9 +92,9 @@ The apparatus for the food experiment included a bird cage (72 $\times$ 48 $\tim
 ```{r}
 #| label: fig-foodapp
 #| fig-cap: "Food experiment apparatus (overhead view)"
-#| out-width: "50%"
+#| out-width: "75%"
 
-knitr::include_graphics(here("figures/food_apparatus.PNG"))
+knitr::include_graphics(here("figures/food_apparatus.png"))
 
 ```
 
@@ -131,9 +131,9 @@ The apparatus (@fig-socialapp) was a Y-maze formed out of chicken wire, plastic 
 ```{r}
 #| label: fig-socialapp
 #| fig-cap: "Social experiment apparatus (overhead view)"
-#| out-width: "75%"
+#| out-width: "65%"
 
-knitr::include_graphics(here("figures/social_apparatus.PNG"))
+knitr::include_graphics(here("figures/social_apparatus.png"))
 
 ```
 
