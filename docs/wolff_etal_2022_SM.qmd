@@ -88,8 +88,11 @@ The University of Nebraska-Lincoln Institutional Animal Care and Use Committee a
 
 The apparatus for the food experiment included a bird cage (72 $\times$ 48 $\times$ 48 cm) abutting a plastic stand with sliding trays that contained mealworms (@fig-foodapp). The stand was set at a 15 degree angle tilted toward the subject to facilitate mealworm viewing. The stand had two channels the same width as the plexiglas trays. Each plexiglas tray had a standard petri dish placed half an inch away from the front of each tray. Mealworms were placed in the front two thirds of the petri dish so the subjects could easily reach the mealworms, and they were evenly distributed across the available area. Within the cage were three perches. One large free-standing perch stood in the middle of the cage, while two small perches attached to each side of the cage a few inches back from the front. Subjects started each trial perched on the large free standing perch, and they chose an option by landing on the smaller left or right perches. They then consumed the mealworms associated with their decision while the unchosen side was removed immediately.
 
+<!--(foodapp)-->     
+(ref:foodapp-cap) Food experiment apparatus (overhead view). Subjects started the trial on the back perch and hopped forward to one of the front perches to signal choice. The experimenter then removed the opposite dish and the subject had up to three minutes to consume their chosen mealworms. Once the subject consumed all mealworms, the next trial started immediately.  Figure used with permission under a CC-BY4.0 license: Wolff et al. (2022); available at https://doi.org/10.31234/osf.io/kxgwt.
+
 <!--(foodapp)-->
-```{r}
+```{r, fig.cap = "(ref:foodapp-cap)"}
 #| label: fig-foodapp
 #| fig-cap: "Food experiment apparatus (overhead view)"
 #| out-width: "75%"
@@ -127,8 +130,11 @@ During habituation, three consecutive days of no choices and/or no eating of mea
 
 The apparatus (@fig-socialapp) was a Y-maze formed out of chicken wire, plastic sheets, and Plexiglas. The subject entered a large chamber at the base of the maze before choosing one of two arms of the Y-maze. At the entrance to both arms, guillotine-style doors were closed after the bird walked or flew past them, thus making a choice between the option on the left or right. At the end of each arm, was a large bird cage (72 $\times$ 48 $\times$ 48 cm) housing the stooge birds. Each cage had two lengthwise perches for the stooge birds to use and one small perch hanging from the ceiling.
 
+<!--(socialapp)-->     
+(ref:socialapp-cap) Social experiment apparatus (overhead view). Subjects were placed inside the main chamber of the Y maze and shown each bird numerical pair for six seconds a piece (counter balancing side shown first) and then the subject was released. Once the subject crossed under a door, the doors were closed and the bird stayed with their chosen conspecific(s) until 3 minutes had elapsed. They were then taken out of the Y maze and the next subject ran through the experiment. Figure used with permission under a CC-BY4.0 license: Wolff et al. (2022); available at https://doi.org/10.31234/osf.io/kxgwt.
+
 <!--(socialapp)-->
-```{r}
+```{r, fig.cap = "(ref:socialapp-cap)"}
 #| label: fig-socialapp
 #| fig-cap: "Social experiment apparatus (overhead view)"
 #| out-width: "65%"
@@ -182,10 +188,12 @@ While we see clear individual preferences, these choices do not differ depending
 
 <!-- To more clearly visualize the *individual* relationships between subjects and stooge birds we created a heatmap (@fig-individualheatmap) with the percentage of times each stooge bird was chosen by a subject bird per replicate. For example, the subject bird BlackElk choose Sapphire 71% of the time that she was offered as an option during the first replication. Alternatively, Juniper choose the stooge bird Hermia 25% of the time she was an option during replicate 1. Due to bird colony facility maintenance we used more stooge birds in replicate 1 than replicate 2 so birds saw each bird fewer times in replicate 1 but saw more birds overall. The average number of trials a stooge bird was offered in replicate 1 was `mean(replicate1N)` with a median of  `median(replicate1N)` while the average in replication 2 was `mean(replicate2N)` with a median of  `median(replicate2N)`. Birds with an * next to their name note Female status.  -->
  
+<!--(individualpref)-->     
+(ref:individualpref-cap) Preference for individual stooge birds per subject bird for replicates 1 and 2. The number of times each stooge bird was chosen when offered as an option per subject bird is shown above in a percentage value out of 100%. The saturation level of the colors indicates strength of preference per subject/stooge pair. High green saturation levels lean towards a preference *against* a particular bird by a subject and a high blue saturation leans *towards* a preference for a particular stooge bird. Asterisks note female pinyon jays. Figure used with permission under a CC-BY4.0 license: Wolff et al. (2022); available at https://doi.org/10.31234/osf.io/kxgwt.
 
 <!--(individualheatmap)-->
 
-```{r}
+```{r, fig.cap = "(ref:individualpre-cap)"}
 #| label: fig-individualpref
 #| fig-cap: "Preference for individual stooges for replicates 1 and 2."
 #| out-width: "100%"
