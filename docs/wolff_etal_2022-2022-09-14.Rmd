@@ -1,0 +1,226 @@
+---
+title : "Friends aren't food: pinyon jays show distinct context dependent numerical cognitive strategies"
+shorttitle: "Numerical cognition in pinyon jays"
+
+author:
+  - name: London M. Wolff
+    affiliation: '1'
+    corresponding: yes
+    email: lmwolff3@gmail.com
+    address: B83 East Stadium, University of Nebraska, Lincoln, Lincoln, NE, USA 68588. ORCID 0000-0001-8359-2619
+  - name: Katherine Carey
+    affiliation: '1'
+  - name: Jeffrey R. Stevens
+    affiliation: '1'
+    corresponding: no
+    email: jeffrey.r.stevens@gmail.com
+    address: B83 East Stadium, University of Nebraska, Lincoln, Lincoln, NE, USA 68588. ORCID 0000-0003-2375-1360
+
+
+affiliation:
+  - id: '1'
+    institution: Department of Psychology, Center for Brain, Biology & Behavior, University of Nebraska, Lincoln, Lincoln, NE, USA
+
+
+authornote: |
+  London M. Wolff, \orcidlink{0000-0001-8359-2619} [https://orcid.org/0000-0001-8359-2619](https://orcid.org/0000-0001-8359-2619).
+ 
+  Jeffrey R. Stevens, \orcidlink{0000-0003-2375-1360} [https://orcid.org/0000-0003-2375-1360](https://orcid.org/0000-0003-2375-1360).
+ 
+ 
+abstract: >
+ Animals must often discriminate different quantities of objects in their environment, from numbers of food items to conspecifics. Yet we know little about how numerical cognitive abilites compare across different object types. Based on past research, we would expect individuals to use both numerical ratio and numerical difference to choose between two numerical options. This study investigates whether numerical ratio and difference predict numerical preference in pinyon jays (_Gymnorhinus cyanocephalus_) for two types of stimuli, food items and conspecifics. Subjects (N=12 for food condition, N=20 for social condition) chose between two options using paired combinations of food items or group size numbers between 1 and 6. Upon completion of all pairs for a given item: food or conspecific the bird participants were switched to the other item category and retested in a within subject design. Therefore birds saw both item choices in random order. In the food condition, both sets of pinyon jays showed an overall preference for the larger option over the smaller option. Also for the food condition, pinyon jays preferred numbers of items with higher numerical differences and lower numerical ratios. However, numerical difference and numerical ratio did not influence food preference independently. In the social condition we saw very different results. When choosing between sets of conspecifics pinyon jays did not significantly choose the larger over smaller option, in opposition to what would be expected due to predation risk. Also in the social condition, birds did not show numerical ratio or numerical difference effects and therefore there were no independent effects for either variable. One rationale for these results are pinyon jays use different strategies when deciding between numbers of food items and flock mates. While number is important for selecting food items, other factors such as flock mate identity may be more important for selecting social groups to join. Thus, in numerical preference situations, the type of objects offered drive the numerical strategies that animals use.
+
+ 
+  
+keywords          : "Numerical preference, Social cognition, Avian cognition"
+wordcount         : ""
+
+bibliography      : ["merp_references.bib", "r-references.bib"]
+csl               : "prsb.csl"
+
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : yes
+
+header-includes: 
+  - \usepackage{orcidlink}
+  - \usepackage[justification=Centering,position=top]{subfig}
+
+class             : "doc"
+keep_tex          : "TRUE"
+output            : papaja::apa6_pdf
+
+---
+
+```{r include = FALSE}
+
+library(here)
+library(patchwork)
+library(formattable)
+library(knitr)
+
+source(here("R/wolff_etal_2022_rcode.R"))
+r_refs(file = "r-references.bib")
+my_citations <- cite_r(file = "r-references.bib")
+
+typeset_scientific <- function(x) {
+  x <- gsub("e\\+00$", "", x)
+  x <- gsub("e\\+0?(\\d+)$", " \\\\times 10\\^\\{\\1\\}", x)
+  x <- gsub("e\\-0?(\\d+)$", " \\\\times 10\\^\\{-\\1\\}", x)
+  x
+}
+
+printbf <- function(x, digits = 2, cutoff = NULL) {
+  # Check if object is numeric, BFBayesFactor, or other
+  if (is.numeric(x)) {
+    bf <- x
+  } else if (class(x) == "BFBayesFactor") {
+    bf <- extractBF(x)$bf
+  } else {
+    stop("Object is not numeric or of class BFBayesFactor.")
+  }
+  # Format Bayes factor
+  if (is.null(cutoff)) {
+    if (bf > 1000 | bf < 0.001) {
+      bf <- typeset_scientific(sprintf("%.2e", bf))
+    }
+    p <- paste0("$\\mathrm{BF}_{\\textrm{10}} = ", printnum(bf), "$")
+  } else {
+    if (bf > cutoff) {
+      p <- paste0("$\\mathrm{BF}_{\\textrm{10}} > ", cutoff, "$")
+    } else if (bf <  1 / cutoff) {
+      p <- paste0("$\\mathrm{BF}_{\\textrm{10}} < ", printnum(1 / cutoff, digits = digits), "$")
+    } else {
+      p <- paste0("$\\mathrm{BF}_{\\textrm{10}} = ", printnum(bf), "$")
+    }
+  }
+  return(p)
+}
+
+```
+
+# Introduction
+
+Many animal species have demonstrated the ability to quantify objects in their environment, including bees [@Dacke.Srinivasan.2008], fish [@Agrillo.etal.2008; @Agrillo.Dadda.2007;@Agrillo.etal.2011], amphibians [@Uller.etal.2003], birds [@Xia.etal.2001;@Emmerton.Renner.2006;@Emmerton.Renner.2009], and mammals [@Vonk.Beran.2012; @Nieder.2018;@Call.2000;@Beran.2001]. Quantification skills have strong adaptive value for survival and reproduction [@Nieder.2018], playing a role in navigation, predator avoidance, territory defense, foraging, and mating [@White.etal.2009;@Carazo.etal.2012;@Arak.1983;@Nieder.2020;@Agrillo.etal.2017;@Yang.Chiao.2016]. Yet it remains unclear if the same cognitive processes apply across these different adaptive problems.
+
+A key cognitive process proposed for quantification is the _approximate number system_, which involves the estimation of numerical quantity without relying on language or symbols [@Feigenson.etal.2004;@Nieder.2020]. This system is characterized by the numerical magnitude effect and the numerical distance effect [@Ditz.Nieder.2016;@Dehaene.etal.1998]. The _numerical magnitude effect_ asserts that, at a given numerical difference (i.e., the mathematical difference between two numbers: $4-2$ has a difference of 2), discrimination worsens with increasing magnitude and, equivalently, a decreasing numerical ratio (the mathematical quotient between two numbers: 2/4 has a ratio of 0.5). Essentially, discrimination becomes more difficult as the numerical ratio approaches 1. The _numerical distance effect_ asserts that discrimination improves with increasing numerical difference between two values. Essentially, discrimination becomes easier as the options become more dissimilar. Combined, these two effects describe Weber’s Law [@Nieder.2020], which indicates the use of approximate amounts rather than precise numbers.
+
+Animals can quantify many different types of objects in their environment     [@Agrillo.Beran.2013;@Agrillo.Bisazza.2014]. However, most studies use food as the objects to quantify [@Call.2000;@Beran.2001;@Kelly.2016;@Scarf.etal.2011;@Rugani.etal.2013]. Supporting the numerical magnitude effect, accuracy in food quantity discrimination decreases as the ratio between the values approached 1 [@Ditz.Nieder.2016;@Cantlon.Brannon.2006; @Merten.Nieder.2009;@Hanus.Call.2007;@Evans.etal.2009]. Similarly, animals discriminate food quantities better when there are larger numerical differences, supporting the numerical distance effect [@Ditz.Nieder.2016;@Kelly.2016;@Tornick.etal.2015;@Ditz.Nieder.2015]. 
+
+In addition to food, a few studies in fish have used numbers of conspecifics to assess quantification [@Buckingham.etal.2007;@Agrillo.etal.2008;@Gomez-Laplaza.Gerlai.2016]. Quantifying conspecifics can be important to help dilute predation risk in larger groups [@Krause.Ruxton.2002;@Silk.etal.2014]. Though some studies show an effect of both difference and ratio on preference for larger groups [@Agrillo.Dadda.2007;@Agrillo.etal.2008], others only show an effect of ratio [@Buckingham.etal.2007;@Gomez-Laplaza.Gerlai.2011]. Little research has examined quantification in a social setting outside of fish.
+
+The primary aim of the present study was to compare quantification across two types of objects. To achieve this aim, we investigated how pinyon jays (_Gymnorhinus cyanocephalus_) use numerical difference and ratio information to choose between smaller and larger quantities of food items or conspecifics. Our first hypothesis posits that pinyon jays will, on average, prefer larger over smaller numbers of food items and conspecifics. Our second hypothesis posits that pinyon jays will prefer more items more when the quantities have higher numerical differences and lower numerical ratios. Our third hypothesis posits that both numerical difference and ratio will influence preference independently of each other. This distinction is important because difference and ratio are highly correlated: as difference increases, ratio decreases. Testing these hypotheses in two different object types within a single test population investigates whether the same cognitive processes generalize across adaptive problems faced by animals.
+
+# Methods
+
+We conducted food and social experiments in separate sets of pinyon jays, then replicated each experiment with the opposite set of birds. Additional methods, data analysis, and visualizations are available in the supplementary material. 
+
+## Subjects
+
+Replicate 1: Eight pinyon jays (1 female) completed all rounds of the food experiment and 10  jays (4 female) completed all rounds of the social experiment. A further 17 jays (6 female) acted as stooge conspecifics in the social experiment. Two jays were dropped from the social experiment due to unrelated health concerns.
+
+Replicate 2: Four pinyon jays (1 female) completed all rounds of the food experiment and 10  jays (1 female) completed all rounds of the social experiment. A further 8  jays (4 female) acted as stooge conspecifics in the social experiment. 
+
+The jays in the food item experiment were housed two to a double cage, while the jays in the social experiment were individually housed. The subjects were not food restricted in either experiment. 
+
+## Food Experiment
+
+### Apparatus 
+
+The food experiment was conducted in a bird cage (72 $\times$ 48 $\times$ 48 cm) with three perches. The cage abutted a plastic stand with sliding trays that had dishes attached that could contain mealworms (Figure S?). 
+
+### Experimental Procedure
+
+At the beginning of each trial, the experimenter placed the appropriate number of mealworms in each of the dishes. The subject hopped forward to one of the front perches to signal choice. The experimenter then removed the opposite dish and the subject had up to three minutes to consume the mealworms. Once the subject consumed all mealworms, the next trial began. If the subject did not make a choice and/or did not finish all mealworms within three minutes, the session stopped.
+
+Each bird experienced 10 repetitions for each of the 15 numerical pairs between 1 and 6 (e.g., 6 vs 5, 6 vs 4, 6 vs 3, etc.) in a pseudo-randomized order. The side of the larger option was pseudo-randomized with no left or right runs longer than three in a row. Subjects ran in a randomized order each day. Birds averaged 3 trials per session (range ?-?). 
+
+## Social Experiment
+
+### Apparatus 
+
+The apparatus was a Y maze where the subject entered a large chamber at the base of the maze and could choose one of two arms. Guillotine style doors separated the entrance chamber from the arms where a large bird cage housing the stooge birds was placed.
+
+### Experimental Procedure
+
+The experimenter held the subject inside the apparatus and showed them each option for six seconds before releasing them into the entrance chamber. Once the subject crossed the threshold of one of the doors, both doors were closed. After three minutes elapsed, the handler collected the subject and returned them to their home cage. These steps repeated until all birds had run through the experiment.
+
+Each subject experienced five trials (repetition 1) or ten trials (repetition 2) for each of the numerical pairs between 1 and 6 (repetition 1) and reach of the numerical pairs between 1 and 6 except those that required more than 8 birds (repetition 2). The side of the larger option was pseudo-randomized with no left or right runs longer than three consecutive trials. The pairs were organized into blocks with one instance of each pair per block and pairs randomized within each block. Subjects ran in a randomized order each day.
+   
+## Data Analysis
+
+All data were analyzed using the same pre-registered analyses (https://aspredicted.org/RVH_MNB) in R version `r paste0(R.version$major, ".", R.version$minor)` [@R-base]. To test the first hypothesis, whether pinyon jays prefer larger over smaller numbers of food items and conspecifics, we conducted frequentist and Bayesian one sample t-tests (using the `ttestBF()` function from the _BayesFactor_ package with default, noninformative priors [@R-BayesFactor]). 
+
+To test our second and third hypotheses, whether numerical difference and ratio predict preferences between smaller and larger options independently, we used generalized linear mixed-effects modeling. We used trial-level choices for the larger or smaller option as the response variable. To investigate our hypotheses, we used model selection to compare which combination of random (subject, pair, or both) and fixed (ratio, difference, or a combination of both) effects best fit each data set (food and social). We draw inferences based on Bayesian statistics (_BF_ values) where a _BF_ > 3 is sufficient evidence for the alternative hypothesis, _BF_ < 1/3 is sufficient evidence for the null hypothesis, and 1/3 < _BF_ < 3 indicate neither hypothesis has evidence supporting it.
+
+# Results
+
+## Food Experiment
+
+Our first hypothesis predicted that subjects would choose the larger number of mealworms over the smaller number overall across the numerical pairs. One sample t-tests provided strong and moderate evidence (respectively) that preferences were above chance (50%) in both replicate 1 (`r apa_print(food1_results$ttest)$statistic`, `r apa_print(food1_results$ttestbf)$statistic`) and replicate 2 (`r apa_print(food2_results$ttest)$statistic`, `r apa_print(food2_results$ttestbf)$statistic`). 
+ 
+To investigate our other two hypotheses, we used model selection with mixed effect models. For both replicates, the best-fitting random effect structure was no random effect structure. Hypothesis two posits that pinyon jays prefer higher differences and lower ratios, which would predict that the models with only difference and only ratio must have at least moderate evidence in support for our prediction to be correct. The model with only the main effect of ratio (Replicate 1: `r printbf(food1_results$fixed_bf_df$BF[2])`, Replicate 2: `r printbf(food2_results$fixed_bf_df$BF[2])`) best fit both data sets (Figure \ref{fig:foodgraphs}A&C). The model with the main effect of only difference had moderate evidence (Replicate 1: `r printbf(food1_results$fixed_bf_df$BF[3])`, Replicate 2: `r printbf(food2_results$fixed_bf_df$BF[3])`) supporting stronger preferences for larger options at larger differences but only for repetition 1. Consequently, this only partially supports our second hypothesis (Figure \ref{fig:foodgraphs}B&D). Additionally, our third hypothesis was not supported, as the interaction model with difference and ratio did not have a _BF_ >3 in either replication (see Tables ?? and ?? for full results). 
+
+<!--(foodgraphs)-->     
+(ref:foodgraphs-cap) Food study difference and ratio results for both replicates. Mean preference for the larger option is shown on the y axis with the numerical difference (B&D) or ratio (A&C) on the x axis for both replicate 1 (A&B) and replicate 2 (C&D). Dots represent mean values across subjects and trials. Error bars represent 95% within-subject confidence intervals. Lines represent individual subject data. Figure used with permission under a CC-BY4.0 license: Wolff, Carey, & Stevens (2022); available at https://doi.org/10.31234/osf.io/????.
+
+```{r foodgraphs, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:foodgraphs-cap)"}
+
+include_graphics(here("figures/food_figure.png"))
+
+```
+
+## Social Experiment
+Hypothesis 1 predicted that subjects would choose the larger number of flock mates over the smaller. One sample t-tests provided moderate evidence that our hypothesis was supported for replicate 1 (`r apa_print(social1_results$ttest)$full_result`, `r apa_print(social1_results$ttestbf)$statistic`). However, evidence supported no difference from chance replicate 2 (`r apa_print(social2_results$ttest)$full_result`, `r apa_print(social2_results$ttestbf)$statistic`). 
+
+For hypotheses 2 and 3, we again used mixed effect model selection. No random effect structure was used for both replications. For fixed effects, the intercept only model (Replicate 1: `r printbf(social1_results$fixed_bf_df$BF[2])`, Replicate 2: `r printbf(social2_results$fixed_bf_df$BF[2])`) best fit the data, suggesting that neither ratio nor difference influenced choice. Because no model other than the intercept only had evidence suggesting that it was true, neither hypotheses 2 or 3 were supported by the data (Figure \ref{fig:socialgraphs}).
+
+<!--(socialgraphs)-->     
+(ref:socialgraphs-cap) Social study difference & ratio results for both replicate 1 and 2. Mean preference for the larger option is shown on the y axis with the numerical difference (B&D) or ratio (A&C) on the x axis for both replicate 1 (A&B) and replicate 2 (C&D). Dots represent mean values across subjects and trials. Error bars represent 95% within-subject confidence intervals. Lines represent individual subject data. Figure used with permission under a CC-BY4.0 license: Wolff, Carey, & Stevens (2022); available at https://doi.org/10.31234/osf.io/????.
+
+```{r socialgraphs, fig.show="hold", out.width="100%", fig.align="center", fig.cap = "(ref:socialgraphs-cap)"}
+
+include_graphics(here("figures/social_figure.png"))
+
+
+```
+
+# Discussion
+
+We examined pinyon jays' quantitative abilities in choosing between different numbers of food items and social partners. Over all numerical pairs, birds chose the larger of the two options in the food experiment but not in the social experiment, partially confirming our first hypothesis. In the food study, smaller numerical ratios predicted the birds’ choices but only in the first repetition did larger differences predict birds' choices, partially confirming our second hypothesis. In the social experiment, neither ratio nor difference predicted choice, contradicting our second hypothesis. In both the food and social experiments, difference and ratio did not independently predict choice, contradicting our third hypothesis.
+
+In the food study, our pinyon jays preferred larger over smaller quantities more as the numerical ratios decrease, which aligns with previous corvid research demonstrating a numerical magnitude effect [@Ditz.Nieder.2016;@Kelly.2016;@Tornick.etal.2015]. This provides evidence for pinyon jays using the approximate number system as a mechanism for quantification. However, unlike the previous corvid studies, we did not find conclusive evidence for the numerical distance effect, as number preference did not depend on the difference between two values in both repetitions.
+
+In the social study, neither ratio nor difference predicted choice, suggesting that pinyon jays do not employ a single mechanism across object types. This outcome is surprising, as previous quantification tasks with conspecifics in fish found effects of difference and ratio [@Agrillo.Dadda.2007;@Agrillo.etal.2008], suggesting that the mechanisms underlying quantification in food and social partners differ. The differences in numerical preference between food and social contexts may be due to different selective pressures. Both flock size and foraging techniques have consequences for evolutionary fitness, but they tackle different adaptive problems. Food consumption acts primarily via natural selection by enhancing survival. Flock size, however, is integral to both natural and sexual selection: natural selection in the form of predator avoidance and sexual selection in the form of mate preference. Joining a larger flock size allows an animal to dilute their chances of being eaten by predators (i.e., the dilution effect) but also provides a larger pool of potential mates. For predation risk it is mainly the _number_ of social partners that matters. But for mate preference or other social preferences, the _identity_ of the partners matters. One possible explanation for the lack of a ratio or difference effect for the social preference task is that individual identity of birds overrides the importance of number. A follow-up analysis of our data showed wide variation in preferences for groups that contained the different stooge birds (Table ?). Pinyon jays have complex, long-term bonds with other flock members and mates [@Marzluff.Balda.1992], which may make identity of group mates more important than sheer numbers. Moreover, the birds in our studies did not experience signals of predation danger during the experiment. Without pressure to dilute risk in larger groups, the birds may have ignored group size, allowing them to use other information such as social partner identity to determine choice.
+
+Our study design does not allow us to pinpoint the exact features by which the birds make these quantitative choices. For the food preference tasks, the birds may choose larger _numbers_ of food items or larger _amounts_ of them. Using number involves tracking the quantity of individuated objects. However, in many cases, animals choose based on amount, which refers to other measures or proxies of quantity such as item size, surface area, volume, perimeter, and density [@Menzel.1960; @Uller.etal.2003; @Stevens.etal.2007; @Gomez-Laplaza.etal.2019]. It is possible that our jays used, for example, surface area to choose their food items. This is a reasonable criteria because surface area may be a better proxy of total calories than absolute number. Future work is needed to tease apart which features birds use to make quantitative decisions.
+
+## Conclusion
+
+This research investigated how pinyon jays assess numbers of food items and conspecifics in preference tasks. For food items, numerical ratio predicted their choices in both repetitions while numerical difference predicted choice in only the first repetition, but neither ratio nor difference predicted choices in the social preferences task. Though quantity is important for selecting food items, other factors such as flock mate identity may be more important for selecting social groups to join. Thus, in quantification situations, the type of objects to be quantified can drive the cognitive strategies that animals use. Furthermore, numerical cognition research in non-human animals is lacking in non-food based tasks and should be further explored.
+
+## Acknowledgments
+
+This research was funded by National Science Foundation grants (NSF-1062045,
+NSF-1658837). We would like to thank Kylie Hughes, Toria Biancalana, Hailey Wilson, Bailey Wilson, Isaac Martinez, and Rachel Bruner for helping run the experiments and caring for our birds.
+
+## Author Contributions
+
+**Wolff:** Conceptualization, Data Curation, Formal Analysis, Methodology, Project Administration, Resources, Supervision, Software, Validation, Visualization, Writing – Original Draft Preparation, Writing-review & editing. **Trevino:** Investigation, Project Administration, Resources, Visualization, Writing – Review & Editing. **Stevens:** Conceptualization, Formal Analysis, Funding Acquisition, Methodology, Investigation, Software, Supervision, Validation, Visualization, Writing – review & editing. 
+
+**Conflict of interest:** The authors declared that no conflicts of interest exist.
+
+**Data Availability:** The data and analysis code are available at: https://.
+
+## Ethics approval
+
+All procedures were conducted in an ethical and responsible manner, in full compliance with all relevant codes of experimentation and legislation and were approved by the UNL Internal Review Board (protocol # 17922) and Institutional Animal Care and Use Committee (protocol # 1621).
+
+\newpage
+ 
+# References
+
+<div id="refs"></div>
