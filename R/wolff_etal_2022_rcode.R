@@ -181,7 +181,7 @@ analyze_data <- function(df, type, rep) {
   ## Tables -----------------------------------
 
   # Create tables of BF values
-  random_models <- c("1", "(1|Subject)", "(1|Pair)", "(1|Subject) + (1|Pair)")
+  random_models <- c("1", "(1|subject)", "(1|pair)", "(1|subject) + (1|pair)")
   fixed_models <- c("intercept only", "ratio", "difference", "difference + ratio", "difference * ratio")
 
   random_bf_df <- tibble(
@@ -339,7 +339,7 @@ factorial_pairs_df <- data.frame(
 
 random_effect_df <- data.frame(
   Model = c("Intercept Only Model", "Subject Only Model", "Pair Only Model", "Both Subject and Pair"),
-  Formula = c("Choice~1", "Choice~(1|Subject)", "Choice~(1|Pair)", "Choice~(1|Subject)+(1|Pair)")
+  Formula = c("choice ~ 1", "choice ~ (1|subject)", "choice ~ (1|pair)", "choice ~ (1|subject) + (1|pair)")
 )
 
 
@@ -347,7 +347,7 @@ random_effect_df <- data.frame(
 
 fixed_effect_df <- data.frame(
   Model = c("Intercept Only Model", "Ratio Only Model", "Difference Only Model", "Both Fixed Effects, No Interaction", "Both Fixed Effects, With Interaction"),
-  Formula = c("Choice~1", "Choice~Ratio", "Choice~Difference", "Choice~Ratio+Difference", "Choice~Ratio*Difference")
+  Formula = c("choice ~ 1", "choice ~ ratio", "choice ~ difference", "choice ~ ratio + difference", "choice ~ ratio * difference")
 )
 
 
